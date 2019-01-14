@@ -18,27 +18,43 @@ Additions to the Global Object.
   - `prototype` => `%IteratorPrototype%`
   - `asyncPrototype` => `%AsyncIteratorPrototype%`
   - `of(...items)`
-  - `*range(start, stop, step = 1)`
+     - Create an iterable from `items`. Basically
+       `return items[Symbol.iterator]()`
+  - `range(start, stop, step = 1)`
 
 Additions to `%IteratorPrototype%`
 
-- `*filter(callbackfn)`
-- `*map(callbackfn)`
+- `filter(callbackfn)`
+- `map(callbackfn)`
+- `take(n)`
+  - Returns an iterator that yields the first `n` elements. Useful for making
+    an infinite iterator finite.
 - `reduce(callbackfn)`
+  - Consume the entire iterator, using `callbackfn` as a reducer.
 - `collect()`
+  - Create an array from the iterator
+  - `Iterator.of(1, 2, 3).collect() // [1, 2, 3]`
+  - This is in the same space as `Array.from`, but is included to keep symmetry
+    with `Iterator.asyncPrototype.collect`
 
 Additions to `%AsyncIteratorPrototype%`
 
-- `async *filter(callbackfn)`
-- `async *map(callbackfn)`
-- `async reduce(callbackfn)`
-- `async collect()`
+- `filter(callbackfn)`
+- `map(callbackfn)`
+- `take(n)`
+  - Returns an iterator that yields the first `n` elements. Useful for making
+    an infinite iterator finite.
+- `reduce(callbackfn)`
+  - Consume the entire iterator, using `callbackfn` as the reducer.
+- `collect()`
+  - Create an array from the iterator
+  - `asyncIt.collect().then((items) => { console.log(items[2]); })`
 
 ### Example usage
 
 ```js
 const evens = Iterator
-  .range(0, Infinity) // or range(0, Infinity, 2)
+  .range(0, Infinity) // range(0, Infinity, 2) if you're feeling clever
   .filter((n) => n % 2 === 0);
 
 for (const even of evens) {
@@ -62,6 +78,29 @@ const MyIteratorPrototype = {
 Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
 ```
 
+```js
+class ObligatoryCrytocurrencyReference extends Component {
+  componentWillMount() {
+    const items = ticker()
+      .map((c) => (<h2>{`${c.name}: ${c.price}`}</h2>))
+      .take(5) // only consume 5 items of a potentially infinite iterator
+      .collect() // greedily transform async iterator into array
+      .then((data) => this.setState({ data }));
+  }
+
+  render() {
+    return <div>{this.data}</div>
+  }
+}
+```
+
+### Why not use Array.from + Array.prototype methods?
+
+All of these methods (except for reduce and collect) are **lazy**. They will
+only consume the iterable when they need the next item from it. Especially
+for iterators that never end, this is key. Without generic support for
+any form of iterator, different iterators have to be handled differently.
+
 ### Further work
 
 A lot of other languages have more contrived methods such as `zip`, `fold`,
@@ -75,3 +114,68 @@ A lot of other languages have more contrived methods such as `zip`, `fold`,
 - https://docs.rs/itertools/
 - https://www.boost.org/doc/libs/1_66_0/libs/iterator/doc/index.html
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
+
+| Method                      | Rust | Python | npm Itertools | C# |
+| --------------------------- | ---- | ------ | --------------| -- |
+| all                         | ☑    | ☐      | ☑             | ☑  |
+| any                         | ☑    | ☐      | ☑             | ☑  |
+| chain                       | ☑    | ☑      | ☑             | ☑  |
+| collect                     | ☑    | ☐      | ☐             | ☐  |
+| count                       | ☑    | ☑      | ☑             | ☑  |
+| cycle                       | ☑    | ☑      | ☑             | ☐  |
+| enumerate                   | ☑    | ☐      | ☑             | ☐  |
+| filter                      | ☑    | ☐      | ☑             | ☑  |
+| filterMap                   | ☑    | ☐      | ☐             | ☐  |
+| find                        | ☑    | ☐      | ☐             | ☐  |
+| findMap                     | ☑    | ☐      | ☐             | ☐  |
+| flatMap                     | ☑    | ☐      | ☑             | ☐  |
+| flatten                     | ☑    | ☐      | ☐             | ☐  |
+| fold                        | ☑    | ☐      | ☐             | ☐  |
+| forEach                     | ☑    | ☐      | ☐             | ☐  |
+| last                        | ☑    | ☐      | ☐             | ☑  |
+| map                         | ☑    | ☐      | ☑             | ☐  |
+| max                         | ☑    | ☐      | ☑             | ☑  |
+| min                         | ☑    | ☐      | ☑             | ☑  |
+| nth                         | ☑    | ☐      | ☐             | ☑  |
+| partition                   | ☑    | ☐      | ☐             | ☐  |
+| peekable                    | ☑    | ☐      | ☐             | ☐  |
+| position                    | ☑    | ☐      | ☐             | ☐  |
+| product                     | ☑    | ☑      | ☐             | ☐  |
+| reverse                     | ☑    | ☐      | ☐             | ☑  |
+| scan                        | ☑    | ☐      | ☐             | ☐  |
+| skip                        | ☑    | ☐      | ☐             | ☑  |
+| skipWhile                   | ☑    | ☐      | ☐             | ☑  |
+| stepBy                      | ☑    | ☐      | ☐             | ☐  |
+| sum                         | ☑    | ☐      | ☑             | ☑  |
+| take                        | ☑    | ☐      | ☑             | ☑  |
+| takeWhile                   | ☑    | ☐      | ☐             | ☐  |
+| unzip                       | ☑    | ☐      | ☐             | ☐  |
+| zip                         | ☑    | ☑      | ☑             | ☑  |
+| compress                    | ☐    | ☑      | ☑             | ☐  |
+| dropwhile                   | ☐    | ☑      | ☐             | ☐  |
+| groupby                     | ☐    | ☑      | ☐             | ☑  |
+| permutations                | ☐    | ☑      | ☑             | ☐  |
+| repeat                      | ☐    | ☑      | ☑             | ☑  |
+| slice                       | ☐    | ☑      | ☑             | ☐  |
+| starmap                     | ☐    | ☑      | ☐             | ☐  |
+| takewhile                   | ☐    | ☑      | ☐             | ☑  |
+| tee                         | ☐    | ☑      | ☐             | ☐  |
+| compact                     | ☐    | ☐      | ☑             | ☐  |
+| contains                    | ☐    | ☐      | ☑             | ☑  |
+| first                       | ☐    | ☐      | ☑             | ☑  |
+| iter                        | ☐    | ☐      | ☑             | ☐  |
+| range                       | ☐    | ☐      | ☑             | ☑  |
+| reduce                      | ☐    | ☑      | ☑             | ☐  |
+| sorted                      | ☐    | ☐      | ☑             | ☐  |
+| unique                      | ☐    | ☐      | ☑             | ☑  |
+| aggregate                   | ☐    | ☐      | ☐             | ☑  |
+| asenumerable                | ☐    | ☐      | ☐             | ☑  |
+| average                     | ☐    | ☐      | ☐             | ☑  |
+| empty                       | ☐    | ☐      | ☐             | ☑  |
+| except                      | ☐    | ☐      | ☐             | ☑  |
+| intersect                   | ☐    | ☐      | ☐             | ☑  |
+| longcount                   | ☐    | ☐      | ☐             | ☑  |
+| prepend                     | ☐    | ☐      | ☐             | ☑  |
+
+Note: The method names are combined, such as `lastordefault` and `last` or
+`toarray` and `collect`

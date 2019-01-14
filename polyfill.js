@@ -59,6 +59,28 @@ Iterator.prototype.map = function* map(cb) {
   }
 };
 
+Iterator.asyncPrototype.take = async function* take(n) {
+  let taken = 0;
+  for await (const item of this) {
+    taken += 1;
+    if (taken > n) {
+      break;
+    }
+    yield item;
+  }
+};
+
+Iterator.prototype.take = function* take(n) {
+  let taken = 0;
+  for (const item of this) {
+    taken += 1;
+    if (taken > n) {
+      break;
+    }
+    yield item;
+  }
+};
+
 Iterator.asyncPrototype.reduce = async function reduce(reducer, start) {
   let final = start;
   for await (const item of this) {
