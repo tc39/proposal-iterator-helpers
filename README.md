@@ -79,7 +79,7 @@ Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
 ```
 
 ```js
-class ObligatoryCrytocurrencyReference extends Component {
+class ObligatoryCryptocurrencyReference extends Component {
   componentWillMount() {
     const items = ticker()
       .map((c) => (<h2>{`${c.name}: ${c.price}`}</h2>))
@@ -162,6 +162,6 @@ any form of iterator, different iterators have to be handled differently.
 | except                      | ☐    | ☐      | ☐             | ☑  |
 | intersect                   | ☐    | ☐      | ☐             | ☑  |
 | prepend                     | ☐    | ☐      | ☐             | ☑  |
-| append                      |      |        |               |    |
+| append                      | ☐    | ☐      | ☐             | ☑  |
 
 Note: The method names are combined, such as `toArray` and `collect`.
