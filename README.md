@@ -101,11 +101,6 @@ only consume the iterable when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
 
-### Further work
-
-A lot of other languages have more contrived methods such as `zip`, `fold`,
-`flat`, `max`, etc. Should we include these?
-
 ### Prior Art
 
 - https://www.npmjs.com/package/itertools
@@ -126,56 +121,47 @@ A lot of other languages have more contrived methods such as `zip`, `fold`,
 | enumerate                   | ☑    | ☐      | ☑             | ☐  |
 | filter                      | ☑    | ☐      | ☑             | ☑  |
 | filterMap                   | ☑    | ☐      | ☐             | ☐  |
-| find                        | ☑    | ☐      | ☐             | ☐  |
+| find                        | ☑    | ☐      | ☑             | ☑  |
 | findMap                     | ☑    | ☐      | ☐             | ☐  |
-| flatMap                     | ☑    | ☐      | ☑             | ☐  |
+| flatMap                     | ☑    | ☐      | ☑             | ☑  |
 | flatten                     | ☑    | ☐      | ☐             | ☐  |
-| fold                        | ☑    | ☐      | ☐             | ☐  |
 | forEach                     | ☑    | ☐      | ☐             | ☐  |
 | last                        | ☑    | ☐      | ☐             | ☑  |
-| map                         | ☑    | ☐      | ☑             | ☐  |
+| map                         | ☑    | ☐      | ☑             | ☑  |
 | max                         | ☑    | ☐      | ☑             | ☑  |
 | min                         | ☑    | ☐      | ☑             | ☑  |
 | nth                         | ☑    | ☐      | ☐             | ☑  |
-| partition                   | ☑    | ☐      | ☐             | ☐  |
+| partition                   | ☑    | ☑      | ☐             | ☑  |
 | peekable                    | ☑    | ☐      | ☐             | ☐  |
 | position                    | ☑    | ☐      | ☐             | ☐  |
 | product                     | ☑    | ☑      | ☐             | ☐  |
 | reverse                     | ☑    | ☐      | ☐             | ☑  |
 | scan                        | ☑    | ☐      | ☐             | ☐  |
 | skip                        | ☑    | ☐      | ☐             | ☑  |
-| skipWhile                   | ☑    | ☐      | ☐             | ☑  |
+| skipWhile                   | ☑    | ☑      | ☐             | ☑  |
 | stepBy                      | ☑    | ☐      | ☐             | ☐  |
 | sum                         | ☑    | ☐      | ☑             | ☑  |
 | take                        | ☑    | ☐      | ☑             | ☑  |
-| takeWhile                   | ☑    | ☐      | ☐             | ☐  |
+| takeWhile                   | ☑    | ☑      | ☐             | ☑  |
 | unzip                       | ☑    | ☐      | ☐             | ☐  |
 | zip                         | ☑    | ☑      | ☑             | ☑  |
 | compress                    | ☐    | ☑      | ☑             | ☐  |
-| dropwhile                   | ☐    | ☑      | ☐             | ☐  |
-| groupby                     | ☐    | ☑      | ☐             | ☑  |
 | permutations                | ☐    | ☑      | ☑             | ☐  |
 | repeat                      | ☐    | ☑      | ☑             | ☑  |
 | slice                       | ☐    | ☑      | ☑             | ☐  |
 | starmap                     | ☐    | ☑      | ☐             | ☐  |
-| takewhile                   | ☐    | ☑      | ☐             | ☑  |
 | tee                         | ☐    | ☑      | ☐             | ☐  |
 | compact                     | ☐    | ☐      | ☑             | ☐  |
 | contains                    | ☐    | ☐      | ☑             | ☑  |
-| first                       | ☐    | ☐      | ☑             | ☑  |
-| iter                        | ☐    | ☐      | ☑             | ☐  |
 | range                       | ☐    | ☐      | ☑             | ☑  |
-| reduce                      | ☐    | ☑      | ☑             | ☐  |
+| reduce                      | ☑    | ☑      | ☑             | ☑  |
 | sorted                      | ☐    | ☐      | ☑             | ☐  |
 | unique                      | ☐    | ☐      | ☑             | ☑  |
-| aggregate                   | ☐    | ☐      | ☐             | ☑  |
-| asenumerable                | ☐    | ☐      | ☐             | ☑  |
 | average                     | ☐    | ☐      | ☐             | ☑  |
 | empty                       | ☐    | ☐      | ☐             | ☑  |
 | except                      | ☐    | ☐      | ☐             | ☑  |
 | intersect                   | ☐    | ☐      | ☐             | ☑  |
-| longcount                   | ☐    | ☐      | ☐             | ☑  |
 | prepend                     | ☐    | ☐      | ☐             | ☑  |
+| append                      |      |        |               |    |
 
-Note: The method names are combined, such as `lastordefault` and `last` or
-`toarray` and `collect`
+Note: The method names are combined, such as `toArray` and `collect`.
