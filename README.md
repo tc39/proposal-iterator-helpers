@@ -52,8 +52,12 @@ Additions to `%AsyncIteratorPrototype%`
 ### Example usage
 
 ```js
-const evens = Iterator
-  .range(0, Infinity) // range(0, Infinity, 2) if you're feeling clever
+function* nats() {
+  let nat = 0;
+  do { yield nat; ++nat; } while(true);
+}
+
+const evens = nats()
   .filter((n) => n % 2 === 0);
 
 for (const even of evens) {
