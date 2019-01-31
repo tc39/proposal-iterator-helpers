@@ -5,7 +5,8 @@
 A proposal for several interfaces that will help with general usage and
 consumption of iterators in ECMAScript.
 
-Stage 0 - Has not been presented to the committee 
+This proposal is at Stage 1 of
+[The Process](https://tc39.github.io/process-document/)
 
 The following additions are proposed to enable simple and powerful methods of
 interacting with iterators in ECMAScript. 

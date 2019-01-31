@@ -12,22 +12,12 @@ const AsyncIteratorPrototype = Object.getPrototypeOf(
   ).prototype,
 );
 
-const positiveRangeTest = (n, stop) => n < stop;
-const negativeRangeTest = (n, stop) => n > stop;
-
 const Iterator = {
   prototype: IteratorPrototype,
   asyncPrototype: AsyncIteratorPrototype,
 
   of(...items) {
     return items[Symbol.iterator]();
-  },
-
-  * range(start, stop, step = 1) {
-    const test = step >= 0 ? positiveRangeTest : negativeRangeTest;
-    for (let i = start; test(i, stop); i += step) {
-      yield i;
-    }
   },
 };
 
