@@ -20,7 +20,6 @@ Additions to the Global Object.
   - `of(...items)`
      - Create an iterable from `items`. Basically
        `return items[Symbol.iterator]()`
-  - `range(start, stop, step = 1)`
 
 Additions to `%IteratorPrototype%`
 
