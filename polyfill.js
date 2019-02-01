@@ -240,12 +240,17 @@ const IteratorPrototypeMapIteratorPrototype = Object.setPrototypeOf({
     const iterated = O.Iterated;
     const next = ES.IteratorStep(iterated, v);
     if (next === false) {
-      ES.IteratorClose(iterated, () => undefined);
       return ES.CreateIterResultObject(undefined, true);
     }
     const value = ES.IteratorValue(next);
-    const mapped = ES.Call(mapper, undefined, [value]);
-    return ES.CreateIterResultObject(mapped, false);
+    try {
+      const mapped = ES.Call(mapper, undefined, [value]);
+      return ES.CreateIterResultObject(mapped, false);
+    } catch (e) {
+      return ES.IteratorClose(iterated, () => {
+        throw e;
+      });
+    }
   },
   return: IteratorPrototypeReturnPass,
   throw: IteratorPrototypeThrowPass,

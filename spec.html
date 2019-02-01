@@ -89,11 +89,11 @@ contributors: Gus Caplan
             1. Let _iterated_ be _O_.[[Iterated]].
             1. Let _next_ be ? IteratorStep(_iterated_, _v_).
             1. If _next_ is *false*, then
-              1. Perform ? IteratorClose(_iterator_, NormalCompletion(empty)).
               1. Return CreateIterResultObject(*undefined*, *true*).
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _mapped_ be ? Call(_mapper_, *undefined*, &raquo; value &laquo;).
-            1. Return CreateIterResultObject(_mapped_, *false*).
+            1. Let _mapped_ be Call(_mapper_, *undefined*, &raquo; value &laquo;).
+            1. If _mapped_ is an abrupt completion, return ? IteratorClose(_iterated_, _mapped_).
+            1. Return CreateIterResultObject(_mapped_.[[Value]], *false*).
           </emu-alg>
         </emu-clause>
 
@@ -107,6 +107,40 @@ contributors: Gus Caplan
           <h1>%IteratorPrototypeMapIteratorPrototype%.throw</h1>
           <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
           <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-properties-of-iteratorprototypemapiteratorprototype-instances">
+          <h1>Properties of %IteratorPrototypeMapIteratorPrototype Instances</h1>
+          <emu-table id="table-1" caption="Internal Slots of %IteratorPrototypeMapIteratorPrototype Instances">
+            <table>
+              <tbody>
+              <tr>
+                <th>
+                  Internal Slot
+                </th>
+                <th>
+                  Description
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  [[Iterated]]
+                </td>
+                <td>
+                  The iterator which is being iterated.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  [[Mapper]]
+                </td>
+                <td>
+                  The function which is used to map each value of [[Iterated]].
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </emu-table>
         </emu-clause>
       </emu-clause>
     </emu-clause>
