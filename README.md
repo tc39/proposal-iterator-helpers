@@ -16,11 +16,16 @@ Many [libraries and languages](#prior-art) already provide these interfaces.
 Additions to the Global Object.
 
 - `Iterator` global namespace
-  - `prototype` => `%IteratorPrototype%`
+  - `syncPrototype` => `%IteratorPrototype%`
   - `asyncPrototype` => `%AsyncIteratorPrototype%`
+  - `from(value)`
+     - Tries to grab `Symbol.iterator` if it exists
+     - If the iterator is a proper iterator inheriting from
+       `%IteratorPrototype%` it will be returned, otherwise a wrapper
+       will be returned.
   - `of(...items)`
      - Create an iterable from `items`. Basically
-       `return items[Symbol.iterator]()`
+       `return Iterator.from(items)`
 
 Additions to `%IteratorPrototype%`
 
@@ -79,7 +84,7 @@ const MyIteratorPrototype = {
 // Object.setPrototypeOf(MyIteratorPrototype,
 //   Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
 
-Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
+Object.setPrototypeOf(MyIteratorPrototype, Iterator.syncPrototype);
 ```
 
 ```js
