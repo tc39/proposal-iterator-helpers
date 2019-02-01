@@ -286,7 +286,6 @@ const IteratorPrototypeFilterIteratorPrototype = Object.setPrototypeOf({
       const value = ES.IteratorValue(next);
       const selected = ES.ToBoolean(ES.Call(filterer, undefined, [value]));
       if (selected === true) {
-        ES.IteratorClose(iterated, () => undefined);
         return ES.CreateIterResultObject(value, false);
       }
     }

@@ -58,12 +58,15 @@ Additions to `%AsyncIteratorPrototype%`
 ### Example usage
 
 ```js
-function* nats() {
-  let nat = 0;
-  do { yield nat; ++nat; } while(true);
+function* naturals() {
+  let i = 0;
+  while (true) {
+    yield i;
+    i += 1;
+  }
 }
 
-const evens = nats()
+const evens = naturals()
   .filter((n) => n % 2 === 0);
 
 for (const even of evens) {
@@ -116,6 +119,7 @@ any form of iterator, different iterators have to be handled differently.
 - https://www.npmjs.com/package/lodash
 - https://docs.python.org/3/library/itertools.html
 - https://docs.rs/itertools/
+- https://doc.rust-lang.org/std/iter/trait.Iterator.html
 - https://www.boost.org/doc/libs/1_66_0/libs/iterator/doc/index.html
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
 
