@@ -32,6 +32,24 @@ contributors: Gus Caplan
   }
 </style>
 
+<emu-clause id="sec-abstract-operations">
+  <h1>Abstract Operations</h1>
+
+  <emu-clause id="sec-operations-on-iterator-objects">
+    <h1>Operations on Iterator Objects</h1>
+
+    <emu-clause id="sec-getiteratordirect" aoid="GetIteratorDirect">
+      <h1>GetIteratorDirect ( _obj_ )</h1>
+      <emu-alg>
+        1. If Type(_obj_) is not Object, throw a *TypeError* exception.
+        1. Let _nextMethod_ be ? GetV(_obj_, `"next"`).
+        1. Let _iteratorRecord_ be Record { [[Iterator]]: _obj_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
+        1. Return _iteratorRecord_.
+      </emu-alg>
+    </emu-clause>
+  </emu-clause>
+</emu-clause>
+
 <emu-clause id="sec-control-abstraction-objects">
   <h1>Control Abstraction Objects</h1>
 
@@ -44,8 +62,8 @@ contributors: Gus Caplan
       <emu-clause id="sec-iteratorprototype-map">
         <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
         <emu-alg>
-          1. If IsCallable(_mapper_) is *false*, throw a *TypeError*.
-          1. Let _iterated_ be GetIteratorDirect(_this_).
+          1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
+          1. Let _iterated_ be ? GetIteratorDirect(_this_).
           1. Let _iterator_ be ObjectCreate(%IteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
           1. Set iterator.[[Mapper]] to _mapper_.
           1. Set iterator.[[Iterated]] to _iterated_.
@@ -60,11 +78,69 @@ contributors: Gus Caplan
           <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
           <li>is an ordinary object.</li>
         </ul>
+
+        <emu-clause id="sec-iteratorprototypemapiteratorprototype-next">
+          <h1>%IteratorPrototypeMapIteratorPrototype%.next( _v_ )</h1>
+          <emu-alg>
+            1. Let _O_ be *this* value.
+            1. If Type(_O_) is not Object, throw a *TypeError* exception.
+            1. If _O_ does not have all the internal slots of a %IteratorPrototypeMapIteratorPrototype% Instance, throw a *TypeError* exception.
+            1. Let _mapper_ be _O_.[[Mapper]].
+            1. Let _iterated_ be _O_.[[Iterated]].
+            1. Let _next_ be ? IteratorStep(_iterated_, _v_).
+            1. If _next_ is *false*, then
+              1. Perform ? IteratorClose(_iterator_, NormalCompletion(empty)).
+              1. Return CreateIterResultObject(*undefined*, *true*).
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _mapped_ be ? Call(_mapper_, *undefined*, &raquo; value &laquo;).
+            1. Return CreateIterResultObject(_mapped_, *false*).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iteratorprototypemapiteratorprototype-return">
+          <h1>%IteratorPrototypeMapIteratorPrototype%.return</h1>
+          <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-iteratorprototypemapiteratorprototype-throw">
+          <h1>%IteratorPrototypeMapIteratorPrototype%.throw</h1>
+          <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
       <h1>The %AsyncIteratorPrototype% Object</h1>
+    </emu-clause>
+
+    <emu-clause id="sec-iteratorprototypereturnpass">
+      <h1>%IteratorPrototypeReturnPass% ( _value_ )</h1>
+      <p>The <dfn>%IteratorPrototypeReturnPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
+      <emu-alg>
+        1. Let _O_ be *this* value.
+        1. If Type(_O_) is not Object, throw a *TypeError* exception.
+        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
+        1. Let _iterated_ be _O_.[[Iterated]].
+        1. Let _return_ be ? GetMethod(_iterated_, `"return"`).
+        1. If _return_ is *undefined*, return CreateIterResultObject(_value_, *true*).
+        1. Return ? Call(_return_, _iterated_.[[Iterator]], &laquo; value &raquo;).
+      </emu-alg>
+    </emu-clause>
+
+    <emu-clause id="sec-iteratorprototypethrowpass">
+      <h1>%IteratorPrototypeThrowPass% ( _value_ )</h1>
+      <p>The <dfn>%IteratorPrototypeThrowPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
+      <emu-alg>
+        1. Let _O_ be *this* value.
+        1. If Type(_O_) is not Object, throw a *TypeError* exception.
+        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
+        1. Let _iterated_ be _O_.[[Iterated]].
+        1. Let _throw_ be ? GetMethod(_iterated_, `"throw"`).
+        1. If _throw_ is *undefined*, return ThrowCompletion(_value_).
+        1. Return ? Call(_throw_, _iterated_.[[Iterator]], &laquo; value &raquo;).
+      </emu-alg>
     </emu-clause>
   </emu-clause>
 </emu-clause>
