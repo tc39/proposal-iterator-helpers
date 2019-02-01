@@ -4,7 +4,7 @@
 title: Iterator Helpers
 status: proposal
 stage: 1
-location: https://tc39.github.io/ecma262
+location: https://tc39.github.io/proposal-iterator-helpers
 copyright: false
 contributors: Gus Caplan
 </pre>
@@ -32,14 +32,39 @@ contributors: Gus Caplan
   }
 </style>
 
-<emu-intro id="sec-intro">
-  <h1>TODO</h1>
-</emu-intro>
+<emu-clause id="sec-control-abstraction-objects">
+  <h1>Control Abstraction Objects</h1>
 
-<emu-clause id="#sec-%iteratorprototype%-object">
-  <h1>The %IteratorPrototype% Object</h1>
-</emu-clause>
+  <emu-clause id="sec-iteration">
+    <h1>Iteration</h1>
 
-<emu-clause id="#sec-%asynciteratorprototype%-object">
-  <h1>The %AsyncIteratorPrototype% Object</h1>
+    <emu-clause id="sec-%iteratorprototype%-object">
+      <h1>The %IteratorPrototype% Object</h1>
+
+      <emu-clause id="sec-iteratorprototype-map">
+        <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
+        <emu-alg>
+          1. If IsCallable(_mapper_) is *false*, throw a *TypeError*.
+          1. Let _iterated_ be GetIteratorDirect(_this_).
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
+          1. Set iterator.[[Mapper]] to _mapper_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-iteratorprototypemapiteratorprototype">
+        <h1>%IteratorPrototypeMapIteratorPrototype%</h1>
+        <p>The <dfn>%IteratorPrototypeMapIteratorPrototype%</dfn> object:</p>
+        <ul>
+          <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
+          <li>is an ordinary object.</li>
+        </ul>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-asynciteratorprototype">
+      <h1>The %AsyncIteratorPrototype% Object</h1>
+    </emu-clause>
+  </emu-clause>
 </emu-clause>
