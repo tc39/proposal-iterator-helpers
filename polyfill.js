@@ -285,13 +285,18 @@ const IteratorPrototypeFilterIteratorPrototype = Object.setPrototypeOf({
     while (true) {
       const next = ES.IteratorStep(iterated, v);
       if (next === false) {
-        ES.IteratorClose(iterated, () => undefined);
         return ES.CreateIterResultObject(undefined, true);
       }
       const value = ES.IteratorValue(next);
-      const selected = ES.ToBoolean(ES.Call(filterer, undefined, [value]));
-      if (selected === true) {
-        return ES.CreateIterResultObject(value, false);
+      try {
+        const selected = ES.Call(filterer, undefined, [value]);
+        if (ES.ToBoolean(selected) === true) {
+          return ES.CreateIterResultObject(value, false);
+        }
+      } catch (e) {
+        return ES.IteratorClose(iterated, () => {
+          throw e;
+        });
       }
     }
   },

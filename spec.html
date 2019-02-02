@@ -63,7 +63,7 @@ contributors: Gus Caplan
         <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
         <emu-alg>
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-          1. Let _iterated_ be ? GetIteratorDirect(_this_).
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _iterator_ be ObjectCreate(%IteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
           1. Set iterator.[[Mapper]] to _mapper_.
           1. Set iterator.[[Iterated]] to _iterated_.
@@ -136,6 +136,92 @@ contributors: Gus Caplan
                 </td>
                 <td>
                   The function which is used to map each value of [[Iterated]].
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </emu-table>
+        </emu-clause>
+      </emu-clause>
+
+
+      <emu-clause id="sec-iteratorprototype-filter">
+        <h1>%IteratorPrototype%.filter ( _filterer_ )</h1>
+        <emu-alg>
+          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeFilterIteratorPrototype%, &laquo; [[Filterer]], [[Iterated]] &raquo;).
+          1. Set iterator.[[Filterer]] to _filterer_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-iteratorprototypefilteriteratorprototype">
+        <h1>%IteratorPrototypeFilterIteratorPrototype%</h1>
+        <p>The <dfn>%IteratorPrototypeFilterIteratorPrototype%</dfn> object:</p>
+        <ul>
+          <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
+          <li>is an ordinary object.</li>
+        </ul>
+
+        <emu-clause id="sec-iteratorprototypefilteriteratorprototype-next">
+          <h1>%IteratorPrototypeMapIteratorPrototype%.next( _v_ )</h1>
+          <emu-alg>
+            1. Let _O_ be *this* value.
+            1. If Type(_O_) is not Object, throw a *TypeError* exception.
+            1. If _O_ does not have all the internal slots of a %IteratorPrototypeFilterIteratorPrototype% Instance, throw a *TypeError* exception.
+            1. Let _filterer_ be _O_.[[Filterer]].
+            1. Let _iterated_ be _O_.[[Iterated]].
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_, _v_).
+              1. If _next_ is *false*, return CreateIterResultObject(*undefined*, *true*);
+              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
+              1. If _selected_ is an abrupt completion, return ? IteratorClose(_iterated_, _selected_).
+              1. If ToBoolean(_selected_.[[Value]]) is *true*, return CreateIterResultObject(_value_, *false*).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-iteratorprototypefilteriteratorprototype-return">
+          <h1>%IteratorPrototypeFilterIteratorPrototype%.return</h1>
+          <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-iteratorprototypefilteriteratorprototype-throw">
+          <h1>%IteratorPrototypeFilterIteratorPrototype%.throw</h1>
+          <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+
+        <emu-clause id="sec-properties-of-iteratorprototypefilteriteratorprototype-instances">
+          <h1>Properties of %IteratorPrototypeFilterIteratorPrototype Instances</h1>
+          <emu-table id="table-1" caption="Internal Slots of %IteratorPrototypeFilterIteratorPrototype Instances">
+            <table>
+              <tbody>
+              <tr>
+                <th>
+                  Internal Slot
+                </th>
+                <th>
+                  Description
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  [[Iterated]]
+                </td>
+                <td>
+                  The iterator which is being iterated.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  [[Filterer]]
+                </td>
+                <td>
+                  The function which is used to filter values of [[Iterated]].
                 </td>
               </tr>
               </tbody>
