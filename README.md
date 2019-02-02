@@ -24,7 +24,7 @@ Additions to the Global Object.
        `%IteratorPrototype%` it will be returned, otherwise a wrapper
        will be returned.
   - `of(...items)`
-     - Create an iterable from `items`. Basically
+     - Create an iterator from `items`. Basically
        `return Iterator.from(items)`
 
 Additions to `%IteratorPrototype%`
@@ -93,15 +93,15 @@ Object.setPrototypeOf(MyIteratorPrototype, Iterator.syncPrototype);
 ```js
 class ObligatoryCryptocurrencyReference extends Component {
   componentWillMount() {
-    const items = ticker()
-      .map((c) => (<h2>{`${c.name}: ${c.price}`}</h2>))
+    const items = ticker() // returns async iterator
+      .map((c) => createElement('h2', null, `${c.name}: ${c.price}`))
       .take(5) // only consume 5 items of a potentially infinite iterator
       .collect() // greedily transform async iterator into array
       .then((data) => this.setState({ data }));
   }
 
   render() {
-    return <div>{this.state.data}</div>
+    return createElement('div', null, this.state.data);
   }
 }
 ```
@@ -109,7 +109,7 @@ class ObligatoryCryptocurrencyReference extends Component {
 ### Why not use Array.from + Array.prototype methods?
 
 All of these methods (except for reduce and collect) are **lazy**. They will
-only consume the iterable when they need the next item from it. Especially
+only consume the iterator when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
 
