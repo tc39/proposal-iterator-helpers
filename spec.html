@@ -92,8 +92,8 @@ contributors: Gus Caplan
       <emu-clause id="sec-iteratorprototype-map">
         <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
         <emu-alg>
+           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _iterator_ be ObjectCreate(%IteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
           1. Set iterator.[[Mapper]] to _mapper_.
           1. Set iterator.[[Iterated]] to _iterated_.
@@ -139,7 +139,7 @@ contributors: Gus Caplan
           </emu-clause>
 
           <emu-clause id="sec-properties-of-iteratorprototypemapiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeMapIteratorPrototype Instances</h1>
+            <h1>Properties of %IteratorPrototypeMapIteratorPrototype% Instances</h1>
             <emu-table id="table-1" caption="Internal Slots of %IteratorPrototypeMapIteratorPrototype Instances">
               <table>
                 <tbody>
@@ -178,8 +178,8 @@ contributors: Gus Caplan
       <emu-clause id="sec-iteratorprototype-filter">
         <h1>%IteratorPrototype%.filter ( _filterer_ )</h1>
         <emu-alg>
-          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _iterator_ be ObjectCreate(%IteratorPrototypeFilterIteratorPrototype%, &laquo; [[Filterer]], [[Iterated]] &raquo;).
           1. Set iterator.[[Filterer]] to _filterer_.
           1. Set iterator.[[Iterated]] to _iterated_.
@@ -225,7 +225,7 @@ contributors: Gus Caplan
           </emu-clause>
 
           <emu-clause id="sec-properties-of-iteratorprototypefilteriteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeFilterIteratorPrototype Instances</h1>
+            <h1>Properties of %IteratorPrototypeFilterIteratorPrototype% Instances</h1>
             <emu-table id="table-2" caption="Internal Slots of %IteratorPrototypeFilterIteratorPrototype Instances">
               <table>
                 <tbody>

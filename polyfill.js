@@ -258,10 +258,10 @@ const IteratorPrototypeMapIteratorPrototype = Object.setPrototypeOf({
 }, Iterator.syncPrototype);
 
 Iterator.syncPrototype.map = function map(mapper) {
+  const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(mapper) === false) {
     throw new TypeError();
   }
-  const iterated = GetIteratorDirect(this);
   const iterator = ES.ObjectCreate(IteratorPrototypeMapIteratorPrototype, [
     // 'Mapper',
     // 'Iterated',
@@ -306,10 +306,10 @@ const IteratorPrototypeFilterIteratorPrototype = Object.setPrototypeOf({
 }, Iterator.syncPrototype);
 
 Iterator.syncPrototype.filter = function filter(filterer) {
+  const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(filterer) === false) {
     throw new TypeError();
   }
-  const iterated = GetIteratorDirect(this);
   const iterator = ES.ObjectCreate(IteratorPrototypeFilterIteratorPrototype, [
     // 'Filterer',
     // 'Iterated',
