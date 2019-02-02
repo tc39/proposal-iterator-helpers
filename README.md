@@ -101,7 +101,7 @@ class ObligatoryCryptocurrencyReference extends Component {
   }
 
   render() {
-    return <div>{this.data}</div>
+    return <div>{this.state.data}</div>
   }
 }
 ```
