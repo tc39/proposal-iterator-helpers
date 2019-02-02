@@ -3,15 +3,13 @@
 ### Proposal
 
 A proposal for several interfaces that will help with general usage and
-consumption of iterators in ECMAScript.
+consumption of iterators in ECMAScript. Many
+[libraries and languages](#prior-art) already provide these interfaces.
 
 This proposal is at Stage 1 of
 [The Process](https://tc39.github.io/process-document/)
 
-The following additions are proposed to enable simple and powerful methods of
-interacting with iterators in ECMAScript. 
-
-Many [libraries and languages](#prior-art) already provide these interfaces.
+See [DETAILS.md](./DETAILS.md) for details on semantics decisions.
 
 Additions to the Global Object.
 
