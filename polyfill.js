@@ -325,17 +325,15 @@ const IteratorPrototypeTakeIteratorPrototype = Object.setPrototypeOf({
     if (ES.Type(O) !== 'Object') {
       throw new TypeError();
     }
-    if (!('Limit' in O && 'Taken' in O && 'Iterated' in O)) {
+    if (!('Remaining' in O && 'Iterated' in O)) {
       throw new TypeError();
     }
-    const limit = O.Limit;
-    const taken = O.Taken + 1;
-    O.Taken = taken;
-    const iterated = O.Iterated;
-    if (taken > limit) {
-      ES.IteratorClose(iterated, () => undefined);
+    const remaining = O.Remaining;
+    O.Remaining = remaining - 1;
+    if (remaining === 0) {
       return ES.CreateIterResultObject(undefined, true);
     }
+    const iterated = O.Iterated;
     return ES.IteratorNext(iterated, v);
   },
   return: IteratorPrototypeReturnPass,
@@ -344,15 +342,13 @@ const IteratorPrototypeTakeIteratorPrototype = Object.setPrototypeOf({
 }, Iterator.syncPrototype);
 
 Iterator.syncPrototype.take = function take(n) {
-  const limit = ES.ToNumber(n);
   const iterated = GetIteratorDirect(this);
+  const remaining = ES.ToNumber(n);
   const iterator = ES.ObjectCreate(IteratorPrototypeTakeIteratorPrototype, [
-    // 'Limit',
-    // 'Taken',
+    // 'Remaining',
     // 'Iterated',
   ]);
-  iterator.Limit = limit;
-  iterator.Taken = 0;
+  iterator.Remaining = remaining;
   iterator.Iterated = iterated;
   return iterator;
 };

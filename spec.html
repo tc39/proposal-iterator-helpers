@@ -174,7 +174,6 @@ contributors: Gus Caplan
         </emu-clause>
       </emu-clause>
 
-
       <emu-clause id="sec-iteratorprototype-filter">
         <h1>%IteratorPrototype%.filter ( _filterer_ )</h1>
         <emu-alg>
@@ -251,6 +250,87 @@ contributors: Gus Caplan
                   </td>
                   <td>
                     The function which is used to filter values of [[Iterated]].
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </emu-table>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-iteratorprototype-take">
+        <h1>%IteratorPrototype%.take ( _limit_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeTakeIteratorPrototype%, &laquo; [[Remaining]], [[Iterated]] &raquo;).
+          1. Set iterator.[[Remaining]] to _remaining_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+
+        <emu-clause id="sec-iteratorprototypetakeiteratorprototype">
+          <h1>%IteratorPrototypeTakeIteratorPrototype%</h1>
+          <p>The <dfn>%IteratorPrototypeTakeIteratorPrototype%</dfn> object:</p>
+          <ul>
+            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
+            <li>is an ordinary object.</li>
+          </ul>
+
+          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-next">
+            <h1>%IteratorPrototypeTakeIteratorPrototype%.next( _v_ )</h1>
+            <emu-alg>
+              1. Let _O_ be *this* value.
+              1. If Type(_O_) is not Object, throw a *TypeError* exception.
+              1. If _O_ does not have all the internal slots of a %IteratorPrototypeTakeIteratorPrototype% Instance, throw a *TypeError* exception.
+              1. Let _remaining_ be _O_.[[Remaining]].
+              1. Set _O_.[[Remaining]] to _remaining_ - 1.
+              1. If _remaining_ is 0, return CreateIterResultObject(*undefined*, *true*).
+              1. Let _iterated_ be _O_.[[Iterated]].
+              1. Return ? IteratorNext(_iterated_, _v_).
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-return">
+            <h1>%IteratorPrototypeTakeIteratorPrototype%.return</h1>
+            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-throw">
+            <h1>%IteratorPrototypeTakeIteratorPrototype%.throw</h1>
+            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-properties-of-iteratorprototypetakeiteratorprototype-instances">
+            <h1>Properties of %IteratorPrototypeTakeIteratorPrototype% Instances</h1>
+            <emu-table id="table-3" caption="Internal Slots of %IteratorPrototypeTakeIteratorPrototype Instances">
+              <table>
+                <tbody>
+                <tr>
+                  <th>
+                    Internal Slot
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    [[Iterated]]
+                  </td>
+                  <td>
+                    The iterator which is being iterated.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    [[Remaining]]
+                  </td>
+                  <td>
+                    The remaining number of items to take from [[Iterated]].
                   </td>
                 </tr>
                 </tbody>
