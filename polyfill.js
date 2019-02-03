@@ -329,10 +329,10 @@ const IteratorPrototypeTakeIteratorPrototype = Object.setPrototypeOf({
       throw new TypeError();
     }
     const remaining = O.Remaining;
-    O.Remaining = remaining - 1;
     if (remaining === 0) {
       return ES.CreateIterResultObject(undefined, true);
     }
+    O.Remaining = remaining - 1;
     const iterated = O.Iterated;
     return ES.IteratorNext(iterated, v);
   },

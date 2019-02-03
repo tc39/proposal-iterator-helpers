@@ -285,8 +285,8 @@ contributors: Gus Caplan
               1. If Type(_O_) is not Object, throw a *TypeError* exception.
               1. If _O_ does not have all the internal slots of a %IteratorPrototypeTakeIteratorPrototype% Instance, throw a *TypeError* exception.
               1. Let _remaining_ be _O_.[[Remaining]].
-              1. Set _O_.[[Remaining]] to _remaining_ - 1.
               1. If _remaining_ is 0, return CreateIterResultObject(*undefined*, *true*).
+              1. Set _O_.[[Remaining]] to _remaining_ - 1.
               1. Let _iterated_ be _O_.[[Iterated]].
               1. Return ? IteratorNext(_iterated_, _v_).
             </emu-alg>
