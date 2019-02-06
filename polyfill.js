@@ -378,15 +378,14 @@ Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
 
 Iterator.syncPrototype.collect = function collect() {
   const iterated = GetIteratorDirect(this);
-  const array = [];
+  const items = [];
   while (true) {
     const next = ES.IteratorStep(iterated);
     if (next === false) {
-      ES.IteratorClose(iterated, () => undefined);
-      return array;
+      return items;
     }
     const value = ES.IteratorValue(next);
-    array.push(value);
+    items.push(value);
   }
 };
 
