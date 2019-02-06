@@ -353,20 +353,26 @@ Iterator.syncPrototype.take = function take(n) {
   return iterator;
 };
 
-Iterator.syncPrototype.reduce = function reduce(reducer, start) {
+Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
+  const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(reducer) === false) {
     throw new TypeError();
   }
-  const iterated = GetIteratorDirect(this);
-  let final = start;
+  let accumulator = initialValue;
   while (true) {
     const next = ES.IteratorStep(iterated);
     if (next === false) {
-      ES.IteratorClose(iterated, () => undefined);
-      return final;
+      return accumulator;
     }
     const value = ES.IteratorValue(next);
-    final = ES.Call(reducer, undefined, [final, value]);
+    try {
+      const result = ES.Call(reducer, undefined, [accumulator, value]);
+      accumulator = result;
+    } catch (e) {
+      return ES.IteratorClose(iterated, () => {
+        throw e;
+      });
+    }
   }
 };
 
