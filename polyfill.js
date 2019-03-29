@@ -389,26 +389,88 @@ Iterator.syncPrototype.collect = function collect() {
   }
 };
 
+ES.NewPromiseCapability = function NewPromiseCapability(C) {
+  if (ES.IsConstructor(C) === false) {
+    throw new TypeError();
+  }
+  const promiseCapability = {
+    Promise: undefined,
+    Resolve: undefined,
+    Reject: undefined,
+  };
+  const steps = (0, (resolve, reject) => {
+    if (promiseCapability.Resolve !== undefined) {
+      throw new TypeError();
+    }
+    if (promiseCapability.Reject !== undefined) {
+      throw new TypeError();
+    }
+    promiseCapability.Resolve = resolve;
+    promiseCapability.Reject = reject;
+    return undefined;
+  });
+  const executor = steps;
+  executor.Capability = promiseCapability;
+  const promise = new C(executor);
+  if (ES.IsCallable(promiseCapability.Resolve) === false) {
+    throw new TypeError();
+  }
+  if (ES.IsCallable(promiseCapability.Reject) === false) {
+    throw new TypeError();
+  }
+  promiseCapability.Promise = promise;
+  return promiseCapability;
+};
+
 const AsyncIteratorPrototypeMapIteratorPrototype = Object.setPrototypeOf({
   async next(v) {
     const O = this;
-    if (ES.Type(O) !== 'Object') {
-      throw new TypeError();
+    const promiseCapability = ES.NewPromiseCapability(Promise);
+    if (ES.Type(O) !== 'Object' || !('Mapper' in O && 'Iterated' in O)) {
+      const invalidIteratorError = new TypeError();
+      ES.Call(promiseCapability.Reject, undefined, [invalidIteratorError]);
+      return promiseCapability.Promise;
     }
-    if (!('AsyncMapper' in O && 'Iterated' in O)) {
-      throw new TypeError();
-    }
-    const mapper = O.AsyncMapper;
+    const mapper = O.Mapper;
     const iterated = O.Iterated;
-    const next = await ES.IteratorNext(iterated, v);
-    const done = ES.IteratorComplete(next);
-    if (done === true) {
-      await ES.AsyncIteratorClose(iterated, () => undefined);
-      return ES.CreateIterResultObject(undefined, true);
+    let next;
+    try { // IfAbruptRejectPromise
+      next = ES.IteratorNext(iterated, v);
+    } catch (e) {
+      ES.Call(promiseCapability.Reject, undefined, [e]);
+      return promiseCapability.Promise;
     }
-    const value = ES.IteratorValue(next);
-    const mapped = await ES.Call(mapper, undefined, [value]);
-    return ES.CreateIterResultObject(mapped, false);
+    next = await next;
+    let done;
+    try { // IfAbruptRejectPromise
+      done = ES.IteratorComplete(next);
+    } catch (e) {
+      ES.Call(promiseCapability.Reject, undefined, [e]);
+      return promiseCapability.Promise;
+    }
+    if (done === true) {
+      const iterResultObject = ES.CreateIterResultObject(undefined, true);
+      ES.Call(promiseCapability.Resolve, undefined, [iterResultObject]);
+      return promiseCapability.Promise;
+    }
+    let value;
+    try { // IfAbruptRejectPromise
+      value = ES.IteratorValue(next);
+    } catch (e) {
+      ES.Call(promiseCapability.Reject, undefined, [e]);
+      return promiseCapability.Promise;
+    }
+    let mapped;
+    try { // IfAbruptRejectPromise
+      mapped = ES.Call(mapper, undefined, [value]);
+    } catch (e) {
+      ES.Call(promiseCapability.Reject, undefined, [e]);
+      return promiseCapability.Promise;
+    }
+    mapped = await mapped;
+    const iterResultObject = ES.CreateIterResultObject(mapped, false);
+    ES.Call(promiseCapability.Resolve, undefined, [iterResultObject]);
+    return promiseCapability.Promise;
   },
   return: IteratorPrototypeReturnPass,
   throw: IteratorPrototypeThrowPass,
@@ -421,10 +483,10 @@ Iterator.asyncPrototype.map = function map(mapper) {
   }
   const iterated = GetIteratorDirect(this, 'async');
   const iterator = ES.ObjectCreate(AsyncIteratorPrototypeMapIteratorPrototype, [
-    // 'AsyncMapper',
+    // 'Mapper',
     // 'Iterated',
   ]);
-  iterator.AsyncMapper = mapper;
+  iterator.Mapper = mapper;
   iterator.Iterated = iterated;
   return iterator;
 };

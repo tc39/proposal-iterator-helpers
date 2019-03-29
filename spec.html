@@ -109,7 +109,7 @@ contributors: Gus Caplan
           </ul>
 
           <emu-clause id="sec-iteratorprototypemapiteratorprototype-next">
-            <h1>%IteratorPrototypeMapIteratorPrototype%.next( _v_ )</h1>
+            <h1>%IteratorPrototypeMapIteratorPrototype%.next ( _v_ )</h1>
             <emu-alg>
               1. Let _O_ be *this* value.
               1. If Type(_O_) is not Object, throw a *TypeError* exception.
@@ -194,7 +194,7 @@ contributors: Gus Caplan
           </ul>
 
           <emu-clause id="sec-iteratorprototypefilteriteratorprototype-next">
-            <h1>%IteratorPrototypeFilterIteratorPrototype%.next( _v_ )</h1>
+            <h1>%IteratorPrototypeFilterIteratorPrototype%.next ( _v_ )</h1>
             <emu-alg>
               1. Let _O_ be *this* value.
               1. If Type(_O_) is not Object, throw a *TypeError* exception.
@@ -279,7 +279,7 @@ contributors: Gus Caplan
           </ul>
 
           <emu-clause id="sec-iteratorprototypetakeiteratorprototype-next">
-            <h1>%IteratorPrototypeTakeIteratorPrototype%.next( _v_ )</h1>
+            <h1>%IteratorPrototypeTakeIteratorPrototype%.next ( _v_ )</h1>
             <emu-alg>
               1. Let _O_ be *this* value.
               1. If Type(_O_) is not Object, throw a *TypeError* exception.
@@ -372,6 +372,104 @@ contributors: Gus Caplan
 
     <emu-clause id="sec-asynciteratorprototype">
       <h1>The %AsyncIteratorPrototype% Object</h1>
+
+      <emu-clause id="sec-asynciteratorprototype-map">
+        <h1>%AsyncIteratorPrototype%.map ( _mapper_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
+          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
+          1. Set iterator.[[Mapper]] to _mapper_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+
+        <emu-clause id="sec-asynciteratorprototypemapiteratorprototype">
+          <h1>%AsyncIteratorPrototypeMapIteratorPrototype%</h1>
+          <p>The <dfn>%AsyncIteratorPrototypeMapIteratorPrototype%</dfn> object:</p>
+          <ul>
+            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
+            <li>is an ordinary object.</li>
+          </ul>
+
+          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-next">
+            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.next ( _v_ )</h1>
+            <emu-alg>
+              1. Let _O_ be *this* value.
+              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+              1. If Type(_O_) is not Object or _O_ does not have all the internal slots of a %AsyncIteratorPrototypeMapIteratorPrototype% Instance,
+                1. Let _invalidIteratorError_ be a newly created *TypeError* object.
+                1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _invalidIteratorError_ &raquo;).
+                1. Return _promiseCapability_.[[Promise]].
+              1. Let _mapper_ be _O_.[[Mapper]].
+              1. Let _iterated_ be _O_.[[Iterated]].
+              1. Let _next_ be IteratorNext(_iterated_, _v_).
+              1. IfAbruptRejectPromise(_next_, _promiseCapability_).
+              1. Let _done_ be IteratorComplete(_next_).
+              1. IfAbruptRejectPromise(_done_, _promiseCapability_).
+              1. If _done_ is *true*, then
+                1. Let _iterResultObject_ be CreateIterResultObject(*undefined*, *true*).
+                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResultObject_ &raquo;).
+                1. Return _promiseCapability_.[[Promise]].
+              1. Let _value_ be IteratorValue(_next_).
+              1. IfAbruptRejectPromise(_value_, _promiseCapability_).
+              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
+              1. IfAbruptRejectPromise(_mapped_, _promiseCapability_).
+              1. Set _mapped_ to ? Await(_mapped_).
+              1. Let _iterResultObject_ be CreateIterResultObject(_mapped_, *false*).
+              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResultObject_ &raquo;).
+              1. Return _promiseCapability_.[[Promise]].
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-return">
+            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.return</h1>
+            <p>The initial value of %AsyncIteratorPrototypeMapIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-throw">
+            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.throw</h1>
+            <p>The initial value of %AsyncIteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-properties-of-asynciteratorprototypemapiteratorprototype-instances">
+            <h1>Properties of %AsyncIteratorPrototypeMapIteratorPrototype% Instances</h1>
+            <emu-table id="table-4" caption="Internal Slots of %AsyncIteratorPrototypeMapIteratorPrototype Instances">
+              <table>
+                <tbody>
+                <tr>
+                  <th>
+                    Internal Slot
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    [[Iterated]]
+                  </td>
+                  <td>
+                    The iterator which is being iterated.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    [[Mapper]]
+                  </td>
+                  <td>
+                    The function which is used to map each value of [[Iterated]].
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </emu-table>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+
     </emu-clause>
 
     <emu-clause id="sec-iteratorprototypereturnpass">
@@ -384,7 +482,7 @@ contributors: Gus Caplan
         1. Let _iterated_ be _O_.[[Iterated]].
         1. Let _return_ be ? GetMethod(_iterated_, `"return"`).
         1. If _return_ is *undefined*, return CreateIterResultObject(_value_, *true*).
-        1. Return ? Call(_return_, _iterated_.[[Iterator]], &laquo; value &raquo;).
+        1. Return ? Call(_return_, _iterated_.[[Iterator]], &laquo; _value_ &raquo;).
       </emu-alg>
     </emu-clause>
 
@@ -398,7 +496,7 @@ contributors: Gus Caplan
         1. Let _iterated_ be _O_.[[Iterated]].
         1. Let _throw_ be ? GetMethod(_iterated_, `"throw"`).
         1. If _throw_ is *undefined*, return ThrowCompletion(_value_).
-        1. Return ? Call(_throw_, _iterated_.[[Iterator]], &laquo; value &raquo;).
+        1. Return ? Call(_throw_, _iterated_.[[Iterator]], &laquo; _value_ &raquo;).
       </emu-alg>
     </emu-clause>
   </emu-clause>
