@@ -353,6 +353,44 @@ Iterator.syncPrototype.take = function take(n) {
   return iterator;
 };
 
+const IteratorPrototypeDropIteratorPrototype = Object.setPrototypeOf({
+  next(v) {
+    const O = this;
+    if (ES.Type(O) !== 'Object') {
+      throw new TypeError();
+    }
+    if (!('Remaining' in O && 'Iterated' in O)) {
+      throw new TypeError();
+    }
+    let remaining = O.Remaining;
+    const iterated = O.Iterated;
+    if (remaining === 0) {
+      return ES.IteratorNext(iterated, v);
+    }
+    O.Remaining = 0;
+    while (remaining > 0) {
+      ES.IteratorNext(iterated, undefined);
+      remaining -= 1;
+    }
+    return ES.IteratorNext(iterated, v);
+  },
+  return: IteratorPrototypeReturnPass,
+  throw: IteratorPrototypeThrowPass,
+  [Symbol.toStringTag]: 'TBD',
+}, Iterator.syncPrototype);
+
+Iterator.syncPrototype.drop = function drop(n) {
+  const iterated = GetIteratorDirect(this);
+  const remaining = ES.ToNumber(n);
+  const iterator = ES.ObjectCreate(IteratorPrototypeDropIteratorPrototype, [
+    // 'Remaining',
+    // 'Iterated',
+  ]);
+  iterator.Remaining = remaining;
+  iterator.Iterated = iterated;
+  return iterator;
+};
+
 Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
   const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(reducer) === false) {

@@ -340,6 +340,90 @@ contributors: Gus Caplan
         </emu-clause>
       </emu-clause>
 
+      <emu-clause id="sec-iteratorprototype-drop">
+        <h1>%IteratorPrototype%.drop ( _limit_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeDropIteratorPrototype%, &laquo; [[Remaining]], [[Iterated]] &raquo;).
+          1. Set iterator.[[Remaining]] to _remaining_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+
+        <emu-clause id="sec-iteratorprototypedropiteratorprototype">
+          <h1>%IteratorPrototypeDropIteratorPrototype%</h1>
+          <p>The <dfn>%IteratorPrototypeDropIteratorPrototype%</dfn> object:</p>
+          <ul>
+            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
+            <li>is an ordinary object.</li>
+          </ul>
+
+          <emu-clause id="sec-iteratorprototypedropiteratorprototype-next">
+            <h1>%IteratorPrototypeDropIteratorPrototype%.next ( _v_ )</h1>
+            <emu-alg>
+              1. Let _O_ be *this* value.
+              1. If Type(_O_) is not Object, throw a *TypeError* exception.
+              1. If _O_ does not have all the internal slots of a %IteratorPrototypeDropIteratorPrototype% Instance, throw a *TypeError* exception.
+              1. Let _remaining_ be _O_.[[Remaining]].
+              1. Let _iterated_ be _O_.[[Iterated]].
+              1. If _remaining_ is 0, return ? IteratorNext(_iterated_, _v_).
+              1. Set _O_.[[Remaining]] to 0.
+              1. Repeat, while _remaining_ &gt; 0,
+                1. Perform ? IteratorNext(_iterated_, _undefined_).
+                1. Set _remaining_ to _remaining_ - 1.
+              1. Return ? IteratorNext(_iterated_, _v_).
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-iteratorprototypedropiteratorprototype-return">
+            <h1>%IteratorPrototypeDropIteratorPrototype%.return</h1>
+            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-iteratorprototypedropiteratorprototype-throw">
+            <h1>%IteratorPrototypeDropIteratorPrototype%.throw</h1>
+            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-properties-of-iteratorprototypedropiteratorprototype-instances">
+            <h1>Properties of %IteratorPrototypeDropIteratorPrototype% Instances</h1>
+            <emu-table id="table-3" caption="Internal Slots of %IteratorPrototypeDropIteratorPrototype Instances">
+              <table>
+                <tbody>
+                <tr>
+                  <th>
+                    Internal Slot
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    [[Iterated]]
+                  </td>
+                  <td>
+                    The iterator which is being iterated.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    [[Remaining]]
+                  </td>
+                  <td>
+                    The number of items to drop from [[Iterated]].
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </emu-table>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+
       <emu-clause id="sec-iteratorprototype-reduce">
         <h1>%IteratorPrototype%.reduce ( _reducer_, _initialValue_ )</h1>
         <emu-alg>
