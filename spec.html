@@ -390,7 +390,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-properties-of-iteratorprototypedropiteratorprototype-instances">
             <h1>Properties of %IteratorPrototypeDropIteratorPrototype% Instances</h1>
-            <emu-table id="table-3" caption="Internal Slots of %IteratorPrototypeDropIteratorPrototype Instances">
+            <emu-table id="table-4" caption="Internal Slots of %IteratorPrototypeDropIteratorPrototype Instances">
               <table>
                 <tbody>
                 <tr>
@@ -450,6 +450,20 @@ contributors: Gus Caplan
             1. If _next_ is *false*, return ? CreateArrayFromList(_items_).
             1. Let _value_ be ? IteratorValue(_next_).
             1. Append _value_ to _items_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-iteratorprototype-foreach">
+        <h1>%IteratorPrototype%.forEach ( _fn_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _index_ be *0*.
+          1. Repeat,
+            1. Let _next_ be ? IteratorStep(_iterated_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Perform ? Call(_fn_, *undefined*, &laquo; _value_, _index_ &raquo;).
+            1. Set _index_ to _index_ + *1*.
         </emu-alg>
       </emu-clause>
     </emu-clause>

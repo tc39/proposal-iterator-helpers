@@ -427,6 +427,20 @@ Iterator.syncPrototype.collect = function collect() {
   }
 };
 
+Iterator.syncPrototype.forEach = function forEach(fn) {
+  const iterated = GetIteratorDirect(this);
+  let index = 0;
+  while (true) {
+    const next = ES.IteratorStep(iterated);
+    if (next === false) {
+      return undefined;
+    }
+    const value = ES.IteratorValue(next);
+    ES.Call(fn, undefined, [value, index]);
+    index += 1;
+  }
+};
+
 ES.NewPromiseCapability = function NewPromiseCapability(C) {
   if (ES.IsConstructor(C) === false) {
     throw new TypeError();
