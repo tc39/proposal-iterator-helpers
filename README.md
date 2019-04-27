@@ -11,47 +11,7 @@ This proposal is at Stage 1 of
 
 See [DETAILS.md](./DETAILS.md) for details on semantics decisions.
 
-Additions to the Global Object.
-
-- `Iterator` global namespace
-  - `syncPrototype` => `%IteratorPrototype%`
-  - `asyncPrototype` => `%AsyncIteratorPrototype%`
-  - `from(value)`
-     - Tries to grab `Symbol.iterator` if it exists
-     - If the iterator is a proper iterator inheriting from
-       `%IteratorPrototype%` it will be returned, otherwise a wrapper
-       will be returned.
-  - `of(...items)`
-     - Create an iterator from `items`. Basically
-       `return Iterator.from(items)`
-
-Additions to `%IteratorPrototype%`
-
-- `filter(callbackfn)`
-- `map(callbackfn)`
-- `take(n)`
-  - Returns an iterator that yields the first `n` elements. Useful for making
-    an infinite iterator finite.
-- `reduce(callbackfn)`
-  - Consume the entire iterator, using `callbackfn` as a reducer.
-- `collect()`
-  - Create an array from the iterator
-  - `Iterator.of(1, 2, 3).collect() // [1, 2, 3]`
-  - This is in the same space as `Array.from`, but is included to keep symmetry
-    with `Iterator.asyncPrototype.collect`
-
-Additions to `%AsyncIteratorPrototype%`
-
-- `filter(callbackfn)`
-- `map(callbackfn)`
-- `take(n)`
-  - Returns an iterator that yields the first `n` elements. Useful for making
-    an infinite iterator finite.
-- `reduce(callbackfn)`
-  - Consume the entire iterator, using `callbackfn` as the reducer.
-- `collect()`
-  - Create an array from the iterator
-  - `asyncIt.collect().then((items) => { console.log(items[2]); })`
+See this specification rendered [here](https://tc39.github.io/proposal-iterator-helpers)
 
 ### Example usage
 
