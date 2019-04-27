@@ -104,6 +104,41 @@ ES.AsyncIteratorClose = async function AsyncIteratorClose(iteratorRecord, comple
   return completionRecord;
 };
 
+ES.NewPromiseCapability = function NewPromiseCapability(C) {
+  if (ES.IsConstructor(C) === false) {
+    throw new TypeError();
+  }
+  const promiseCapability = {
+    Promise: undefined,
+    Resolve: undefined,
+    Reject: undefined,
+  };
+  const steps = (0, (resolve, reject) => {
+    if (promiseCapability.Resolve !== undefined) {
+      throw new TypeError();
+    }
+    if (promiseCapability.Reject !== undefined) {
+      throw new TypeError();
+    }
+    promiseCapability.Resolve = resolve;
+    promiseCapability.Reject = reject;
+    return undefined;
+  });
+  const executor = steps;
+  executor.Capability = promiseCapability;
+  const promise = new C(executor);
+  if (ES.IsCallable(promiseCapability.Resolve) === false) {
+    throw new TypeError();
+  }
+  if (ES.IsCallable(promiseCapability.Reject) === false) {
+    throw new TypeError();
+  }
+  promiseCapability.Promise = promise;
+  return promiseCapability;
+};
+
+ES.CreateArrayFromList = (array) => array;
+
 function GetIteratorDirect(obj) {
   if (ES.Type(obj) !== 'Object') {
     throw new TypeError();
@@ -391,6 +426,43 @@ Iterator.syncPrototype.drop = function drop(n) {
   return iterator;
 };
 
+const IteratorPrototypeEnumerateIteratorPrototype = Object.setPrototypeOf({
+  next(v) {
+    const O = this;
+    if (ES.Type(O) !== 'Object') {
+      throw new TypeError();
+    }
+    if (!('Index' in O && 'Iterated' in O)) {
+      throw new TypeError();
+    }
+    const index = O.Index;
+    O.Index = index + 1;
+    const iterated = O.Iterated;
+    const next = ES.IteratorStep(iterated, v);
+    if (next === false) {
+      return ES.CreateIterResultObject(undefined, true);
+    }
+    const value = ES.IteratorValue(next);
+    const pair = ES.CreateArrayFromList([index, value]);
+    return ES.CreateIterResultObject(pair, false);
+  },
+  return: IteratorPrototypeReturnPass,
+  throw: IteratorPrototypeThrowPass,
+  [Symbol.toStringTag]: 'TBD',
+}, Iterator.syncPrototype);
+
+
+Iterator.syncPrototype.enumerate = function enumerate() {
+  const iterated = GetIteratorDirect(this);
+  const iterator = ES.ObjectCreate(IteratorPrototypeEnumerateIteratorPrototype, [
+    // 'Index',
+    // 'Iterated',
+  ]);
+  iterator.Index = 0;
+  iterator.Iterated = iterated;
+  return iterator;
+};
+
 Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
   const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(reducer) === false) {
@@ -439,39 +511,6 @@ Iterator.syncPrototype.forEach = function forEach(fn) {
     ES.Call(fn, undefined, [value, index]);
     index += 1;
   }
-};
-
-ES.NewPromiseCapability = function NewPromiseCapability(C) {
-  if (ES.IsConstructor(C) === false) {
-    throw new TypeError();
-  }
-  const promiseCapability = {
-    Promise: undefined,
-    Resolve: undefined,
-    Reject: undefined,
-  };
-  const steps = (0, (resolve, reject) => {
-    if (promiseCapability.Resolve !== undefined) {
-      throw new TypeError();
-    }
-    if (promiseCapability.Reject !== undefined) {
-      throw new TypeError();
-    }
-    promiseCapability.Resolve = resolve;
-    promiseCapability.Reject = reject;
-    return undefined;
-  });
-  const executor = steps;
-  executor.Capability = promiseCapability;
-  const promise = new C(executor);
-  if (ES.IsCallable(promiseCapability.Resolve) === false) {
-    throw new TypeError();
-  }
-  if (ES.IsCallable(promiseCapability.Reject) === false) {
-    throw new TypeError();
-  }
-  promiseCapability.Promise = promise;
-  return promiseCapability;
 };
 
 const AsyncIteratorPrototypeMapIteratorPrototype = Object.setPrototypeOf({
