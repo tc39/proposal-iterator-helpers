@@ -428,8 +428,8 @@ contributors: Gus Caplan
         <h1>%IteratorPrototype%.enumerate ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeEnumerateIteratorPrototype%, &laquo; [[Remaining]], [[Index]] &raquo;).
-          1. Set iterator.[[Remaining]] to _remaining_.
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeEnumerateIteratorPrototype%, &laquo; [[Iterated]], [[Index]] &raquo;).
+          1. Set iterator.[[Iterated]] to _iterated_.
           1. Set iterator.[[Index]] to *0*.
           1. Return _iterator_.
         </emu-alg>
