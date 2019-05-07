@@ -120,7 +120,7 @@ contributors: Gus Caplan
               1. If _next_ is *false*, then
                 1. Return CreateIterResultObject(*undefined*, *true*).
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Call(_mapper_, *undefined*, &raquo; value &laquo;).
+              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; value &raquo;).
               1. If _mapped_ is an abrupt completion, return ? IteratorClose(_iterated_, _mapped_).
               1. Return CreateIterResultObject(_mapped_.[[Value]], *false*).
             </emu-alg>
