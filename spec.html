@@ -424,30 +424,30 @@ contributors: Gus Caplan
         </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-enumerate">
-        <h1>%IteratorPrototype%.enumerate ( )</h1>
+      <emu-clause id="sec-iteratorprototype-asindexedpairs">
+        <h1>%IteratorPrototype%.asIndexedPairs ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeEnumerateIteratorPrototype%, &laquo; [[Iterated]], [[Index]] &raquo;).
+          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeAsIndexedPairsIteratorPrototype%, &laquo; [[Iterated]], [[Index]] &raquo;).
           1. Set iterator.[[Iterated]] to _iterated_.
           1. Set iterator.[[Index]] to *0*.
           1. Return _iterator_.
         </emu-alg>
 
-        <emu-clause id="sec-iteratorprototypeenumerateiteratorprototype">
-          <h1>%IteratorPrototypeEnumerateIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeEnumerateIteratorPrototype%</dfn> object:</p>
+        <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype">
+          <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%</h1>
+          <p>The <dfn>%IteratorPrototypeAsIndexedPairsIteratorPrototype%</dfn> object:</p>
           <ul>
             <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
             <li>is an ordinary object.</li>
           </ul>
 
-          <emu-clause id="sec-iteratorprototypeenumerateiteratorprototype-next">
-            <h1>%IteratorPrototypeEnumerateIteratorPrototype%.next ( _v_ )</h1>
+          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-next">
+            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.next ( _v_ )</h1>
             <emu-alg>
               1. Let _O_ be *this* value.
               1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeEnumerateIteratorPrototype% Instance, throw a *TypeError* exception.
+              1. If _O_ does not have all the internal slots of a %IteratorPrototypeAsIndexedPairsIteratorPrototype% Instance, throw a *TypeError* exception.
               1. Let _index_ be _O_.[[Index]].
               1. Set _O_.[[Index]] to _index_ + *1*.
               1. Let _iterated_ be _O_.[[Iterated]].
@@ -458,21 +458,21 @@ contributors: Gus Caplan
             </emu-alg>
           </emu-clause>
 
-          <emu-clause id="sec-iteratorprototypeenumerateiteratorprototype-return">
-            <h1>%IteratorPrototypeEnumerateIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeEnumerateIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-return">
+            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.return</h1>
+            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
-          <emu-clause id="sec-iteratorprototypeenumerateiteratorprototype-throw">
-            <h1>%IteratorPrototypeEnumerateIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeEnumerateIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-throw">
+            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw</h1>
+            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
-          <emu-clause id="sec-properties-of-iteratorprototypeenumerateiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeEnumerateIteratorPrototype% Instances</h1>
-            <emu-table id="table-5" caption="Internal Slots of %IteratorPrototypeEnumerateIteratorPrototype Instances">
+          <emu-clause id="sec-properties-of-iteratorprototypeasindexedpairsiteratorprototype-instances">
+            <h1>Properties of %IteratorPrototypeAsIndexedPairsIteratorPrototype% Instances</h1>
+            <emu-table id="table-5" caption="Internal Slots of %IteratorPrototypeAsIndexedPairsIteratorPrototype Instances">
               <table>
                 <tbody>
                 <tr>

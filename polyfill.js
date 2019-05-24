@@ -452,7 +452,7 @@ const IteratorPrototypeEnumerateIteratorPrototype = Object.setPrototypeOf({
 }, Iterator.syncPrototype);
 
 
-Iterator.syncPrototype.enumerate = function enumerate() {
+Iterator.syncPrototype.asIndexedPairs = function asIndexedPairs() {
   const iterated = GetIteratorDirect(this);
   const iterator = ES.ObjectCreate(IteratorPrototypeEnumerateIteratorPrototype, [
     // 'Index',
