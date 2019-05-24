@@ -463,41 +463,6 @@ Iterator.syncPrototype.asIndexedPairs = function asIndexedPairs() {
   return iterator;
 };
 
-const IteratorPrototypeTapIteratorPrototype = Object.setPrototypeOf({
-  next(v) {
-    const O = this;
-    if (ES.Type(O) !== 'Object') {
-      throw new TypeError();
-    }
-    if (!('Iterated' in O && 'Tapper' in O)) {
-      throw new TypeError();
-    }
-    const iterated = O.Iterated;
-    const obj = ES.IteratorNext(iterated, v);
-    const value = ES.Get(obj, 'value');
-    const tapper = O.Tapper;
-    ES.Call(tapper, undefined, [value]);
-    return obj;
-  },
-  return: IteratorPrototypeReturnPass,
-  throw: IteratorPrototypeThrowPass,
-  [Symbol.toStringTag]: 'TBD',
-}, Iterator.syncPrototype);
-
-Iterator.syncPrototype.tap = function tap(tapper) {
-  const iterated = GetIteratorDirect(this);
-  if (!ES.IsCallable(tapper)) {
-    throw new TypeError();
-  }
-  const iterator = ES.ObjectCreate(IteratorPrototypeTapIteratorPrototype, [
-    // 'Iterated',
-    // 'Tapper',
-  ]);
-  iterator.Iterated = iterated;
-  iterator.Tapper = tapper;
-  return iterator;
-};
-
 Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
   const iterated = GetIteratorDirect(this);
   if (ES.IsCallable(reducer) === false) {
