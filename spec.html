@@ -56,6 +56,7 @@ contributors: Gus Caplan
     <li>
       <p>Community:</p>
       <ul>
+        <li>Discourse: <a href="https://es.discourse.group">https://es.discourse.group</a></li>
         <li>IRC: <a href="ircs://irc.freenode.net:6667">#tc39</a> on <a href="https://freenode.net/kb/answer/chat">freenode</a></li>
       </ul>
     </li>
@@ -97,6 +98,20 @@ contributors: Gus Caplan
         <li>does not have a [[Construct]] internal method; it cannot be used as a constructor with the new operator.</li>
         <li>does not have a [[Call]] internal method; it cannot be invoked as a function.</li>
       </ul>
+
+      <emu-clause id="sec-value-properties-of-the-iterator-object">
+        <h1>Value Properties of the Iterator Object</h1>
+        <emu-clause id="sec-iterator.syncprototype">
+          <h1>Iterator.syncPrototype</h1>
+          <p>The initial value of Iterator.syncPrototype is %IteratorPrototype%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+        <emu-clause id="sec-iterator.asyncprototype">
+          <h1>Iterator.asyncPrototype</h1>
+          <p>The initial value of Iterator.asyncPrototype is %AsyncIteratorPrototype%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+      </emu-clause>
 
       <emu-clause id="sec-function-properties-of-the-iterator-object">
         <h1>Function Properties of the Iterator Object</h1>
@@ -141,7 +156,7 @@ contributors: Gus Caplan
     </emu-clause>
 
     <emu-clause id="sec-iteratorprototype-object">
-      <h1>The %IteratorPrototype% Object</h1>
+      <h1>The <dfn>%IteratorPrototype%</dfn> Object</h1>
 
       <emu-clause id="sec-iteratorprototype-map">
         <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
@@ -642,7 +657,7 @@ contributors: Gus Caplan
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
-      <h1>The %AsyncIteratorPrototype% Object</h1>
+      <h1>The <dfn>%AsyncIteratorPrototype%</dfn> Object</h1>
 
       <emu-clause id="sec-asynciteratorprototype-map">
         <h1>%AsyncIteratorPrototype%.map ( _mapper_ )</h1>
