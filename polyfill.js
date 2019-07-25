@@ -248,15 +248,10 @@ function IteratorFrom(O) {
   return wrapper;
 }
 
-function IteratorOf(...values) {
-  return IteratorFrom(values);
-}
-
 const Iterator = {
   syncPrototype: IteratorPrototype,
   asyncPrototype: AsyncIteratorPrototype,
   from: IteratorFrom,
-  of: IteratorOf,
 };
 
 module.exports = Iterator;
@@ -486,7 +481,7 @@ Iterator.syncPrototype.reduce = function reduce(reducer, initialValue) {
   }
 };
 
-Iterator.syncPrototype.collect = function collect() {
+Iterator.syncPrototype.toArray = function toArray() {
   const iterated = GetIteratorDirect(this);
   const items = [];
   while (true) {
@@ -725,7 +720,7 @@ Iterator.asyncPrototype.reduce = async function reduce(reducer, start) {
   }
 };
 
-Iterator.asyncPrototype.collect = async function collect() {
+Iterator.asyncPrototype.toArray = async function toArray() {
   const iterated = GetIteratorDirect(this, 'async');
   const array = [];
   while (true) {

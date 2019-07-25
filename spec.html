@@ -86,7 +86,61 @@ contributors: Gus Caplan
   <emu-clause id="sec-iteration">
     <h1>Iteration</h1>
 
-    <emu-clause id="sec-%iteratorprototype%-object">
+    <emu-clause id="sec-iterator-object">
+      <h1>The Iterator Object</h1>
+      <p>The <dfn>Iterator</dfn> object:</p>
+      <ul>
+        <li>is the initial value of the *Iterator* property of the global object.</li>
+        <li>is an ordinary object.</li>
+        <li>has a [[Prototype]] internal slot whose value is the intrinsic object %ObjectPrototype%.</li>
+        <li>is not a function object.</li>
+        <li>does not have a [[Construct]] internal method; it cannot be used as a constructor with the new operator.</li>
+        <li>does not have a [[Call]] internal method; it cannot be invoked as a function.</li>
+      </ul>
+
+      <emu-clause id="sec-function-properties-of-the-iterator-object">
+        <h1>Function Properties of the Iterator Object</h1>
+        <emu-clause id="sec-iterator.from">
+          <h1>Iterator.from ( _O_ )</h1>
+          <emu-alg>
+            1. If Type(_O_) is not Object, throw a TypeError exception.
+            1. If ? HasProperty(_O_, @@iterator) is *true*, then
+              1. Let _iteratorRecord_ be ? GetIterator(_O_).
+              1. Let _hasInstance_ be ? NonConstructorHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
+              1. If _hasInstance_ is *true*, then
+                1. Return _iteratorRecord_.[[Iterator]].
+            1. Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
+            1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
+            1. Return _wrapper_.
+          </emu-alg>
+
+          <emu-clause id="sec-wrapforvaliditeratorprototype-object">
+            <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-next">
+              <h1>%WrapForValidIteratorPrototype%.next</h1>
+              <p>The initial value of %WrapForValidIteratorPrototype%.next is %IteratorPrototypeNextPass%.</p>
+              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+            </emu-clause>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-return">
+              <h1>%WrapForValidIteratorPrototype%.return</h1>
+              <p>The initial value of %WrapForValidIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
+              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+            </emu-clause>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
+              <h1>%WrapForValidIteratorPrototype%.throw</h1>
+              <p>The initial value of %WrapForValidIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+            </emu-clause>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-iteratorprototype-object">
       <h1>The %IteratorPrototype% Object</h1>
 
       <emu-clause id="sec-iteratorprototype-map">
@@ -128,7 +182,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-iteratorprototypemapiteratorprototype-return">
             <h1>%IteratorPrototypeMapIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
@@ -213,7 +267,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-iteratorprototypefilteriteratorprototype-return">
             <h1>%IteratorPrototypeFilterIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
@@ -294,7 +348,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-iteratorprototypetakeiteratorprototype-return">
             <h1>%IteratorPrototypeTakeIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
@@ -378,7 +432,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-iteratorprototypedropiteratorprototype-return">
             <h1>%IteratorPrototypeDropIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
@@ -460,7 +514,7 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-return">
             <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw is %IteratorPrototypeReturnPass%.</p>
+            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
             <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
           </emu-clause>
 
@@ -522,8 +576,8 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-collect">
-        <h1>%IteratorPrototype%.collect ( )</h1>
+      <emu-clause id="sec-iteratorprototype-toarray">
+        <h1>%IteratorPrototype%.toArray ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -686,7 +740,18 @@ contributors: Gus Caplan
           </emu-clause>
         </emu-clause>
       </emu-clause>
+    </emu-clause>
 
+    <emu-clause id="sec-iteratorprototypenextpass">
+      <h1>%IteratorPrototypeNextPass% ( _value_ )</h1>
+      <p>The <dfn>%IteratorPrototypeNextPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
+      <emu-alg>
+        1. Let _O_ be *this* value.
+        1. If Type(_O_) is not Object, throw a *TypeError* exception.
+        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
+        1. Let _iterated_ be _O_.[[Iterated]].
+        1. Return ? IteratorNext(_iterated_, _value_).
+      </emu-alg>
     </emu-clause>
 
     <emu-clause id="sec-iteratorprototypereturnpass">
