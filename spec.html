@@ -101,14 +101,9 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-value-properties-of-the-iterator-object">
         <h1>Value Properties of the Iterator Object</h1>
-        <emu-clause id="sec-iterator.syncprototype">
-          <h1>Iterator.syncPrototype</h1>
-          <p>The initial value of Iterator.syncPrototype is %IteratorPrototype%.</p>
-          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-        </emu-clause>
-        <emu-clause id="sec-iterator.asyncprototype">
-          <h1>Iterator.asyncPrototype</h1>
-          <p>The initial value of Iterator.asyncPrototype is %AsyncIteratorPrototype%.</p>
+        <emu-clause id="sec-iterator.prototype">
+          <h1>Iterator.prototype</h1>
+          <p>The initial value of Iterator.prototype is %IteratorPrototype%.</p>
           <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
         </emu-clause>
       </emu-clause>
@@ -121,7 +116,7 @@ contributors: Gus Caplan
             1. If Type(_O_) is not Object, throw a TypeError exception.
             1. If ? HasProperty(_O_, @@iterator) is *true*, then
               1. Let _iteratorRecord_ be ? GetIterator(_O_).
-              1. Let _hasInstance_ be ? NonConstructorHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
@@ -129,29 +124,70 @@ contributors: Gus Caplan
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
           </emu-alg>
-
-          <emu-clause id="sec-wrapforvaliditeratorprototype-object">
-            <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
-
-            <emu-clause id="sec-wrapforvaliditeratorprototype-next">
-              <h1>%WrapForValidIteratorPrototype%.next</h1>
-              <p>The initial value of %WrapForValidIteratorPrototype%.next is %IteratorPrototypeNextPass%.</p>
-              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-            </emu-clause>
-
-            <emu-clause id="sec-wrapforvaliditeratorprototype-return">
-              <h1>%WrapForValidIteratorPrototype%.return</h1>
-              <p>The initial value of %WrapForValidIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-            </emu-clause>
-
-            <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
-              <h1>%WrapForValidIteratorPrototype%.throw</h1>
-              <p>The initial value of %WrapForValidIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-              <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-            </emu-clause>
-          </emu-clause>
         </emu-clause>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-asynciterator-object">
+      <h1>The AsyncIterator Object</h1>
+      <p>The <dfn>AsyncIterator</dfn> object:</p>
+      <ul>
+        <li>is the initial value of the *AsyncIterator* property of the global object.</li>
+        <li>is an ordinary object.</li>
+        <li>has a [[Prototype]] internal slot whose value is the intrinsic object %ObjectPrototype%.</li>
+        <li>is not a function object.</li>
+        <li>does not have a [[Construct]] internal method; it cannot be used as a constructor with the new operator.</li>
+        <li>does not have a [[Call]] internal method; it cannot be invoked as a function.</li>
+      </ul>
+
+      <emu-clause id="sec-value-properties-of-the-asynciterator-object">
+        <h1>Value Properties of the AsyncIterator Object</h1>
+        <emu-clause id="sec-asynciterator.prototype">
+          <h1>AsyncIterator.prototype</h1>
+          <p>The initial value of AsyncIterator.prototype is %AsyncIteratorPrototype%.</p>
+          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-function-properties-of-the-asynciterator-object">
+        <h1>Function Properties of the AsyncIterator Object</h1>
+        <emu-clause id="sec-asynciterator.from">
+          <h1>AsyncIterator.from ( _O_ )</h1>
+          <emu-alg>
+            1. If Type(_O_) is not Object, throw a TypeError exception.
+            1. If ? HasProperty(_O_, @@iterator) is *true*, then
+              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
+              1. If _hasInstance_ is *true*, then
+                1. Return _iteratorRecord_.[[Iterator]].
+            1. Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
+            1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
+            1. Return _wrapper_.
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-wrapforvaliditeratorprototype-object">
+      <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
+
+      <emu-clause id="sec-wrapforvaliditeratorprototype-next">
+        <h1>%WrapForValidIteratorPrototype%.next</h1>
+        <p>The initial value of %WrapForValidIteratorPrototype%.next is %IteratorPrototypeNextPass%.</p>
+        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-wrapforvaliditeratorprototype-return">
+        <h1>%WrapForValidIteratorPrototype%.return</h1>
+        <p>The initial value of %WrapForValidIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
+        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+      </emu-clause>
+
+      <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
+        <h1>%WrapForValidIteratorPrototype%.throw</h1>
+        <p>The initial value of %WrapForValidIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
       </emu-clause>
     </emu-clause>
 

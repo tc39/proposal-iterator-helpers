@@ -248,14 +248,40 @@ function IteratorFrom(O) {
   return wrapper;
 }
 
+function AsyncIteratorFrom(O) {
+  if (ES.Type(O) !== 'Object') {
+    throw new TypeError();
+  }
+  let iteratorRecord;
+  if (ES.HasProperty(O, Symbol.iterator) === true) {
+    iteratorRecord = ES.GetIterator(O, 'async');
+    const hasPrototype = NonConstructorHasInstance(IteratorPrototype, iteratorRecord.Iterator);
+    if (hasPrototype === true) {
+      return iteratorRecord.Iterator;
+    }
+  } else {
+    iteratorRecord = GetIteratorDirect(O);
+  }
+  const wrapper = ES.ObjectCreate(WrapForValidIteratorPrototype, [
+    // 'Iterated',
+  ]);
+  wrapper.Iterated = iteratorRecord;
+  return wrapper;
+}
+
 const Iterator = {
-  syncPrototype: IteratorPrototype,
-  asyncPrototype: AsyncIteratorPrototype,
+  prototype: IteratorPrototype,
   from: IteratorFrom,
 };
 
-module.exports = Iterator;
+const AsyncIterator = {
+  prototype: AsyncIteratorPrototype,
+  from: AsyncIteratorFrom,
+};
+
+module.exports = { Iterator, AsyncIterator };
 global.Iterator = Iterator;
+global.AsyncIterator = AsyncIterator;
 
 const IteratorPrototypeMapIteratorPrototype = Object.setPrototypeOf({
   next(v) {
