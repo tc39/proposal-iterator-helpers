@@ -821,7 +821,8 @@ contributors: Gus Caplan
             1. If _done_ is *true*, then
               1. Let _promise_ be AsyncIteratorClose(_iterated_, _completion_).
               1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-              1. Return ! PerformPromiseThen(_promise_, _F_).
+              1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _items_ &raquo;).
+              1. Return _promiseCapability_.[[Promise]].
             1. Let _value_ be IteratorValue(_iterated_).
             1. IfAbruptRejectPromise(_value_, _promiseCapability_).
             1. Append _value_ to _items_.
