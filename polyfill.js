@@ -745,18 +745,3 @@ Iterator.asyncPrototype.reduce = async function reduce(reducer, start) {
     final = await ES.Call(reducer, undefined, [final, value]);
   }
 };
-
-Iterator.asyncPrototype.toArray = async function toArray() {
-  const iterated = GetIteratorDirect(this, 'async');
-  const array = [];
-  while (true) {
-    const next = await ES.IteratorNext(iterated);
-    const done = ES.IteratorComplete(next);
-    if (done === true) {
-      await ES.AsyncIteratorClose(iterated, () => undefined);
-      return array;
-    }
-    const value = ES.IteratorValue(next);
-    array.push(value);
-  }
-};

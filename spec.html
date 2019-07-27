@@ -791,6 +791,47 @@ contributors: Gus Caplan
           </emu-clause>
         </emu-clause>
       </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-toarray">
+        <h1>%AsyncIteratorPrototype%.toArray ( )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _steps_ be the algorithm steps defined in <emu-xref href="#sec-asynciteratorprototype-toarray-helper" title></emu-xref>.
+          1. Let _helper_ be ! CreateBuiltinFunction(_steps_, &laquo; [[Items]], [[Iterated]] &raquo;).
+          1. Set _helper_.[[Items]] to a new empty List.
+          1. Set _helper_.[[Iterated]] to _iterated_.
+          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+          1. Let _promise_ be IteratorNext(_iterated_).
+          1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+          1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
+          1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _helper_).
+        </emu-alg>
+
+        <emu-clause id="sec-asynciteratorprototype-toarray-helper">
+          <h1>AsyncIteratorPrototype.toArray Helper Functions</h1>
+          <p>When this is called with argument _next_, the following steps are taken:</p>
+          <emu-alg>
+            1. Let _F_ be the active function object.
+            1. Assert: _F_ has the [[Iterated]] and [[Items]] internal slots.
+            1  Let _iterated_ be _F_.[[Iterated]].
+            1. Let _items_ be _F_.[[Items]].
+            1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+            1. Let _done_ be IteratorComplete(_next_).
+            1. IfAbruptRejectPromise(_done_, _promiseCapability_).
+            1. If _done_ is *true*, then
+              1. Let _promise_ be AsyncIteratorClose(_iterated_, _completion_).
+              1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+              1. Return ! PerformPromiseThen(_promise_, _F_).
+            1. Let _value_ be IteratorValue(_iterated_).
+            1. IfAbruptRejectPromise(_value_, _promiseCapability_).
+            1. Append _value_ to _items_.
+            1. Let _promise_ be IteratorNext(_iterated_).
+            1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+            1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
+            1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _F_).
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-iteratorprototypenextpass">
