@@ -792,6 +792,125 @@ contributors: Gus Caplan
         </emu-clause>
       </emu-clause>
 
+      <emu-clause id="sec-asynciteratorprototype-filter">
+        <h1>%AsyncIteratorPrototype%.filter ( _filterer_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
+          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeFilterIteratorPrototype%, &laquo; [[AsyncFilterer]], [[Iterated]] &raquo;).
+          1. Set iterator.[[AsyncFilterer]] to _filterer_.
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+
+        <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype">
+          <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%</h1>
+          <p>The <dfn>%AsyncIteratorPrototypeFilterIteratorPrototype%</dfn> object:</p>
+          <ul>
+            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
+            <li>is an ordinary object.</li>
+          </ul>
+
+          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-next">
+            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.next ( _v_ )</h1>
+            <emu-alg>
+              1. Let _O_ be *this* value.
+              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+              1. If Type(_O_) is not Object or _O_ does not have all the internal slots of a %AsyncIteratorPrototypeFilterIteratorPrototype% Instance,
+                1. Let _invalidIteratorError_ be a newly created *TypeError* object.
+                1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _invalidIteratorError_ &raquo;).
+                1. Return _promiseCapability_.[[Promise]].
+              1. Let _steps_ be the algorithm steps defined in <emu-xref href="#sec-asynciteratorprototypefilteriteratorprototype-next-helper" title></emu-xref>
+              1. Let _helper_ be ! CreateBuiltinFunction(_steps_, &laquo; [[Iterated]], [[AsyncFilterer]] &raquo;).
+              1. Set _helper_.[[Iterated]] to _O_.[[Iterated]].
+              1. Set _helper_.[[AsyncFilterer]] to _O_.[[AsyncFilterer]].
+              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+              1. Let _promise_ be IteratorNext(_iterated_).
+              1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+              1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
+              1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _helper_).
+            </emu-alg>
+
+            <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-next-helper">
+              <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.next Helper Functions</h1>
+              <p>When this is called with argument _next_, the following steps are taken:</p>
+              <emu-alg>
+                1. Let _F_ be the active function object.
+                1. Assert: _F_ has the [[Iterated]] and [[AsyncFilterer]] slots.
+                1. Let _iterated_ be _F_.[[Iterated]].
+                1. Let _filterer_ be _F_.[[AsyncFilterer]].
+                1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+                1. Let _done_ be IteratorComplete(_next_).
+                1. IfAbruptRejectPromise(_next_, _promiseCapability_).
+                1. If _done_ is *true*, then
+                  1. Let promise be AsyncIteratorClose(_iterated_, _completion_).
+                  1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+                  1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
+                  1. Return _promiseCapability_.[[Promise]].
+                1. Let _value_ be IteratorValue(_next_).
+                1. IfAbruptRejectPromise(_value_, _promiseCapability_).
+                1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
+                1. IfAbruptRejectPromise(_selected_, _promiseCapability_).
+                1. If ! ToBoolean(_selected_) is *true*, then
+                  1. Let _result_ be CreateIterResultObject(_value_, *false*).
+                  1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _result_ &raquo;).
+                  1. Return _promiseCapability_.[[Promise]].
+                1. Let _promise_ be IteratorNext(_iterated_).
+                1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
+                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
+                1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _F_).
+              </emu-alg>
+            </emu-clause>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-return">
+            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.return</h1>
+            <p>The initial value of %AsyncIteratorPrototypeFilterIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-throw">
+            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.throw</h1>
+            <p>The initial value of %AsyncIteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-properties-of-asynciteratorprototypefilteriteratorprototype-instances">
+            <h1>Properties of %AsyncIteratorPrototypeFilterIteratorPrototype% Instances</h1>
+            <emu-table id="table-8" caption="Internal Slots of %AsyncIteratorPrototypeFilterIteratorPrototype Instances">
+              <table>
+                <tbody>
+                <tr>
+                  <th>
+                    Internal Slot
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    [[Iterated]]
+                  </td>
+                  <td>
+                    The iterator which is being iterated.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    [[AsyncFilterer]]
+                  </td>
+                  <td>
+                    The function which is used to filter each value of [[Iterated]].
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </emu-table>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+
       <emu-clause id="sec-asynciteratorprototype-toarray">
         <h1>%AsyncIteratorPrototype%.toArray ( )</h1>
         <emu-alg>
