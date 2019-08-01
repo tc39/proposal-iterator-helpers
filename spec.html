@@ -911,6 +911,93 @@ contributors: Gus Caplan
         </emu-clause>
       </emu-clause>
 
+      <emu-clause id="sec-asynciteratorprototype-take">
+        <h1>%AsyncIteratorPrototype%.take ( _limit_ )</h1>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeTakeIteratorPrototype%, &laquo; [[Iterated]], [[Remaining]] &raquo;).
+          1. Set iterator.[[Iterated]] to _iterated_.
+          1. Set iterator.[[Remaining]] to _iterated_.
+          1. Return _iterator_.
+        </emu-alg>
+
+        <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype">
+          <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%</h1>
+          <p>The <dfn>%AsyncIteratorPrototypeTakeIteratorPrototype%</dfn> object:</p>
+          <ul>
+            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
+            <li>is an ordinary object.</li>
+          </ul>
+
+          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-next">
+            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.next ( _v_ )</h1>
+            <emu-alg>
+              1. Let _O_ be *this* value.
+              1. If Type(_O_) is not Object, throw a *TypeError* exception.
+              1. If _O_ does not have all the internal slots of a %AsyncIteratorPrototypeTakeIteratorPrototype% Instance, throw a *TypeError* exception.
+              1. Let _remaining_ be _O_.[[Remaining]].
+              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+              1. If _remaining_ is 0, then
+                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; CreateIterResultObject(*undefined*, *true*) &raquo;).
+                1. Return _promiseCapability_.[[Promise]].
+              1. Set _O_.[[Remaining]] to _remaining_ - 1.
+              1. Let _iterated_ be _O_.[[Iterated]].
+              1. Let _next_ be IteratorNext(_iterated_, _v_).
+              1. IfAbruptRejectPromise(_next_, _promiseCapability_).
+              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _next_ &raquo;).
+              1. Return _promiseCapability_.[[Promise]].
+            </emu-alg>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-return">
+            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.return</h1>
+            <p>The initial value of %AsyncIteratorPrototypeTakeIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-throw">
+            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.throw</h1>
+            <p>The initial value of %AsyncIteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
+            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+          </emu-clause>
+
+          <emu-clause id="sec-properties-of-asynciteratorprototypetakeiteratorprototype-instances">
+            <h1>Properties of %AsyncIteratorPrototypeTakeIteratorPrototype% Instances</h1>
+            <emu-table id="table-9" caption="Internal Slots of %AsyncIteratorPrototypeTakeIteratorPrototype Instances">
+              <table>
+                <tbody>
+                <tr>
+                  <th>
+                    Internal Slot
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    [[Iterated]]
+                  </td>
+                  <td>
+                    The iterator which is being iterated.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    [[Remaining]]
+                  </td>
+                  <td>
+                    The remaining number of items to take from [[Iterated]].
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </emu-table>
+          </emu-clause>
+        </emu-clause>
+      </emu-clause>
+
       <emu-clause id="sec-asynciteratorprototype-toarray">
         <h1>%AsyncIteratorPrototype%.toArray ( )</h1>
         <emu-alg>
