@@ -87,23 +87,28 @@ contributors: Gus Caplan
   <emu-clause id="sec-iteration">
     <h1>Iteration</h1>
 
-    <emu-clause id="sec-iterator-object">
-      <h1>The Iterator Object</h1>
-      <p>The <dfn>Iterator</dfn> object:</p>
+    <emu-clause id="sec-iterator-constructor">
+      <h1>The Iterator Constructor</h1>
+      <p>The <dfn>Iterator</dfn> constructor:</p>
       <ul>
         <li>is the initial value of the *Iterator* property of the global object.</li>
-        <li>is an ordinary object.</li>
-        <li>has a [[Prototype]] internal slot whose value is the intrinsic object %ObjectPrototype%.</li>
-        <li>is not a function object.</li>
-        <li>does not have a [[Construct]] internal method; it cannot be used as a constructor with the new operator.</li>
-        <li>does not have a [[Call]] internal method; it cannot be invoked as a function.</li>
+        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
       </ul>
+
+      <emu-clause id="sec-iterator">
+        <h1>Iterator ( )</h1>
+        <p>When the `Iterator` function is called, the following steps are taken:</p>
+        <emu-alg>
+          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%Iterator.prototype%"*).
+        </emu-alg>
+      </emu-clause>
 
       <emu-clause id="sec-value-properties-of-the-iterator-object">
         <h1>Value Properties of the Iterator Object</h1>
         <emu-clause id="sec-iterator.prototype">
           <h1>Iterator.prototype</h1>
-          <p>The initial value of Iterator.prototype is %IteratorPrototype%.</p>
+          <p>The initial value of Iterator.prototype is %Iterator.prototype%.</p>
           <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
         </emu-clause>
       </emu-clause>
@@ -116,7 +121,7 @@ contributors: Gus Caplan
             1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
             1. If _usingIterator_ is not *undefined*,
               1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
@@ -128,23 +133,28 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-asynciterator-object">
-      <h1>The AsyncIterator Object</h1>
-      <p>The <dfn>AsyncIterator</dfn> object:</p>
+    <emu-clause id="sec-asynciterator-constructor">
+      <h1>The AsyncIterator Constructor</h1>
+      <p>The <dfn>AsyncIterator</dfn> constructor:</p>
       <ul>
         <li>is the initial value of the *AsyncIterator* property of the global object.</li>
-        <li>is an ordinary object.</li>
-        <li>has a [[Prototype]] internal slot whose value is the intrinsic object %ObjectPrototype%.</li>
-        <li>is not a function object.</li>
-        <li>does not have a [[Construct]] internal method; it cannot be used as a constructor with the new operator.</li>
-        <li>does not have a [[Call]] internal method; it cannot be invoked as a function.</li>
+        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
       </ul>
+
+      <emu-clause id="sec-asynciterator">
+        <h1>AsyncIterator ( )</h1>
+        <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
+        <emu-alg>
+          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncIterator.prototype%"*).
+        </emu-alg>
+      </emu-clause>
 
       <emu-clause id="sec-value-properties-of-the-asynciterator-object">
         <h1>Value Properties of the AsyncIterator Object</h1>
         <emu-clause id="sec-asynciterator.prototype">
           <h1>AsyncIterator.prototype</h1>
-          <p>The initial value of AsyncIterator.prototype is %AsyncIteratorPrototype%.</p>
+          <p>The initial value of AsyncIterator.prototype is %AsyncIterator.prototype%.</p>
           <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
         </emu-clause>
       </emu-clause>
@@ -157,7 +167,7 @@ contributors: Gus Caplan
             1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
             1. If _usingIterator_ is not undefined, then
               1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, let _iteratorRecord_ be ? GetIteratorDirect(_O_).
@@ -204,16 +214,16 @@ contributors: Gus Caplan
     </emu-clause>
 
     <emu-clause id="sec-iteratorprototype-object">
-      <h1>The <dfn>%IteratorPrototype%</dfn> Object</h1>
+      <h1>The <dfn>%Iterator.prototype%</dfn> Object</h1>
 
       <emu-clause id="sec-iteratorprototype-map">
-        <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
-        <p>%IteratorPrototype%.map is a built-in generator function which, when called, performs the following prelude steps:</p>
+        <h1>%Iterator.prototype%.map ( _mapper_ )</h1>
+        <p>%Iterator.prototype%.map is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
         </emu-alg>
-        <p>The body of %IteratorPrototype%.map is composed of the following steps:</p>
+        <p>The body of %Iterator.prototype%.map is composed of the following steps:</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -226,13 +236,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-filter">
-        <h1>%IteratorPrototype%.filter ( _filterer_ )</h1>
-        <p>%IteratorPrototype%.filter is a built-in generator function which, when called, performs the following prelude steps:</p>
+        <h1>%Iterator.prototype%.filter ( _filterer_ )</h1>
+        <p>%Iterator.prototype%.filter is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
         </emu-alg>
-        <p>The body of %IteratorPrototype%.filter is composed of the following steps</p>
+        <p>The body of %Iterator.prototype%.filter is composed of the following steps</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -245,13 +255,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-take">
-        <h1>%IteratorPrototype%.take ( _limit_ )</h1>
-        <p>%IteratorPrototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
+        <h1>%Iterator.prototype%.take ( _limit_ )</h1>
+        <p>%Iterator.prototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
         </emu-alg>
-        <p>The body of %IteratorPrototype%.take is composed of the following steps</p>
+        <p>The body of %Iterator.prototype%.take is composed of the following steps</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -264,13 +274,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-drop">
-        <h1>%IteratorPrototype%.drop ( _limit_ )</h1>
-        <p>%IteratorPrototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
+        <h1>%Iterator.prototype%.drop ( _limit_ )</h1>
+        <p>%Iterator.prototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
         </emu-alg>
-        <p>The body of %IteratorPrototype%.drop is composed of the following steps:</p>
+        <p>The body of %Iterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
           1. Repeat, while _remaining_ &gt; 0,
             1. Set _remaining_ to _remaining_ - 1.
@@ -285,12 +295,12 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-asindexedpairs">
-        <h1>%IteratorPrototype%.asIndexedPairs ( )</h1>
-        <p>%IteratorPrototype%.asIndexedPairs is a built-in generator function which, when called, performs the following prelude steps:</p>
+        <h1>%Iterator.prototype%.asIndexedPairs ( )</h1>
+        <p>%Iterator.prototype%.asIndexedPairs is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
         </emu-alg>
-        <p>The body of %IteratorPrototype%.asIndexedPairs is composed of the following steps:</p>
+        <p>The body of %Iterator.prototype%.asIndexedPairs is composed of the following steps:</p>
         <emu-alg>
           1. Let _index_ be 0.
           1. Let _lastValue_ be *undefined*.
@@ -305,7 +315,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-reduce">
-        <h1>%IteratorPrototype%.reduce ( _reducer_, _initialValue_ )</h1>
+        <h1>%Iterator.prototype%.reduce ( _reducer_, _initialValue_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
@@ -321,7 +331,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-toarray">
-        <h1>%IteratorPrototype%.toArray ( )</h1>
+        <h1>%Iterator.prototype%.toArray ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -334,7 +344,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-foreach">
-        <h1>%IteratorPrototype%.forEach ( _fn_ )</h1>
+        <h1>%Iterator.prototype%.forEach ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Repeat,
@@ -346,7 +356,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-some">
-        <h1>%IteratorPrototype%.some ( _fn_ )</h1>
+        <h1>%Iterator.prototype%.some ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Repeat,
@@ -359,7 +369,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-every">
-        <h1>%IteratorPrototype%.every ( _fn_ )</h1>
+        <h1>%Iterator.prototype%.every ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Repeat,
@@ -372,7 +382,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-find">
-        <h1>%IteratorPrototype%.find ( _fn_ )</h1>
+        <h1>%Iterator.prototype%.find ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Repeat,
@@ -386,16 +396,16 @@ contributors: Gus Caplan
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
-      <h1>The <dfn>%AsyncIteratorPrototype%</dfn> Object</h1>
+      <h1>The <dfn>%AsyncIterator.prototype%</dfn> Object</h1>
 
       <emu-clause id="sec-asynciteratorprototype-map">
-        <h1>%AsyncIteratorPrototype%.map ( _mapper_ )</h1>
-        <p>%AsyncIteratorPrototype%.map is a built-in async generator function which, when called, performs the following prelude steps:</p>
+        <h1>%AsyncIterator.prototype%.map ( _mapper_ )</h1>
+        <p>%AsyncIterator.prototype%.map is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
         </emu-alg>
-        <p>The body of %AsyncIteratorPrototype%.map is composed of the following steps:</p>
+        <p>The body of %AsyncIterator.prototype%.map is composed of the following steps:</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -408,13 +418,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-filter">
-        <h1>%AsyncIteratorPrototype%.filter ( _filterer_ )</h1>
-        <p>%AsyncIteratorPrototype%.filter is a built-in async generator function which, when called, performs the following prelude steps:</p>
+        <h1>%AsyncIterator.prototype%.filter ( _filterer_ )</h1>
+        <p>%AsyncIterator.prototype%.filter is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
         </emu-alg>
-        <p>The body of %AsyncIteratorPrototype%.filter is composed of the following steps:</p>
+        <p>The body of %AsyncIterator.prototype%.filter is composed of the following steps:</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -427,13 +437,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-take">
-        <h1>%AsyncIteratorPrototype%.take ( _limit_ )</h1>
-        <p>%AsyncIteratorPrototype%.take is a built-in async generator function which, when called, performs the following prelude steps:</p>
+        <h1>%AsyncIterator.prototype%.take ( _limit_ )</h1>
+        <p>%AsyncIterator.prototype%.take is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
         </emu-alg>
-        <p>The body of %AsyncIteratorPrototype%.take is composed of the following steps:</p>
+        <p>The body of %AsyncIterator.prototype%.take is composed of the following steps:</p>
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
@@ -446,13 +456,13 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-drop">
-        <h1>%AsyncIteratorPrototype%.drop ( _limit_ )</h1>
-        <p>%AsyncIteratorPrototype%.drop is a built-in async generator function which, when called, performs the following prelude steps:</p>
+        <h1>%AsyncIterator.prototype%.drop ( _limit_ )</h1>
+        <p>%AsyncIterator.prototype%.drop is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
         </emu-alg>
-        <p>The body of %AsyncIteratorPrototype%.drop is composed of the following steps:</p>
+        <p>The body of %AsyncIterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
           1. Repeat, while _remaining_ &gt; 0,
             1. Set _remaining_ to _remaining_ - 1.
@@ -467,8 +477,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-toarray">
-        <h1>%AsyncIteratorPrototype%.toArray ( )</h1>
-        <p>%AsyncIteratorPrototype%.toArray is a built-in async function which, when called, performs the following steps:</p>
+        <h1>%AsyncIterator.prototype%.toArray ( )</h1>
+        <p>%AsyncIterator.prototype%.toArray is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
