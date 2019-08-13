@@ -1,14 +1,10 @@
 {
   "private": true,
-  "main": "polyfill.js",
   "scripts": {
     "build": "mkdir -p dist; ecmarkup --verbose spec.html dist/index.html --css dist/ecmarkup.css --js dist/ecmarkup.js"
   },
   "devDependencies": {
     "@alrra/travis-scripts": "^3.0.1",
     "ecmarkup": "^3.16.0"
-  },
-  "dependencies": {
-    "es-abstract": "^1.13.0"
   }
 }

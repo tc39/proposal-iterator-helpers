@@ -113,13 +113,13 @@ contributors: Gus Caplan
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
-            1. If Type(_O_) is not Object, throw a TypeError exception.
-            1. If ? HasProperty(_O_, @@iterator) is *true*, then
-              1. Let _iteratorRecord_ be ? GetIterator(_O_).
+            1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
+            1. If _usingIterator_ is not *undefined*,
+              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
               1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
-            1. Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
             1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
@@ -154,13 +154,13 @@ contributors: Gus Caplan
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
-            1. If Type(_O_) is not Object, throw a TypeError exception.
-            1. If ? HasProperty(_O_, @@iterator) is *true*, then
-              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~).
+            1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
+            1. If _usingIterator_ is not undefined, then
+              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~, _usingIterator_).
               1. Let _hasInstance_ be ? OrdinaryHasInstance(%IteratorPrototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
-            1. Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Else, let _iteratorRecord_ be ? GetIteratorDirect(_O_).
             1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
@@ -173,21 +173,33 @@ contributors: Gus Caplan
       <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
 
       <emu-clause id="sec-wrapforvaliditeratorprototype-next">
-        <h1>%WrapForValidIteratorPrototype%.next</h1>
-        <p>The initial value of %WrapForValidIteratorPrototype%.next is %IteratorPrototypeNextPass%.</p>
-        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <h1>%WrapForValidIteratorPrototype%.next ( _v_ )</h1>
+        <emu-alg>
+          1. Let _O_ be *this* value.
+          1. RequireInternalSlot(_O_, [[Iterated]]).
+          1. Return ? IteratorNext(_O_.[[Iterated]]).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-wrapforvaliditeratorprototype-return">
-        <h1>%WrapForValidIteratorPrototype%.return</h1>
-        <p>The initial value of %WrapForValidIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <h1>%WrapForValidIteratorPrototype%.return ( _v_ )</h1>
+        <emu-alg>
+          1. Let _O_ be *this* value.
+          1. RequireInternalSlot(_O_, [[Iterated]]).
+          1. Return ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
-        <h1>%WrapForValidIteratorPrototype%.throw</h1>
-        <p>The initial value of %WrapForValidIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-        <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <h1>%WrapForValidIteratorPrototype%.throw ( _v_ )</h1>
+        <emu-alg>
+          1. Let _O_ be *this* value.
+          1. RequireInternalSlot(_O_, [[Iterated]]).
+          1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
+          1. Let _throw_ be ? GetMethod(_iterator_, *"throw"*).
+          1. If _throw_ is *undefined*, return ThrowCompletion(_v_).
+          1. Otherwise, return ? Call(_throw_, _iterator_, &laquo; _v_ &raquo;).
+        </emu-alg>
       </emu-clause>
     </emu-clause>
 
@@ -196,419 +208,100 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype-map">
         <h1>%IteratorPrototype%.map ( _mapper_ )</h1>
+        <p>%IteratorPrototype%.map is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
-          1. Set iterator.[[Mapper]] to _mapper_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-iteratorprototypemapiteratorprototype">
-          <h1>%IteratorPrototypeMapIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeMapIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-iteratorprototypemapiteratorprototype-next">
-            <h1>%IteratorPrototypeMapIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeMapIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _mapper_ be _O_.[[Mapper]].
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Let _next_ be ? IteratorStep(_iterated_, _v_).
-              1. If _next_ is *false*, then
-                1. Return CreateIterResultObject(*undefined*, *true*).
-              1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; value &raquo;).
-              1. If _mapped_ is an abrupt completion, return ? IteratorClose(_iterated_, _mapped_).
-              1. Return CreateIterResultObject(_mapped_.[[Value]], *false*).
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypemapiteratorprototype-return">
-            <h1>%IteratorPrototypeMapIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypemapiteratorprototype-throw">
-            <h1>%IteratorPrototypeMapIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-iteratorprototypemapiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeMapIteratorPrototype% Instances</h1>
-            <emu-table id="table-1" caption="Internal Slots of %IteratorPrototypeMapIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Mapper]]
-                  </td>
-                  <td>
-                    The function which is used to map each value of [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %IteratorPrototype%.map is composed of the following steps:</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _mapped_ be ? Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
+            1. Set _lastValue_ to ? Yield(_mapped_).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-filter">
         <h1>%IteratorPrototype%.filter ( _filterer_ )</h1>
+        <p>%IteratorPrototype%.filter is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeFilterIteratorPrototype%, &laquo; [[Filterer]], [[Iterated]] &raquo;).
-          1. Set iterator.[[Filterer]] to _filterer_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-iteratorprototypefilteriteratorprototype">
-          <h1>%IteratorPrototypeFilterIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeFilterIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-iteratorprototypefilteriteratorprototype-next">
-            <h1>%IteratorPrototypeFilterIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeFilterIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _filterer_ be _O_.[[Filterer]].
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Repeat,
-                1. Let _next_ be ? IteratorStep(_iterated_, _v_).
-                1. If _next_ is *false*, return CreateIterResultObject(*undefined*, *true*);
-                1. Let _value_ be ? IteratorValue(_next_).
-                1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
-                1. If _selected_ is an abrupt completion, return ? IteratorClose(_iterated_, _selected_).
-                1. If ToBoolean(_selected_.[[Value]]) is *true*, return CreateIterResultObject(_value_, *false*).
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypefilteriteratorprototype-return">
-            <h1>%IteratorPrototypeFilterIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypefilteriteratorprototype-throw">
-            <h1>%IteratorPrototypeFilterIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-iteratorprototypefilteriteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeFilterIteratorPrototype% Instances</h1>
-            <emu-table id="table-2" caption="Internal Slots of %IteratorPrototypeFilterIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Filterer]]
-                  </td>
-                  <td>
-                    The function which is used to filter values of [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %IteratorPrototype%.filter is composed of the following steps</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _selected_ be ? Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
+            1. If ToBoolean(_selected_) is *true*, Set _lastValue_ to ? Yield(_value_).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-take">
         <h1>%IteratorPrototype%.take ( _limit_ )</h1>
+        <p>%IteratorPrototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeTakeIteratorPrototype%, &laquo; [[Remaining]], [[Iterated]] &raquo;).
-          1. Set iterator.[[Remaining]] to _remaining_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-iteratorprototypetakeiteratorprototype">
-          <h1>%IteratorPrototypeTakeIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeTakeIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-next">
-            <h1>%IteratorPrototypeTakeIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeTakeIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _remaining_ be _O_.[[Remaining]].
-              1. If _remaining_ is 0, return CreateIterResultObject(*undefined*, *true*).
-              1. Set _O_.[[Remaining]] to _remaining_ - 1.
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Return ? IteratorNext(_iterated_, _v_).
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-return">
-            <h1>%IteratorPrototypeTakeIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypetakeiteratorprototype-throw">
-            <h1>%IteratorPrototypeTakeIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-iteratorprototypetakeiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeTakeIteratorPrototype% Instances</h1>
-            <emu-table id="table-3" caption="Internal Slots of %IteratorPrototypeTakeIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Remaining]]
-                  </td>
-                  <td>
-                    The remaining number of items to take from [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %IteratorPrototype%.take is composed of the following steps</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. If _remaining_ is 0, return *undefined*.
+            1. Set _remaining_ to _remaining_ - 1.
+            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Set _lastValue_ to ? Yield(? IteratorValue(_next_)).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-drop">
         <h1>%IteratorPrototype%.drop ( _limit_ )</h1>
+        <p>%IteratorPrototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeDropIteratorPrototype%, &laquo; [[Remaining]], [[Iterated]] &raquo;).
-          1. Set iterator.[[Remaining]] to _remaining_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-iteratorprototypedropiteratorprototype">
-          <h1>%IteratorPrototypeDropIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeDropIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-iteratorprototypedropiteratorprototype-next">
-            <h1>%IteratorPrototypeDropIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeDropIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _remaining_ be _O_.[[Remaining]].
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. If _remaining_ is 0, return ? IteratorNext(_iterated_, _v_).
-              1. Set _O_.[[Remaining]] to 0.
-              1. Repeat, while _remaining_ &gt; 0,
-                1. Perform ? IteratorNext(_iterated_, _undefined_).
-                1. Set _remaining_ to _remaining_ - 1.
-              1. Return ? IteratorNext(_iterated_, _v_).
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypedropiteratorprototype-return">
-            <h1>%IteratorPrototypeDropIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypedropiteratorprototype-throw">
-            <h1>%IteratorPrototypeDropIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeDropIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-iteratorprototypedropiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeDropIteratorPrototype% Instances</h1>
-            <emu-table id="table-4" caption="Internal Slots of %IteratorPrototypeDropIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Remaining]]
-                  </td>
-                  <td>
-                    The number of items to drop from [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %IteratorPrototype%.drop is composed of the following steps:</p>
+        <emu-alg>
+          1. Repeat, while _remaining_ &gt; 0,
+            1. Set _remaining_ to _remaining_ - 1.
+            1. Let _next_ be ? IteratorStep(_iterated_).
+            1. If _next_ is *false*, return *undeifned*.
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Set _lastValue_ to ? Yield(? IteratorValue(_next_)).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-asindexedpairs">
         <h1>%IteratorPrototype%.asIndexedPairs ( )</h1>
+        <p>%IteratorPrototype%.asIndexedPairs is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _iterator_ be ObjectCreate(%IteratorPrototypeAsIndexedPairsIteratorPrototype%, &laquo; [[Iterated]], [[Index]] &raquo;).
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Set iterator.[[Index]] to *0*.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype">
-          <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%</h1>
-          <p>The <dfn>%IteratorPrototypeAsIndexedPairsIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %IteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-next">
-            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %IteratorPrototypeAsIndexedPairsIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _index_ be _O_.[[Index]].
-              1. Set _O_.[[Index]] to _index_ + *1*.
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Let _next_ be ? IteratorStep(_iterated_, _v_).
-              1. If _next_ is *false*, return ? CreateIterResultObject(*undefined*, *false*).
-              1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _pair_ be ! CreateArrayFromList(&raquo;).
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-return">
-            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.return</h1>
-            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-iteratorprototypeasindexedpairsiteratorprototype-throw">
-            <h1>%IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw</h1>
-            <p>The initial value of %IteratorPrototypeAsIndexedPairsIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-iteratorprototypeasindexedpairsiteratorprototype-instances">
-            <h1>Properties of %IteratorPrototypeAsIndexedPairsIteratorPrototype% Instances</h1>
-            <emu-table id="table-5" caption="Internal Slots of %IteratorPrototypeAsIndexedPairsIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Index]]
-                  </td>
-                  <td>
-                    The next index .
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %IteratorPrototype%.asIndexedPairs is composed of the following steps:</p>
+        <emu-alg>
+          1. Let _index_ be 0.
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? IteratorNext(_iterated_, _lastValue_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
+            1. Set _index_ to _index_ + 1.
+            1. Set _lastValue_ to ? Yield(_pair_).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-reduce">
@@ -697,388 +390,95 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype-map">
         <h1>%AsyncIteratorPrototype%.map ( _mapper_ )</h1>
+        <p>%AsyncIteratorPrototype%.map is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeMapIteratorPrototype%, &laquo; [[Mapper]], [[Iterated]] &raquo;).
-          1. Set iterator.[[Mapper]] to _mapper_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-asynciteratorprototypemapiteratorprototype">
-          <h1>%AsyncIteratorPrototypeMapIteratorPrototype%</h1>
-          <p>The <dfn>%AsyncIteratorPrototypeMapIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-next">
-            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-              1. If Type(_O_) is not Object or _O_ does not have all the internal slots of a %AsyncIteratorPrototypeMapIteratorPrototype% Instance,
-                1. Let _invalidIteratorError_ be a newly created *TypeError* object.
-                1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _invalidIteratorError_ &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
-              1. Let _mapper_ be _O_.[[Mapper]].
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Let _next_ be IteratorNext(_iterated_, _v_).
-              1. IfAbruptRejectPromise(_next_, _promiseCapability_).
-              1. Let _done_ be IteratorComplete(_next_).
-              1. IfAbruptRejectPromise(_done_, _promiseCapability_).
-              1. If _done_ is *true*, then
-                1. Let _iterResultObject_ be CreateIterResultObject(*undefined*, *true*).
-                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResultObject_ &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
-              1. Let _value_ be IteratorValue(_next_).
-              1. IfAbruptRejectPromise(_value_, _promiseCapability_).
-              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
-              1. IfAbruptRejectPromise(_mapped_, _promiseCapability_).
-              1. Set _mapped_ to ? Await(_mapped_).
-              1. Let _iterResultObject_ be CreateIterResultObject(_mapped_, *false*).
-              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResultObject_ &raquo;).
-              1. Return _promiseCapability_.[[Promise]].
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-return">
-            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.return</h1>
-            <p>The initial value of %AsyncIteratorPrototypeMapIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypemapiteratorprototype-throw">
-            <h1>%AsyncIteratorPrototypeMapIteratorPrototype%.throw</h1>
-            <p>The initial value of %AsyncIteratorPrototypeMapIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-asynciteratorprototypemapiteratorprototype-instances">
-            <h1>Properties of %AsyncIteratorPrototypeMapIteratorPrototype% Instances</h1>
-            <emu-table id="table-7" caption="Internal Slots of %AsyncIteratorPrototypeMapIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Mapper]]
-                  </td>
-                  <td>
-                    The function which is used to map each value of [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %AsyncIteratorPrototype%.map is composed of the following steps:</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_value_, _lastValue_)).
+            1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _mapped_ be ? Await(? Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
+            1. Set _lastValue_ to ? Yield(_mapped_).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-filter">
         <h1>%AsyncIteratorPrototype%.filter ( _filterer_ )</h1>
+        <p>%AsyncIteratorPrototype%.filter is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
-          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeFilterIteratorPrototype%, &laquo; [[AsyncFilterer]], [[Iterated]] &raquo;).
-          1. Set iterator.[[AsyncFilterer]] to _filterer_.
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
-
-        <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype">
-          <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%</h1>
-          <p>The <dfn>%AsyncIteratorPrototypeFilterIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-next">
-            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-              1. If Type(_O_) is not Object or _O_ does not have all the internal slots of a %AsyncIteratorPrototypeFilterIteratorPrototype% Instance,
-                1. Let _invalidIteratorError_ be a newly created *TypeError* object.
-                1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _invalidIteratorError_ &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
-              1. Let _steps_ be the algorithm steps defined in <emu-xref href="#sec-asynciteratorprototypefilteriteratorprototype-next-helper" title></emu-xref>
-              1. Let _helper_ be ! CreateBuiltinFunction(_steps_, &laquo; [[Iterated]], [[AsyncFilterer]] &raquo;).
-              1. Set _helper_.[[Iterated]] to _O_.[[Iterated]].
-              1. Set _helper_.[[AsyncFilterer]] to _O_.[[AsyncFilterer]].
-              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-              1. Let _promise_ be IteratorNext(_iterated_).
-              1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-              1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
-              1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _helper_).
-            </emu-alg>
-
-            <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-next-helper">
-              <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.next Helper Functions</h1>
-              <p>When this is called with argument _next_, the following steps are taken:</p>
-              <emu-alg>
-                1. Let _F_ be the active function object.
-                1. Assert: _F_ has the [[Iterated]] and [[AsyncFilterer]] slots.
-                1. Let _iterated_ be _F_.[[Iterated]].
-                1. Let _filterer_ be _F_.[[AsyncFilterer]].
-                1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-                1. Let _done_ be IteratorComplete(_next_).
-                1. IfAbruptRejectPromise(_next_, _promiseCapability_).
-                1. If _done_ is *true*, then
-                  1. Let promise be AsyncIteratorClose(_iterated_, _completion_).
-                  1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-                  1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
-                  1. Return _promiseCapability_.[[Promise]].
-                1. Let _value_ be IteratorValue(_next_).
-                1. IfAbruptRejectPromise(_value_, _promiseCapability_).
-                1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
-                1. IfAbruptRejectPromise(_selected_, _promiseCapability_).
-                1. If ! ToBoolean(_selected_) is *true*, then
-                  1. Let _result_ be CreateIterResultObject(_value_, *false*).
-                  1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _result_ &raquo;).
-                  1. Return _promiseCapability_.[[Promise]].
-                1. Let _promise_ be IteratorNext(_iterated_).
-                1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
-                1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _F_).
-              </emu-alg>
-            </emu-clause>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-return">
-            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.return</h1>
-            <p>The initial value of %AsyncIteratorPrototypeFilterIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypefilteriteratorprototype-throw">
-            <h1>%AsyncIteratorPrototypeFilterIteratorPrototype%.throw</h1>
-            <p>The initial value of %AsyncIteratorPrototypeFilterIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-asynciteratorprototypefilteriteratorprototype-instances">
-            <h1>Properties of %AsyncIteratorPrototypeFilterIteratorPrototype% Instances</h1>
-            <emu-table id="table-8" caption="Internal Slots of %AsyncIteratorPrototypeFilterIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[AsyncFilterer]]
-                  </td>
-                  <td>
-                    The function which is used to filter each value of [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+        <p>The body of %AsyncIteratorPrototype%.filter is composed of the following steps:</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_value_, _lastValue_)).
+            1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _selected_ be ? Await(? Call(_filterer_, *undefined*, &laquo; _value_ &raquo;)).
+            1. If ToBoolean(_selected_) is *true*, set _lastValue_ to ? Yield(_value_).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-take">
         <h1>%AsyncIteratorPrototype%.take ( _limit_ )</h1>
+        <p>%AsyncIteratorPrototype%.take is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToNumber(_limit_).
-          1. Let _iterator_ be ObjectCreate(%AsyncIteratorPrototypeTakeIteratorPrototype%, &laquo; [[Iterated]], [[Remaining]] &raquo;).
-          1. Set iterator.[[Iterated]] to _iterated_.
-          1. Set iterator.[[Remaining]] to _iterated_.
-          1. Return _iterator_.
         </emu-alg>
+        <p>The body of %AsyncIteratorPrototype%.take is composed of the following steps:</p>
+        <emu-alg>
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. If _remaining_ is 0, return *undefined*.
+            1. Set _remaining_ to _remaining_ - 1.
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
+            1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
+            1. Set _lastValue_ to ? Yield(? IteratorValue(_next_)).
+        </emu-alg>
+      </emu-clause>
 
-        <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype">
-          <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%</h1>
-          <p>The <dfn>%AsyncIteratorPrototypeTakeIteratorPrototype%</dfn> object:</p>
-          <ul>
-            <li>has a [[Prototype]] internal slot whose intrinsic value is %AsyncIteratorPrototype%.</li>
-            <li>is an ordinary object.</li>
-          </ul>
-
-          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-next">
-            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.next ( _v_ )</h1>
-            <emu-alg>
-              1. Let _O_ be *this* value.
-              1. If Type(_O_) is not Object, throw a *TypeError* exception.
-              1. If _O_ does not have all the internal slots of a %AsyncIteratorPrototypeTakeIteratorPrototype% Instance, throw a *TypeError* exception.
-              1. Let _remaining_ be _O_.[[Remaining]].
-              1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-              1. If _remaining_ is 0, then
-                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; CreateIterResultObject(*undefined*, *true*) &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
-              1. Set _O_.[[Remaining]] to _remaining_ - 1.
-              1. Let _iterated_ be _O_.[[Iterated]].
-              1. Let _next_ be IteratorNext(_iterated_, _v_).
-              1. IfAbruptRejectPromise(_next_, _promiseCapability_).
-              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _next_ &raquo;).
-              1. Return _promiseCapability_.[[Promise]].
-            </emu-alg>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-return">
-            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.return</h1>
-            <p>The initial value of %AsyncIteratorPrototypeTakeIteratorPrototype%.return is %IteratorPrototypeReturnPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-asynciteratorprototypetakeiteratorprototype-throw">
-            <h1>%AsyncIteratorPrototypeTakeIteratorPrototype%.throw</h1>
-            <p>The initial value of %AsyncIteratorPrototypeTakeIteratorPrototype%.throw is %IteratorPrototypeThrowPass%.</p>
-            <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
-          </emu-clause>
-
-          <emu-clause id="sec-properties-of-asynciteratorprototypetakeiteratorprototype-instances">
-            <h1>Properties of %AsyncIteratorPrototypeTakeIteratorPrototype% Instances</h1>
-            <emu-table id="table-9" caption="Internal Slots of %AsyncIteratorPrototypeTakeIteratorPrototype Instances">
-              <table>
-                <tbody>
-                <tr>
-                  <th>
-                    Internal Slot
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    [[Iterated]]
-                  </td>
-                  <td>
-                    The iterator which is being iterated.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    [[Remaining]]
-                  </td>
-                  <td>
-                    The remaining number of items to take from [[Iterated]].
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </emu-table>
-          </emu-clause>
-        </emu-clause>
+      <emu-clause id="sec-asynciteratorprototype-drop">
+        <h1>%AsyncIteratorPrototype%.drop ( _limit_ )</h1>
+        <p>%AsyncIteratorPrototype%.drop is a built-in async generator function which, when called, performs the following prelude steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. Let _remaining_ be ? ToNumber(_limit_).
+        </emu-alg>
+        <p>The body of %AsyncIteratorPrototype%.drop is composed of the following steps:</p>
+        <emu-alg>
+          1. Repeat, while _remaining_ &gt; 0,
+            1. Set _remaining_ to _remaining_ - 1.
+            1. Let _next_ be ? Await(? IteratorStep(_iterated_)).
+            1. If _next_ is *false*, return *undeifned*.
+          1. Let _lastValue_ be *undefined*.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorStep(_iterated_, _lastValue_)).
+            1. If _next_ is *false*, return *undefined*.
+            1. Set _lastValue_ to ? Yield(? IteratorValue(_next_)).
+        </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-toarray">
         <h1>%AsyncIteratorPrototype%.toArray ( )</h1>
+        <p>%AsyncIteratorPrototype%.toArray is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _steps_ be the algorithm steps defined in <emu-xref href="#sec-asynciteratorprototype-toarray-helper" title></emu-xref>.
-          1. Let _helper_ be ! CreateBuiltinFunction(_steps_, &laquo; [[Items]], [[Iterated]] &raquo;).
-          1. Set _helper_.[[Items]] to a new empty List.
-          1. Set _helper_.[[Iterated]] to _iterated_.
-          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-          1. Let _promise_ be IteratorNext(_iterated_).
-          1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-          1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
-          1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _helper_).
-        </emu-alg>
-
-        <emu-clause id="sec-asynciteratorprototype-toarray-helper">
-          <h1>AsyncIteratorPrototype.toArray Helper Functions</h1>
-          <p>When this is called with argument _next_, the following steps are taken:</p>
-          <emu-alg>
-            1. Let _F_ be the active function object.
-            1. Assert: _F_ has the [[Iterated]] and [[Items]] internal slots.
-            1  Let _iterated_ be _F_.[[Iterated]].
-            1. Let _items_ be _F_.[[Items]].
-            1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-            1. Let _done_ be IteratorComplete(_next_).
-            1. IfAbruptRejectPromise(_done_, _promiseCapability_).
-            1. If _done_ is *true*, then
-              1. Let _promise_ be AsyncIteratorClose(_iterated_, _completion_).
-              1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-              1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _items_ &raquo;).
-              1. Return _promiseCapability_.[[Promise]].
-            1. Let _value_ be IteratorValue(_iterated_).
-            1. IfAbruptRejectPromise(_value_, _promiseCapability_).
+          1. Let _items_ be a new empty List.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorComplete(_next_) is *true*, return _items_.
+            1. Let _value_ be ? IteratorValue(_next_).
             1. Append _value_ to _items_.
-            1. Let _promise_ be IteratorNext(_iterated_).
-            1. IfAbruptRejectPromise(_promise_, _promiseCapability_).
-            1. Perform ! Call(_promiseCapabilty_.[[Resolve]], *undefined*, &laquo; _promise_ &raquo;).
-            1. Return ! PerformPromiseThen(_promiseCapability_.[[Promise]], _F_).
-          </emu-alg>
-        </emu-clause>
+        </emu-alg>
       </emu-clause>
-    </emu-clause>
-
-    <emu-clause id="sec-iteratorprototypenextpass">
-      <h1>%IteratorPrototypeNextPass% ( _value_ )</h1>
-      <p>The <dfn>%IteratorPrototypeNextPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
-      <emu-alg>
-        1. Let _O_ be *this* value.
-        1. If Type(_O_) is not Object, throw a *TypeError* exception.
-        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
-        1. Let _iterated_ be _O_.[[Iterated]].
-        1. Return ? IteratorNext(_iterated_, _value_).
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-iteratorprototypereturnpass">
-      <h1>%IteratorPrototypeReturnPass% ( _value_ )</h1>
-      <p>The <dfn>%IteratorPrototypeReturnPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
-      <emu-alg>
-        1. Let _O_ be *this* value.
-        1. If Type(_O_) is not Object, throw a *TypeError* exception.
-        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
-        1. Let _iterated_ be _O_.[[Iterated]].
-        1. Let _return_ be ? GetMethod(_iterated_, `"return"`).
-        1. If _return_ is *undefined*, return CreateIterResultObject(_value_, *true*).
-        1. Return ? Call(_return_, _iterated_.[[Iterator]], &laquo; _value_ &raquo;).
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-iteratorprototypethrowpass">
-      <h1>%IteratorPrototypeThrowPass% ( _value_ )</h1>
-      <p>The <dfn>%IteratorPrototypeThrowPass%</dfn> intrinsic is a built-in function object that is defined once for each realm.</p>
-      <emu-alg>
-        1. Let _O_ be *this* value.
-        1. If Type(_O_) is not Object, throw a *TypeError* exception.
-        1. If _O_ does not have a [[Iterated]] internal slot, throw a *TypeError* exception.
-        1. Let _iterated_ be _O_.[[Iterated]].
-        1. Let _throw_ be ? GetMethod(_iterated_, `"throw"`).
-        1. If _throw_ is *undefined*, return ThrowCompletion(_value_).
-        1. Return ? Call(_throw_, _iterated_.[[Iterator]], &laquo; _value_ &raquo;).
-      </emu-alg>
     </emu-clause>
   </emu-clause>
 </emu-clause>
