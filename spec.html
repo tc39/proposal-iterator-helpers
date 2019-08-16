@@ -125,8 +125,9 @@ contributors: Gus Caplan
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]], [[Async]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
+            1. Set _wrapper_.[[Async]] to _false_.
             1. Return _wrapper_.
           </emu-alg>
         </emu-clause>
@@ -164,15 +165,16 @@ contributors: Gus Caplan
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
+            1. Let _usingIterator_ be ? GetMethod(_O_, @@asyncIterator).
             1. If _usingIterator_ is not undefined, then
               1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator.prototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, let _iteratorRecord_ be ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]], [[Async]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
+            1. Set _wrapper_.[[Async]] to *true*.
             1. Return _wrapper_.
           </emu-alg>
         </emu-clause>
@@ -207,7 +209,9 @@ contributors: Gus Caplan
           1. RequireInternalSlot(_O_, [[Iterated]]).
           1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
           1. Let _throw_ be ? GetMethod(_iterator_, *"throw"*).
-          1. If _throw_ is *undefined*, return ThrowCompletion(_v_).
+          1. If _throw_ is *undefined*, then
+            1. If _O_.[[Async]]  is *true*, return ? Call(%Promise.reject%, %Promise%, &laquo; _v_ &raquo;).
+            1. Otherwise, return ThrowCompletion(_v_).
           1. Otherwise, return ? Call(_throw_, _iterator_, &laquo; _v_ &raquo;).
         </emu-alg>
       </emu-clause>
