@@ -125,11 +125,44 @@ contributors: Gus Caplan
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]], [[Async]] &raquo;).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
-            1. Set _wrapper_.[[Async]] to _false_.
             1. Return _wrapper_.
           </emu-alg>
+
+          <emu-clause id="sec-wrapforvaliditeratorprototype-object">
+            <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-next">
+              <h1>%WrapForValidIteratorPrototype%.next ( _v_ )</h1>
+              <emu-alg>
+                1. Let _O_ be *this* value.
+                1. RequireInternalSlot(_O_, [[Iterated]]).
+                1. Return ? IteratorNext(_O_.[[Iterated]]).
+              </emu-alg>
+            </emu-clause>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-return">
+              <h1>%WrapForValidIteratorPrototype%.return ( _v_ )</h1>
+              <emu-alg>
+                1. Let _O_ be *this* value.
+                1. RequireInternalSlot(_O_, [[Iterated]]).
+                1. Return ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+              </emu-alg>
+            </emu-clause>
+
+            <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
+              <h1>%WrapForValidIteratorPrototype%.throw ( _v_ )</h1>
+              <emu-alg>
+                1. Let _O_ be *this* value.
+                1. RequireInternalSlot(_O_, [[Iterated]]).
+                1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
+                1. Let _throw_ be ? GetMethod(_iterator_, *"throw"*).
+                1. If _throw_ is *undefined*, return ThrowCompletion(_v_).
+                1. Otherwise, return ? Call(_throw_, _iterator_, &laquo; _v_ &raquo;).
+              </emu-alg>
+            </emu-clause>
+          </emu-clause>
         </emu-clause>
       </emu-clause>
     </emu-clause>
@@ -172,48 +205,11 @@ contributors: Gus Caplan
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, let _iteratorRecord_ be ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]], [[Async]] &raquo;).
-            1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
-            1. Set _wrapper_.[[Async]] to *true*.
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
+            1. Set _wrapper_.[[AsyncIterated]] to _iteratorRecord_.
             1. Return _wrapper_.
           </emu-alg>
         </emu-clause>
-      </emu-clause>
-    </emu-clause>
-
-    <emu-clause id="sec-wrapforvaliditeratorprototype-object">
-      <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
-
-      <emu-clause id="sec-wrapforvaliditeratorprototype-next">
-        <h1>%WrapForValidIteratorPrototype%.next ( _v_ )</h1>
-        <emu-alg>
-          1. Let _O_ be *this* value.
-          1. RequireInternalSlot(_O_, [[Iterated]]).
-          1. Return ? IteratorNext(_O_.[[Iterated]]).
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-wrapforvaliditeratorprototype-return">
-        <h1>%WrapForValidIteratorPrototype%.return ( _v_ )</h1>
-        <emu-alg>
-          1. Let _O_ be *this* value.
-          1. RequireInternalSlot(_O_, [[Iterated]]).
-          1. Return ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
-        </emu-alg>
-      </emu-clause>
-
-      <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
-        <h1>%WrapForValidIteratorPrototype%.throw ( _v_ )</h1>
-        <emu-alg>
-          1. Let _O_ be *this* value.
-          1. RequireInternalSlot(_O_, [[Iterated]]).
-          1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
-          1. Let _throw_ be ? GetMethod(_iterator_, *"throw"*).
-          1. If _throw_ is *undefined*, then
-            1. If _O_.[[Async]]  is *true*, return ? Call(%Promise.reject%, %Promise%, &laquo; _v_ &raquo;).
-            1. Otherwise, return ThrowCompletion(_v_).
-          1. Otherwise, return ? Call(_throw_, _iterator_, &laquo; _v_ &raquo;).
-        </emu-alg>
       </emu-clause>
     </emu-clause>
 
@@ -263,7 +259,7 @@ contributors: Gus Caplan
         <p>%Iterator.prototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _remaining_ be ? ToInteger(_limit_).
         </emu-alg>
         <p>The body of %Iterator.prototype%.take is composed of the following steps</p>
         <emu-alg>
@@ -282,7 +278,7 @@ contributors: Gus Caplan
         <p>%Iterator.prototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _remaining_ be ? ToInteger(_limit_).
         </emu-alg>
         <p>The body of %Iterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
@@ -319,11 +315,16 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-reduce">
-        <h1>%Iterator.prototype%.reduce ( _reducer_, _initialValue_ )</h1>
+        <h1>%Iterator.prototype%.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
-          1. Let _accumulator_ be _initialValue_.
+          1. If _initialValue_ is not present, then
+            1. Let _next_ be ? IteratorStep(_iterated_).
+            1. If _next_ is *false*, throw a *TypeError* exception.
+            1. Let _accumulator_ be ? IteratorValue(_next_).
+          1. Else,
+            1. Let _accumulator_ be _initialValue_.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return _accumulator_.
@@ -445,7 +446,7 @@ contributors: Gus Caplan
         <p>%AsyncIterator.prototype%.take is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _remaining_ be ? ToInteger(_limit_).
         </emu-alg>
         <p>The body of %AsyncIterator.prototype%.take is composed of the following steps:</p>
         <emu-alg>
@@ -464,7 +465,7 @@ contributors: Gus Caplan
         <p>%AsyncIterator.prototype%.drop is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToNumber(_limit_).
+          1. Let _remaining_ be ? ToInteger(_limit_).
         </emu-alg>
         <p>The body of %AsyncIterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
