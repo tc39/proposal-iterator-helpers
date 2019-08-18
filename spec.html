@@ -352,6 +352,7 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.forEach ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *undefined*.
@@ -364,6 +365,7 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.some ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *false*.
@@ -377,6 +379,7 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.every ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *true*.
@@ -390,6 +393,7 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.find ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *undefined*.
