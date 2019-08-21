@@ -402,6 +402,12 @@ contributors: Gus Caplan
             1. If _result_ is *true*, return _value_.
         </emu-alg>
       </emu-clause>
+
+      <emu-clause id="sec-iteratorprototype-@@tostringtag">
+        <h1>%Iterator.prototype% [ @@toStringTag ]</h1>
+        <p>The initial value of the @@toStringTag property is the String value "Iterator".</p>
+        <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+      </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
@@ -497,6 +503,12 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Append _value_ to _items_.
         </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-@@tostringtag">
+        <h1>%AsyncIterator.prototype% [ @@toStringTag ]</h1>
+        <p>The initial value of the @@toStringTag property is the String value "Async Iterator".</p>
+        <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
       </emu-clause>
     </emu-clause>
   </emu-clause>
