@@ -74,6 +74,7 @@ contributors: Gus Caplan
       <emu-alg>
         1. If Type(_obj_) is not Object, throw a *TypeError* exception.
         1. Let _nextMethod_ be ? GetV(_obj_, `"next"`).
+        1. If IsCallable(_nextMethod_) is *false*, throw a *TypeError* exception.
         1. Let _iteratorRecord_ be Record { [[Iterator]]: _obj_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
         1. Return _iteratorRecord_.
       </emu-alg>
@@ -311,6 +312,35 @@ contributors: Gus Caplan
             1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
             1. Set _index_ to _index_ + 1.
             1. Set _lastValue_ to ? Yield(_pair_).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-iteratorprototype-flatmap">
+        <h1>%Iterator.prototype%.flatMap ( _mapper_ )</h1>
+        <p>%Iterator.prototype%.flatMap is a built-in generator function which, when called, performs the following steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
+        </emu-alg>
+        <p>The body of %Iterator.prototype%.flatMap is composed of the following steps:</p>
+        <emu-alg>
+          1. Repeat,
+            1. Let _next_ be ? IteratorNext(_iterated_).
+            1. If _next_ is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _mapped_ be ? Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
+            1. Let _usingIterator_ be ? Get(_mapped_, @@iterator).
+            1. If _usingIterator_ is *undefined*, then
+              1. Perform ? Yield(_mapped_).
+            1. Else,
+              1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
+              1. Let _innerAlive_ be *true*.
+              1. Repeat, while _innerAlive_ is *true*,
+                1. Let _innerNext_ be ? IteratorNext(_innerIterator_).
+                1. If next is *false*, set _innerAlive_ to *false*.
+                1. Else,
+                  1. Let _innerValue_ be ? IteratorNext(_innerNext_).
+                  1. Perform ? Yield(_innerValue_).
         </emu-alg>
       </emu-clause>
 
