@@ -6,12 +6,11 @@ A proposal for several interfaces that will help with general usage and
 consumption of iterators in ECMAScript. Many
 [libraries and languages](#prior-art) already provide these interfaces.
 
-This proposal is at Stage 2 of
-[The Process](https://tc39.github.io/process-document/)
+This proposal is at Stage 2 of [The TC39 Process](https://tc39.es/process-document/).
 
 See [DETAILS.md](./DETAILS.md) for details on semantics decisions.
 
-See this specification rendered [here](https://tc39.github.io/proposal-iterator-helpers)
+See this proposal rendered [here](https://tc39.es/proposal-iterator-helpers)
 
 ### Example usage
 
@@ -45,7 +44,7 @@ const MyIteratorPrototype = {
 // Object.setPrototypeOf(MyIteratorPrototype,
 //   Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
 
-Object.setPrototypeOf(MyIteratorPrototype, Iterator.syncPrototype);
+Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
 ```
 
 ```js
