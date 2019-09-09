@@ -261,6 +261,7 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
+          1. If _remaining_ &lt; 0, throw a *TypeError* exception.
         </emu-alg>
         <p>The body of %Iterator.prototype%.take is composed of the following steps</p>
         <emu-alg>
@@ -280,6 +281,7 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
+          1. If _remaining_ &lt; 0, throw a *TypeError* exception.
         </emu-alg>
         <p>The body of %Iterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
@@ -487,6 +489,7 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
+          1. If _remaining_ &lt; 0, throw a *TypeError* exception.
         </emu-alg>
         <p>The body of %AsyncIterator.prototype%.take is composed of the following steps:</p>
         <emu-alg>
@@ -506,6 +509,7 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
+          1. If _remaining_ &lt; 0, throw a *TypeError* exception.
         </emu-alg>
         <p>The body of %AsyncIterator.prototype%.drop is composed of the following steps:</p>
         <emu-alg>
