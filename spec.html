@@ -511,12 +511,12 @@ contributors: Gus Caplan
         <emu-alg>
           1. Repeat, while _remaining_ &gt; 0,
             1. Set _remaining_ to _remaining_ - 1.
-            1. Let _next_ be ? Await(? IteratorStep(_iterated_)).
-            1. If _next_ is *false*, return *undeifned*.
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorNext(_next_) is *false*, return *undeifned*.
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
-            1. Let _next_ be ? Await(? IteratorStep(_iterated_, _lastValue_)).
-            1. If _next_ is *false*, return *undefined*.
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
+            1. If ? IteratorComplete(_next_) is *false*, return *undefined*.
             1. Set _lastValue_ to ? Yield(? IteratorValue(_next_)).
         </emu-alg>
       </emu-clause>
@@ -532,6 +532,65 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return _items_.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Append _value_ to _items_.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-foreach">
+        <h1>%AsyncIterator.prototype%.forEach ( _fn_ )</h1>
+        <p>%AsyncIterator.prototype%.forEach is a built-in async function which, when called, performs the following steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorComplete(_next_) is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Perform ? Await(? Call(_fn_, *undefined*, &laquo; _value_ &raquo;)).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-some">
+        <h1>%AsyncIterator.prototype%.some ( _fn_ )</h1>
+        <p>%AsyncIterator.prototype%.some is a built-in async function which, when called, performs the following steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorComplete(_next_) is *false*, return *false*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _result_ be ? Await(? Call(_fn_, *undefined*, &laquo; _value_ &raquo;)).
+            1. If ToBoolean(_result_) is *true*, return *true*.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-every">
+        <h1>%AsyncIterator.prototype%.every ( _fn_ )</h1>
+        <p>%AsyncIterator.prototype%.every is a built-in async function which, when called, performs the following steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorComplete(_next_) is *false*, return *true*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _result_ be ? Await(? Call(_fn_, *undefined*, &laquo; _value_ &raquo;)).
+            1. If ToBoolean(_result_) is *false*, return *false*.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asynciteratorprototype-find">
+        <h1>%AsyncIterator.prototype%.find ( _fn_ )</h1>
+        <p>%AsyncIterator.prototype%.find is a built-in async function which, when called, performs the following steps:</p>
+        <emu-alg>
+          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
+          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Repeat,
+            1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
+            1. If ? IteratorComplete(_next_) is *false*, return *undefined*.
+            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _result_ be ? Await(? Call(_fn_, *undefined*, &laquo; _value_ &raquo;)).
+            1. If ToBoolean(_result_) is *true*, return _value_.
         </emu-alg>
       </emu-clause>
 
