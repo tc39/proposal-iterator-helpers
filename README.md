@@ -53,7 +53,7 @@ class ObligatoryCryptocurrencyReference extends Component {
     const items = ticker() // returns async iterator
       .map((c) => createElement('h2', null, `${c.name}: ${c.price}`))
       .take(5) // only consume 5 items of a potentially infinite iterator
-      .collect() // greedily transform async iterator into array
+      .toArray() // greedily transform async iterator into array
       .then((data) => this.setState({ data }));
   }
 
@@ -65,7 +65,7 @@ class ObligatoryCryptocurrencyReference extends Component {
 
 ### Why not use Array.from + Array.prototype methods?
 
-All of these methods (except for reduce and collect) are **lazy**. They will
+All of these methods (except for reduce and toArray) are **lazy**. They will
 only consume the iterator when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
