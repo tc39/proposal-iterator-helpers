@@ -79,6 +79,7 @@ any form of iterator, different iterators have to be handled differently.
 - https://doc.rust-lang.org/std/iter/trait.Iterator.html
 - https://www.boost.org/doc/libs/1_66_0/libs/iterator/doc/index.html
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
+- https://github.com/ReactiveX/IxJS
 
 | Method                      | Rust | Python | npm Itertools | C# |
 | --------------------------- | ---- | ------ | --------------| -- |
