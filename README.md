@@ -74,6 +74,7 @@ any form of iterator, different iterators have to be handled differently.
 
 - https://www.npmjs.com/package/itertools
 - https://www.npmjs.com/package/lodash
+- https://www.npmjs.com/package/@sweet-monads/iterator
 - https://docs.python.org/3/library/itertools.html
 - https://docs.rs/itertools/
 - https://doc.rust-lang.org/std/iter/trait.Iterator.html
@@ -81,58 +82,58 @@ any form of iterator, different iterators have to be handled differently.
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
 - https://github.com/ReactiveX/IxJS
 
-| Method                      | Rust | Python | npm Itertools | C# |
-| --------------------------- | ---- | ------ | --------------| -- |
-| all                         | ☑    | ☐      | ☑             | ☑  |
-| any                         | ☑    | ☐      | ☑             | ☑  |
-| chain                       | ☑    | ☑      | ☑             | ☑  |
-| collect                     | ☑    | ☐      | ☐             | ☐  |
-| count                       | ☑    | ☑      | ☑             | ☑  |
-| cycle                       | ☑    | ☑      | ☑             | ☐  |
-| enumerate                   | ☑    | ☐      | ☑             | ☐  |
-| filter                      | ☑    | ☐      | ☑             | ☑  |
-| filterMap                   | ☑    | ☐      | ☐             | ☐  |
-| find                        | ☑    | ☐      | ☑             | ☑  |
-| findMap                     | ☑    | ☐      | ☐             | ☐  |
-| flatMap                     | ☑    | ☐      | ☑             | ☑  |
-| flatten                     | ☑    | ☐      | ☐             | ☐  |
-| forEach                     | ☑    | ☐      | ☐             | ☐  |
-| last                        | ☑    | ☐      | ☐             | ☑  |
-| map                         | ☑    | ☐      | ☑             | ☑  |
-| max                         | ☑    | ☐      | ☑             | ☑  |
-| min                         | ☑    | ☐      | ☑             | ☑  |
-| nth                         | ☑    | ☐      | ☐             | ☑  |
-| partition                   | ☑    | ☑      | ☐             | ☑  |
-| peekable                    | ☑    | ☐      | ☐             | ☐  |
-| position                    | ☑    | ☐      | ☐             | ☐  |
-| product                     | ☑    | ☑      | ☐             | ☐  |
-| reverse                     | ☑    | ☐      | ☐             | ☑  |
-| scan                        | ☑    | ☐      | ☐             | ☐  |
-| skip                        | ☑    | ☐      | ☐             | ☑  |
-| skipWhile                   | ☑    | ☑      | ☐             | ☑  |
-| stepBy                      | ☑    | ☐      | ☐             | ☐  |
-| sum                         | ☑    | ☐      | ☑             | ☑  |
-| take                        | ☑    | ☐      | ☑             | ☑  |
-| takeWhile                   | ☑    | ☑      | ☐             | ☑  |
-| unzip                       | ☑    | ☐      | ☐             | ☐  |
-| zip                         | ☑    | ☑      | ☑             | ☑  |
-| compress                    | ☐    | ☑      | ☑             | ☐  |
-| permutations                | ☐    | ☑      | ☑             | ☐  |
-| repeat                      | ☑    | ☑      | ☑             | ☑  |
-| slice                       | ☐    | ☑      | ☑             | ☐  |
-| starmap                     | ☐    | ☑      | ☐             | ☐  |
-| tee                         | ☐    | ☑      | ☐             | ☐  |
-| compact                     | ☐    | ☐      | ☑             | ☐  |
-| contains                    | ☐    | ☐      | ☑             | ☑  |
-| range                       | ☑    | ☑      | ☑             | ☑  |
-| reduce                      | ☑    | ☑      | ☑             | ☑  |
-| sorted                      | ☐    | ☐      | ☑             | ☐  |
-| unique                      | ☐    | ☐      | ☑             | ☑  |
-| average                     | ☐    | ☐      | ☐             | ☑  |
-| empty                       | ☑    | ☐      | ☐             | ☑  |
-| except                      | ☐    | ☐      | ☐             | ☑  |
-| intersect                   | ☐    | ☐      | ☐             | ☑  |
-| prepend                     | ☐    | ☐      | ☐             | ☑  |
-| append                      | ☐    | ☐      | ☐             | ☑  |
+| Method                      | Rust | Python | npm Itertools | npm @sweet-monads/iterator | C# |
+| --------------------------- | ---- | ------ | --------------|----------------------------| -- |
+| all                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| any                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| chain                       | ☑    | ☑      | ☑             | ☑                          | ☑  |
+| collect                     | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| count                       | ☑    | ☑      | ☑             | ☑                          | ☑  |
+| cycle                       | ☑    | ☑      | ☑             | ☑                          | ☐  |
+| enumerate                   | ☑    | ☐      | ☑             | ☑                          | ☐  |
+| filter                      | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| filterMap                   | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| find                        | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| findMap                     | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| flatMap                     | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| flatten                     | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| forEach                     | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| last                        | ☑    | ☐      | ☐             | ☑                          | ☑  |
+| map                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| max                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| min                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| nth                         | ☑    | ☐      | ☐             | ☑                          | ☑  |
+| partition                   | ☑    | ☑      | ☐             | ☑                          | ☑  |
+| peekable                    | ☑    | ☐      | ☐             | ☐                          | ☐  |
+| position                    | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| product                     | ☑    | ☑      | ☐             | ☑                          | ☐  |
+| reverse                     | ☑    | ☐      | ☐             | ☑                          | ☑  |
+| scan                        | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| skip                        | ☑    | ☐      | ☐             | ☑                          | ☑  |
+| skipWhile                   | ☑    | ☑      | ☐             | ☑                          | ☑  |
+| stepBy                      | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| sum                         | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| take                        | ☑    | ☐      | ☑             | ☑                          | ☑  |
+| takeWhile                   | ☑    | ☑      | ☐             | ☑                          | ☑  |
+| unzip                       | ☑    | ☐      | ☐             | ☑                          | ☐  |
+| zip                         | ☑    | ☑      | ☑             | ☑                          | ☑  |
+| compress                    | ☐    | ☑      | ☑             | ☑                          | ☐  |
+| permutations                | ☐    | ☑      | ☑             | ☑                          | ☐  |
+| repeat                      | ☑    | ☑      | ☑             | ☐                          | ☑  |
+| slice                       | ☐    | ☑      | ☑             | ☑                          | ☐  |
+| starmap                     | ☐    | ☑      | ☐             | ☐                          | ☐  |
+| tee                         | ☐    | ☑      | ☐             | ☐                          | ☐  |
+| compact                     | ☐    | ☐      | ☑             | ☑                          | ☐  |
+| contains                    | ☐    | ☐      | ☑             | ☑                          | ☑  |
+| range                       | ☑    | ☑      | ☑             | ☐                          | ☑  |
+| reduce                      | ☑    | ☑      | ☑             | ☑                          | ☑  |
+| sorted                      | ☐    | ☐      | ☑             | ☐                          | ☐  |
+| unique                      | ☐    | ☐      | ☑             | ☑                          | ☑  |
+| average                     | ☐    | ☐      | ☐             | ☐                          | ☑  |
+| empty                       | ☑    | ☐      | ☐             | ☑                          | ☑  |
+| except                      | ☐    | ☐      | ☐             | ☑                          | ☑  |
+| intersect                   | ☐    | ☐      | ☐             | ☑                          | ☑  |
+| prepend                     | ☐    | ☐      | ☐             | ☑                          | ☑  |
+| append                      | ☐    | ☐      | ☐             | ☑                          | ☑  |
 
 Note: The method names are combined, such as `toArray` and `collect`.
