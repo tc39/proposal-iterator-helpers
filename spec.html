@@ -593,7 +593,7 @@ contributors: Gus Caplan
               1. If _usingIterator_ is *undefined*, then
                 1. Perform ? Yield(_mapped_).
               1. Else,
-                1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
+                1. Let _innerIterator_ be ? GetIterator(_mapped_, ~async~, _usingIterator_).
                 1. Let _innerAlive_ be *true*.
                 1. Repeat, while _innerAlive_ is *true*,
                   1. Let _innerNext_ be ? Await(? IteratorNext(_innerIterator_)).
