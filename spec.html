@@ -365,19 +365,14 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
             1. IfAbruptCloseIterator(_mapped_, _iterated_).
-            1. Let _usingIterator_ be Get(_mapped_, @@iterator).
-            1. IfAbruptCloseIterator(_usingIterator_, _iterated_).
-            1. If _usingIterator_ is *undefined*, then
-              1. Perform ? Yield(_mapped_).
-            1. Else,
-              1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
-              1. Let _innerAlive_ be *true*.
-              1. Repeat, while _innerAlive_ is *true*,
-                1. Let _innerNext_ be ? IteratorNext(_innerIterator_).
-                1. If ? IteratorComplete(_innerNext_) is *false*, set _innerAlive_ to *false*.
-                1. Else,
-                  1. Let _innerValue_ be ? IteratorValue(_innerNext_).
-                  1. Perform ? Yield(_innerValue_).
+            1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~).
+            1. Let _innerAlive_ be *true*.
+            1. Repeat, while _innerAlive_ is *true*,
+              1. Let _innerNext_ be ? IteratorNext(_innerIterator_).
+              1. If ? IteratorComplete(_innerNext_) is *false*, set _innerAlive_ to *false*.
+              1. Else,
+                1. Let _innerValue_ be ? IteratorValue(_innerNext_).
+                1. Perform ? Yield(_innerValue_).
         </emu-alg>
       </emu-clause>
 
@@ -615,18 +610,14 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be ? Await(? Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
-            1. Let _usingIterator_ be ? Get(_mapped_, @@iterator).
-            1. If _usingIterator_ is *undefined*, then
-              1. Perform ? Yield(_mapped_).
-            1. Else,
-              1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
-              1. Let _innerAlive_ be *true*.
-              1. Repeat, while _innerAlive_ is *true*,
-                1. Let _innerNext_ be ? Await(? IteratorNext(_innerIterator_)).
-                1. If ? IteratorComplete(_nextNext_) is *true*, set _innerAlive_ to *false*.
-                1. Else,
-                  1. Let _innerValue_ be ? IteratorValue(_innerNext_).
-                  1. Perform ? Yield(_innerValue_).
+            1. Let _innerIterator_ be ? GetIterator(_mapped_, ~async~).
+            1. Let _innerAlive_ be *true*.
+            1. Repeat, while _innerAlive_ is *true*,
+              1. Let _innerNext_ be ? Await(? IteratorNext(_innerIterator_)).
+              1. If ? IteratorComplete(_nextNext_) is *true*, set _innerAlive_ to *false*.
+              1. Else,
+                1. Let _innerValue_ be ? IteratorValue(_innerNext_).
+                1. Perform ? Yield(_innerValue_).
         </emu-alg>
       </emu-clause>
 
