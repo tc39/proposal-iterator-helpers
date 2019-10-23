@@ -80,6 +80,48 @@ contributors: Gus Caplan
       </emu-alg>
     </emu-clause>
   </emu-clause>
+
+  <emu-clause id="sec-getiterator" aoid="GetIterator">
+    <h1>GetIterator ( _obj_ [ , _hint_ [ , _method_ ] ] )</h1>
+    <p>The abstract operation GetIterator with argument _obj_ and optional arguments _hint_ and _method_ performs the following steps:</p>
+
+    <p><ins>All existing uses of GetIterator are to be replaced with GetIteratorOrThrow</ins></p>
+
+    <emu-alg>
+      1. If _hint_ is not present, set _hint_ to ~sync~.
+      1. Assert: _hint_ is either ~sync~ or ~async~.
+      1. If _method_ is not present, then
+        1. If _hint_ is ~async~, then
+          1. Set _method_ to ? GetMethod(_obj_, @@asyncIterator).
+          1. If _method_ is *undefined*, then
+            1. Let _syncMethod_ be ? GetMethod(_obj_, @@iterator).
+            1. Let _syncIteratorRecord_ be ? GetIterator(_obj_, ~sync~, _syncMethod_).
+            1. Return ! CreateAsyncFromSyncIterator(_syncIteratorRecord_).
+        1. Otherwise, set _method_ to ? GetMethod(_obj_, @@iterator).
+      1. <ins>If _method_ is *undefined*, then</ins>
+        1. <ins>Return *undefined*.</ins>
+      1. Let _iterator_ be ? Call(_method_, _obj_).
+      1. If Type(_iterator_) is not Object, throw a *TypeError* exception.
+      1. Let _nextMethod_ be ? GetV(_iterator_, *"next"*).
+      1. Let _iteratorRecord_ be the Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
+      1. Return _iteratorRecord_.
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-getiteratororthrow" aoid="GetIteratorOrThrow">
+    <h1>GetIteratorOrThrow ( _obj_ [ , _hint_ [ , _method_ ] ] )</h1>
+
+    <p><ins>This new operation replaces all existing uses of GetIterator</ins></p>
+
+    <emu-alg>
+      1. Let _iterator_ be GetIterator(_obj_, _hint_, _method_).
+      1. If _iterator_ is *undefined*, then
+        1. Return _iterator_.
+      1. Else
+        1. Throw a *TypeError* exception.
+    </emu-alg>
+  </emu-clause>
+</emu-clause>
 </emu-clause>
 
 <emu-clause id="sec-control-abstraction-objects">
