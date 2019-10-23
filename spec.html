@@ -176,13 +176,12 @@ contributors: Gus Caplan
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
-            1. If _usingIterator_ is not *undefined*,
-              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
+            1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~).
+            1. If _iteratorRecord_ is not *undefined*,
+              1. Let _hasInstance_ be OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
-            1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Else, set _iteratorRecord_ to ? GetIteratorDirect(_O_).
             1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
@@ -256,19 +255,13 @@ contributors: Gus Caplan
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _usingIterator_ be ? GetMethod(_O_, @@asyncIterator).
-            1. If _usingIterator_ is not *undefined*,
-              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator.prototype%, _iteratorRecord_.[[Iterator]]).
+            1. Let _iteratorRecord_ be ? GetIterator(_O_, ~async~).
+            1. If _iteratorRecord_ is not *undefined*,
+              1. Let _hasInstance_ be OrdinaryHasInstance(%AsyncIterator.prototype%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
-            1. If _iteratorRecord_ is *undefined*,
-              1. Set _usingIterator_ to ? GetMethod(_O_, @@iterator).
-              1. If _usingIterator_ is not *undefined*,
-                1. Let _syncIteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-                1. Return ! CreateAsyncFromSyncIterator(_syncIteratorRecord_).
-            1. If _iteratorRecord_ is *undefined*, set _iteratorRecord_ to ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
+            1. Else, set _iteratorRecord_ to ? GetIteratorDirect(_O_).
+            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
             1. Set _wrapper_.[[AsyncIterated]] to _iteratorRecord_.
             1. Return _wrapper_.
           </emu-alg>
@@ -396,12 +389,11 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
             1. IfAbruptCloseIterator(_mapped_, _iterated_).
-            1. Let _usingIterator_ be Get(_mapped_, @@iterator).
-            1. IfAbruptCloseIterator(_usingIterator_, _iterated_).
-            1. If _usingIterator_ is *undefined*, then
+            1. Let _innerIterator_ be GetIterator(_mapped_, ~sync~).
+            1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
+            1. If _innerIterator_ is *undefined*, then
               1. Perform ? Yield(_mapped_).
             1. Else,
-              1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
                 1. Let _innerNext_ be ? IteratorNext(_innerIterator_).
@@ -629,11 +621,10 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be ? Await(? Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
-            1. Let _usingIterator_ be ? Get(_mapped_, @@iterator).
-            1. If _usingIterator_ is *undefined*, then
+            1. Let _innerIterator be ? GetIterator(_mapped_, ~async~).
+            1. If _innerIterator_ is *undefined*, then
               1. Perform ? Yield(_mapped_).
             1. Else,
-              1. Let _innerIterator_ be ? GetIterator(_mapped_, ~sync~, _usingIterator_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
                 1. Let _innerNext_ be ? Await(? IteratorNext(_innerIterator_)).
