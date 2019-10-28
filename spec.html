@@ -586,7 +586,7 @@ contributors: Gus Caplan
             1. Let _innerAlive_ be *true*.
             1. Repeat, while _innerAlive_ is *true*,
               1. Let _innerNext_ be ? Await(? IteratorNext(_innerIterator_)).
-              1. If ? IteratorComplete(_nextNext_) is *true*, set _innerAlive_ to *false*.
+              1. If ? IteratorComplete(_innerNext_) is *true*, set _innerAlive_ to *false*.
               1. Else,
                 1. Let _innerValue_ be ? IteratorValue(_innerNext_).
                 1. Perform ? Yield(_innerValue_).
