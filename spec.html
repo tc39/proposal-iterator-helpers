@@ -150,11 +150,14 @@ contributors: Gus Caplan
             <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
 
             <emu-clause id="sec-wrapforvaliditeratorprototype-next">
-              <h1>%WrapForValidIteratorPrototype%.next ( _v_ )</h1>
+              <h1>%WrapForValidIteratorPrototype%.next ( _value_ )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. RequireInternalSlot(_O_, [[Iterated]]).
-                1. Return ? IteratorNext(_O_.[[Iterated]]).
+                1. If _value_ is not present, then
+                  1. Return ? IteratorNext(_O_.[[Iterated]]).
+                1. Else,
+                  1. Return ? IteratorNext(_O_.[[Iterated]], _value_).
               </emu-alg>
             </emu-clause>
 
