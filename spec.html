@@ -79,6 +79,21 @@ contributors: Gus Caplan
         1. Return _iteratorRecord_.
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-iteratorstep" aoid="IteratorStep">
+      <h1>IteratorStep ( _iteratorRecord_ <ins>[ , _value_ ]</ins> )</h1>
+
+      <emu-alg>
+        1. <del>Let _result_ be ? IteratorNext(_iteratorRecord_).</del>
+        1. <ins>If _value_ is present, then</ins>
+          1. <ins>Let _result_ be ? IteratorNext(_iteratorRecord_, _value_).</ins>
+        1. <ins>Else,</ins>
+          1. <ins>Let _result_ be ? IteratorNext(_iteratorRecord_).</ins>
+        1. Let _done_ be ? IteratorComplete(_result_).
+        1. If _done_ is *true*, return *false*.
+        1. Return _result_.
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
 
