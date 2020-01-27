@@ -179,7 +179,7 @@ contributors: Gus Caplan
           <emu-clause id="sec-wrapforvaliditeratorprototype-object">
             <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
 
-            <emu-clause id="sec-wrapforvaliditeratorprototype-next">
+            <emu-clause id="sec-wrapforvaliditeratorprototype.next">
               <h1>%WrapForValidIteratorPrototype%.next ( _value_ )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
@@ -191,7 +191,7 @@ contributors: Gus Caplan
               </emu-alg>
             </emu-clause>
 
-            <emu-clause id="sec-wrapforvaliditeratorprototype-return">
+            <emu-clause id="sec-wrapforvaliditeratorprototype.return">
               <h1>%WrapForValidIteratorPrototype%.return ( _v_ )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
@@ -200,7 +200,7 @@ contributors: Gus Caplan
               </emu-alg>
             </emu-clause>
 
-            <emu-clause id="sec-wrapforvaliditeratorprototype-throw">
+            <emu-clause id="sec-wrapforvaliditeratorprototype.throw">
               <h1>%WrapForValidIteratorPrototype%.throw ( _v_ )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
@@ -267,15 +267,15 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-iteratorprototype-object">
+    <emu-clause id="sec-%iteratorprototype%-object">
       <h1>The <dfn>%Iterator.prototype%</dfn> Object</h1>
 
-      <emu-clause id="sec-iteratorprototype-constructor">
+      <emu-clause id="sec-iteratorprototype.constructor">
         <h1>%Iterator.prototype%.constructor</h1>
         <p>The initial value of %Iterator.prototype%.constructor is %Iterator%.</p>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-map">
+      <emu-clause id="sec-iteratorprototype.map">
         <h1>%Iterator.prototype%.map ( _mapper_ )</h1>
         <p>%Iterator.prototype%.map is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -296,7 +296,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-filter">
+      <emu-clause id="sec-iteratorprototype.filter">
         <h1>%Iterator.prototype%.filter ( _filterer_ )</h1>
         <p>%Iterator.prototype%.filter is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -318,7 +318,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-take">
+      <emu-clause id="sec-iteratorprototype.take">
         <h1>%Iterator.prototype%.take ( _limit_ )</h1>
         <p>%Iterator.prototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -339,7 +339,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-drop">
+      <emu-clause id="sec-iteratorprototype.drop">
         <h1>%Iterator.prototype%.drop ( _limit_ )</h1>
         <p>%Iterator.prototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -362,7 +362,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-asindexedpairs">
+      <emu-clause id="sec-iteratorprototype.asindexedpairs">
         <h1>%Iterator.prototype%.asIndexedPairs ( )</h1>
         <p>%Iterator.prototype%.asIndexedPairs is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -383,7 +383,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-flatmap">
+      <emu-clause id="sec-iteratorprototype.flatmap">
         <h1>%Iterator.prototype%.flatMap ( _mapper_ )</h1>
         <p>%Iterator.prototype%.flatMap is a built-in generator function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -409,7 +409,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-reduce">
+      <emu-clause id="sec-iteratorprototype.reduce">
         <h1>%Iterator.prototype%.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -430,7 +430,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-toarray">
+      <emu-clause id="sec-iteratorprototype.toarray">
         <h1>%Iterator.prototype%.toArray ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -443,7 +443,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-foreach">
+      <emu-clause id="sec-iteratorprototype.foreach">
         <h1>%Iterator.prototype%.forEach ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -457,7 +457,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-some">
+      <emu-clause id="sec-iteratorprototype.some">
         <h1>%Iterator.prototype%.some ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -472,7 +472,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-every">
+      <emu-clause id="sec-iteratorprototype.every">
         <h1>%Iterator.prototype%.every ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -487,7 +487,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype-find">
+      <emu-clause id="sec-iteratorprototype.find">
         <h1>%Iterator.prototype%.find ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -512,12 +512,12 @@ contributors: Gus Caplan
     <emu-clause id="sec-asynciteratorprototype">
       <h1>The <dfn>%AsyncIterator.prototype%</dfn> Object</h1>
 
-      <emu-clause id="sec-asynciteratorprototype-constructor">
+      <emu-clause id="sec-asynciteratorprototype.constructor">
         <h1>%AsyncIterator.prototype%.constructor</h1>
         <p>The initial value of %AsyncIterator.prototype%.constructor is %AsyncIterator%.</p>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-map">
+      <emu-clause id="sec-asynciteratorprototype.map">
         <h1>%AsyncIterator.prototype%.map ( _mapper_ )</h1>
         <p>%AsyncIterator.prototype%.map is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -540,7 +540,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-filter">
+      <emu-clause id="sec-asynciteratorprototype.filter">
         <h1>%AsyncIterator.prototype%.filter ( _filterer_ )</h1>
         <p>%AsyncIterator.prototype%.filter is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -564,7 +564,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-take">
+      <emu-clause id="sec-asynciteratorprototype.take">
         <h1>%AsyncIterator.prototype%.take ( _limit_ )</h1>
         <p>%AsyncIterator.prototype%.take is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -585,7 +585,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-drop">
+      <emu-clause id="sec-asynciteratorprototype.drop">
         <h1>%AsyncIterator.prototype%.drop ( _limit_ )</h1>
         <p>%AsyncIterator.prototype%.drop is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -608,7 +608,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-asindexedpairs">
+      <emu-clause id="sec-asynciteratorprototype.asindexedpairs">
         <h1>%AsyncIterator.prototype%.asIndexedPairs ( )</h1>
         <p>%AsyncIterator.prototype%.asIndexedPairs is a built-in async generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
@@ -629,7 +629,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-flatmap">
+      <emu-clause id="sec-asynciteratorprototype.flatmap">
         <h1>%AsyncIterator.prototype%.flatMap ( _mapper_ )</h1>
         <p>%AsyncIterator.prototype%.flatMap is a built-in async generator function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -657,7 +657,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-reduce">
+      <emu-clause id="sec-asynciteratorprototype.reduce">
         <h1>%AsyncIterator.prototype%.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
@@ -680,7 +680,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-toarray">
+      <emu-clause id="sec-asynciteratorprototype.toarray">
         <h1>%AsyncIterator.prototype%.toArray ( )</h1>
         <p>%AsyncIterator.prototype%.toArray is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -694,7 +694,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-foreach">
+      <emu-clause id="sec-asynciteratorprototype.foreach">
         <h1>%AsyncIterator.prototype%.forEach ( _fn_ )</h1>
         <p>%AsyncIterator.prototype%.forEach is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -711,7 +711,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-some">
+      <emu-clause id="sec-asynciteratorprototype.some">
         <h1>%AsyncIterator.prototype%.some ( _fn_ )</h1>
         <p>%AsyncIterator.prototype%.some is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -729,7 +729,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-every">
+      <emu-clause id="sec-asynciteratorprototype.every">
         <h1>%AsyncIterator.prototype%.every ( _fn_ )</h1>
         <p>%AsyncIterator.prototype%.every is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
@@ -747,7 +747,7 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype-find">
+      <emu-clause id="sec-asynciteratorprototype.find">
         <h1>%AsyncIterator.prototype%.find ( _fn_ )</h1>
         <p>%AsyncIterator.prototype%.find is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
