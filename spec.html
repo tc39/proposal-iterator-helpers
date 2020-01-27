@@ -118,6 +118,21 @@ contributors: Gus Caplan
       </emu-alg>
     </emu-clause>
 
+    <emu-clause id="sec-ifabruptcloseasynciterator">
+      <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
+      <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
+      <emu-alg>
+        1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
+      </emu-alg>
+      <p>means the same thing as:</p>
+      <emu-alg>
+        1. If _value_ is an abrupt completion, then
+          1. Perform ? AsyncIteratorClose(_iteratorRecord_, _value_).
+          1. Return _value_.
+        1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
+      </emu-alg>
+    </emu-clause>
+
     <emu-clause id="sec-iterator-constructor">
       <h1>The Iterator Constructor</h1>
       <p>The <dfn>Iterator</dfn> constructor:</p>
@@ -517,11 +532,11 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _mapped_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _mapped_).
             1. Set _mapped_ to Await(_mapped_).
-            1. IfAbruptCloseIterator(_iterated_, _mapped_.
+            1. IfAbruptCloseAsyncIterator(_iterated_, _mapped_).
             1. Set _lastValue_ to Yield(_mapped_).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
         </emu-alg>
       </emu-clause>
 
@@ -540,12 +555,12 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _selected_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _selected_).
             1. Set _selected_ to Await(_selected_).
-            1. IfAbruptCloseIterator(_iterated_, _selected_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _selected_).
             1. If ToBoolean(_selected_) is *true*, then
               1. Set _lastValue_ to Yield(_value_).
-              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+              1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
         </emu-alg>
       </emu-clause>
 
@@ -566,7 +581,7 @@ contributors: Gus Caplan
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
         </emu-alg>
       </emu-clause>
 
@@ -589,7 +604,7 @@ contributors: Gus Caplan
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
         </emu-alg>
       </emu-clause>
 
@@ -605,12 +620,12 @@ contributors: Gus Caplan
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
-            1. If ? IteratorComplete(_next_ is *true*, return *undefined*.
+            1. If ? IteratorComplete(_next_ is *true*, return *undefined*).
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
             1. Set _index_ to _index_ + 1.
             1. Set _lastValue_ to Yield(_pair_).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
         </emu-alg>
       </emu-clause>
 
@@ -628,9 +643,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _mapped_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _mapped_).
             1. Set _mapped_ to Await(_mapped_).
-            1. IfAbruptCloseIterator(_iterated_, _mapped_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _mapped_).
             1. Let _innerIterator_ be ? GetIterator(_mapped_, ~async~).
             1. Let _innerAlive_ be *true*.
             1. Repeat, while _innerAlive_ is *true*,
@@ -658,9 +673,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return _accumulator_.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_reducer_, *undefined*, &laquo; _accumulator_, _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _accumulator_ to _result_.
         </emu-alg>
       </emu-clause>
@@ -690,9 +705,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _r_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _r_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _r_).
             1. Set _r_ to Await(r).
-            1. IfAbruptCloseIterator(_iterated_, _r_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _r_).
         </emu-alg>
       </emu-clause>
 
@@ -707,9 +722,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *false*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. If ToBoolean(_result_) is *true*, return *true*.
         </emu-alg>
       </emu-clause>
@@ -725,9 +740,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *true*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. If ToBoolean(_result_) is *false*, return *false*.
         </emu-alg>
       </emu-clause>
@@ -743,9 +758,9 @@ contributors: Gus Caplan
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
-            1. IfAbruptCloseIterator(_iterated_, _result_).
+            1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. If ToBoolean(_result_) is *true*, return _value_.
         </emu-alg>
       </emu-clause>
