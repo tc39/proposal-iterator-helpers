@@ -140,3 +140,8 @@ Note: The method names are combined, such as `toArray` and `collect`.
 ### Polyfill
 
 A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#iterator-helpers).
+
+Import this core-js polyfill in the browser:
+```js
+import('https://core-js.jackworks.workers.dev/proposals/iterator-helpers.js')
+```
