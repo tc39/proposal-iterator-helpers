@@ -330,7 +330,8 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
-            1. If _remaining_ is 0, return *undefined*.
+            1. If _remaining_ is 0, then
+              1. Return ? IteratorClose(_iterated_, NormalCompletion(*undefined*)).
             1. Set _remaining_ to _remaining_ - 1.
             1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
             1. If _next_ is *false*, return *undefined*.
@@ -576,7 +577,8 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
-            1. If _remaining_ is 0, return *undefined*.
+            1. If _remaining_ is 0, then
+              1. Return ? Await(? AsyncIteratorClose(_iterated_, NormalCompletion(*undefined*))).
             1. Set _remaining_ to _remaining_ - 1.
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
