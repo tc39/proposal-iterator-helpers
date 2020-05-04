@@ -73,6 +73,9 @@ any form of iterator, different iterators have to be handled differently.
 ### Prior Art
 
 - https://www.npmjs.com/package/itertools
+- https://www.npmjs.com/package/itiriri
+- https://www.npmjs.com/package/itiriri-async
+- https://www.npmjs.com/package/linq
 - https://www.npmjs.com/package/lodash
 - https://docs.python.org/3/library/itertools.html
 - https://docs.rs/itertools/
