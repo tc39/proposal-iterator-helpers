@@ -136,7 +136,3 @@ any form of iterator, different iterators have to be handled differently.
 | append                      | ☐    | ☐      | ☐             | ☑  |
 
 Note: The method names are combined, such as `toArray` and `collect`.
-
-### Polyfill
-
-A polyfill is available in the [core-js](https://github.com/zloirock/core-js) library. You can find it in the [ECMAScript proposals section](https://github.com/zloirock/core-js#iterator-helpers).
