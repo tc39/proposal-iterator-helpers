@@ -200,7 +200,8 @@ contributors: Gus Caplan
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. RequireInternalSlot(_O_, [[Iterated]]).
-                1. Return ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+                1. Let _result_ be ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+                1. Return CreateIterResultObject(result, true).
               </emu-alg>
             </emu-clause>
 
