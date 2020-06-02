@@ -167,7 +167,7 @@ contributors: Gus Caplan
             1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
             1. If _usingIterator_ is not *undefined*,
               1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
