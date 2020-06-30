@@ -415,7 +415,7 @@ contributors: Gus Caplan
               1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
               1. Else,
                 1. Let _innerValue_ be IteratorValue(_innerNext_).
-                1. IfAbruptCloseIterator(_innerNext_, _iterated_).
+                1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                 1. Let _yielded_ be Yield(_innerValue_).
                 1. IfAbruptCloseIterator(_yielded_, _iterated_).
         </emu-alg>
@@ -672,7 +672,7 @@ contributors: Gus Caplan
               1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
               1. Else,
                 1. Let _innerValue_ be IteratorValue(_innerNext_).
-                1. IfAbruptCloseAsyncIterator(_innerNext_, _iterated_).
+                1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
                 1. Let _yielded_ be Yield(_innerValue_).
                 1. IfAbruptCloseAsyncIterator(_yielded_, _iterated_).
         </emu-alg>
