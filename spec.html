@@ -317,6 +317,52 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
+    <emu-clause id="sec-async-iterator-helper-objects">
+      <h1>Async Iterator Helper Objects</h1>
+      <p>An Async Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source async iterator object via a built-in async generator function. There is not a named constructor for Async Iterator Helper objects. Instead, Async Iterator Helper objects are created by calling certain methods of AsyncIterator instance objects.</p>
+
+      <emu-clause id="sec-%asynciteratorhelperprototype%-object">
+        <h1>The %AsyncIteratorHelperPrototype% Object</h1>
+        <p>The <dfn>%AsyncIteratorHelperPrototype%</dfn> object:</p>
+        <ul>
+          <li>has properties that are inherited by all Async Iterator Helper Objects.</li>
+          <li>is an ordinary object.</li>
+          <li>has a [[Prototype]] internal slot whose value is %AsyncIterator.prototype%.</li>
+          <li>has the following properties:</li>
+        </ul>
+
+        <emu-clause id="sec-%asynciteratorhelperprototype%.next">
+          <h1>%AsyncIteratorHelperPrototype%.next ( _value_ )</h1>
+          <emu-alg>
+            1. Let _C_ be NormalCompletion(_value_).
+            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%asynciteratorhelperprototype%.return">
+          <h1>%AsyncIteratorHelperPrototype%.return ( _value_ )</h1>
+          <emu-alg>
+            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: _value_, [[Target]]: ~empty~ }.
+            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%asynciteratorhelperprototype%.throw">
+          <h1>%AsyncIteratorHelperPrototype%.throw ( _exception_ )</h1>
+          <emu-alg>
+            1. Let _C_ be ThrowCompletion(_exception_).
+            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%asynciteratorhelperprototype%-@@tostringtag">
+          <h1>%AsyncIteratorHelperPrototype% [ @@toStringTag ]</h1>
+          <p>The initial value of the @@toStringTag property is the String value *"Async Iterator Helper"*.</p>
+          <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+      </emu-clause>
+    </emu-clause>
+
     <emu-clause id="sec-%iteratorprototype%-object">
       <h1>The <dfn>%Iterator.prototype%</dfn> Object</h1>
 
