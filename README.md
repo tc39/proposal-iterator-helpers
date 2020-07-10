@@ -83,14 +83,14 @@ any form of iterator, different iterators have to be handled differently.
 
 | Method                      | Rust | Python | npm Itertools | C# |
 | --------------------------- | ---- | ------ | --------------| -- |
-| all                         | ☑    | ☐      | ☑             | ☑  |
-| any                         | ☑    | ☐      | ☑             | ☑  |
+| all                         | ☑    | ☑      | ☑             | ☑  |
+| any                         | ☑    | ☑      | ☑             | ☑  |
 | chain                       | ☑    | ☑      | ☑             | ☑  |
 | collect                     | ☑    | ☐      | ☐             | ☐  |
 | count                       | ☑    | ☑      | ☑             | ☑  |
 | cycle                       | ☑    | ☑      | ☑             | ☐  |
-| enumerate                   | ☑    | ☐      | ☑             | ☐  |
-| filter                      | ☑    | ☐      | ☑             | ☑  |
+| enumerate                   | ☑    | ☑      | ☑             | ☐  |
+| filter                      | ☑    | ☑      | ☑             | ☑  |
 | filterMap                   | ☑    | ☐      | ☐             | ☐  |
 | find                        | ☑    | ☐      | ☑             | ☑  |
 | findMap                     | ☑    | ☐      | ☐             | ☐  |
@@ -98,11 +98,11 @@ any form of iterator, different iterators have to be handled differently.
 | flatten                     | ☑    | ☐      | ☐             | ☐  |
 | forEach                     | ☑    | ☐      | ☐             | ☐  |
 | last                        | ☑    | ☐      | ☐             | ☑  |
-| map                         | ☑    | ☐      | ☑             | ☑  |
-| max                         | ☑    | ☐      | ☑             | ☑  |
-| min                         | ☑    | ☐      | ☑             | ☑  |
+| map                         | ☑    | ☑      | ☑             | ☑  |
+| max                         | ☑    | ☑      | ☑             | ☑  |
+| min                         | ☑    | ☑      | ☑             | ☑  |
 | nth                         | ☑    | ☐      | ☐             | ☑  |
-| partition                   | ☑    | ☑      | ☐             | ☑  |
+| partition                   | ☑    | ☐      | ☐             | ☑  |
 | peekable                    | ☑    | ☐      | ☐             | ☐  |
 | position                    | ☑    | ☐      | ☐             | ☐  |
 | product                     | ☑    | ☑      | ☐             | ☐  |
@@ -111,7 +111,7 @@ any form of iterator, different iterators have to be handled differently.
 | skip                        | ☑    | ☐      | ☐             | ☑  |
 | skipWhile                   | ☑    | ☑      | ☐             | ☑  |
 | stepBy                      | ☑    | ☐      | ☐             | ☐  |
-| sum                         | ☑    | ☐      | ☑             | ☑  |
+| sum                         | ☑    | ☑      | ☑             | ☑  |
 | take                        | ☑    | ☐      | ☑             | ☑  |
 | takeWhile                   | ☑    | ☑      | ☐             | ☑  |
 | unzip                       | ☑    | ☐      | ☐             | ☐  |
@@ -123,10 +123,10 @@ any form of iterator, different iterators have to be handled differently.
 | starmap                     | ☐    | ☑      | ☐             | ☐  |
 | tee                         | ☐    | ☑      | ☐             | ☐  |
 | compact                     | ☐    | ☐      | ☑             | ☐  |
-| contains                    | ☐    | ☐      | ☑             | ☑  |
+| contains                    | ☐    | ☑      | ☑             | ☑  |
 | range                       | ☑    | ☑      | ☑             | ☑  |
 | reduce                      | ☑    | ☑      | ☑             | ☑  |
-| sorted                      | ☐    | ☐      | ☑             | ☐  |
+| sorted                      | ☐    | ☑      | ☑             | ☐  |
 | unique                      | ☐    | ☐      | ☑             | ☑  |
 | average                     | ☐    | ☐      | ☐             | ☑  |
 | empty                       | ☑    | ☐      | ☐             | ☑  |
