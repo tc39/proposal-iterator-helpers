@@ -327,142 +327,130 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.map">
         <h1>%Iterator.prototype%.map ( _mapper_ )</h1>
-        <p>%Iterator.prototype%.map is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.map is composed of the following steps:</p>
-        <emu-alg>
-          1. Let _lastValue_ be *undefined*.
-          1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _mapped_).
-            1. Set _lastValue_ to Yield(_mapped_).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Let _lastValue_ be *undefined*.
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
+              1. IfAbruptCloseIterator(_iterated_, _mapped_).
+              1. Set _lastValue_ to Yield(_mapped_).
+              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.filter">
         <h1>%Iterator.prototype%.filter ( _filterer_ )</h1>
-        <p>%Iterator.prototype%.filter is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.filter is composed of the following steps</p>
-        <emu-alg>
-          1. Let _lastValue_ be *undefined*.
-          1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_iterated_, _selected_).
-            1. If ToBoolean(_selected_) is *true*,
-              1. Set _lastValue_ to Yield(_value_).
-              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
+            1. Let _lastValue_ be *undefined*.
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _selected_ be Call(_filterer_, *undefined*, &laquo; _value_ &raquo;).
+              1. IfAbruptCloseIterator(_iterated_, _selected_).
+              1. If ToBoolean(_selected_) is *true*,
+                1. Set _lastValue_ to Yield(_value_).
+                1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.take">
         <h1>%Iterator.prototype%.take ( _limit_ )</h1>
-        <p>%Iterator.prototype%.take is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
           1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.take is composed of the following steps</p>
-        <emu-alg>
-          1. Let _lastValue_ be *undefined*.
-          1. Repeat,
-            1. If _remaining_ is 0, then
-              1. Return ? IteratorClose(_iterated_, NormalCompletion(*undefined*)).
-            1. Set _remaining_ to _remaining_ - 1.
-            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+            1. Let _lastValue_ be *undefined*.
+            1. Repeat,
+              1. If _remaining_ is 0, then
+                1. Return ? IteratorClose(_iterated_, NormalCompletion(*undefined*)).
+              1. Set _remaining_ to _remaining_ - 1.
+              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
+              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.drop">
         <h1>%Iterator.prototype%.drop ( _limit_ )</h1>
-        <p>%Iterator.prototype%.drop is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _remaining_ be ? ToInteger(_limit_).
           1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.drop is composed of the following steps:</p>
-        <emu-alg>
-          1. Repeat, while _remaining_ &gt; 0,
-            1. Set _remaining_ to _remaining_ - 1.
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *undeifned*.
-          1. Let _lastValue_ be *undefined*.
-          1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+            1. Repeat, while _remaining_ &gt; 0,
+              1. Set _remaining_ to _remaining_ - 1.
+              1. Let _next_ be ? IteratorStep(_iterated_).
+              1. If _next_ is *false*, return *undeifned*.
+            1. Let _lastValue_ be *undefined*.
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
+              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.asindexedpairs">
         <h1>%Iterator.prototype%.asIndexedPairs ( )</h1>
-        <p>%Iterator.prototype%.asIndexedPairs is a built-in generator function which, when called, performs the following prelude steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.asIndexedPairs is composed of the following steps:</p>
-        <emu-alg>
-          1. Let _index_ be 0.
-          1. Let _lastValue_ be *undefined*.
-          1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
-            1. Set _index_ to _index_ + 1.
-            1. Set _lastValue_ to Yield(_pair_).
-            1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
+            1. Let _index_ be 0.
+            1. Let _lastValue_ be *undefined*.
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
+              1. Set _index_ to _index_ + 1.
+              1. Set _lastValue_ to Yield(_pair_).
+              1. IfAbruptCloseIterator(_iterated_, _lastValue_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.flatmap">
         <h1>%Iterator.prototype%.flatMap ( _mapper_ )</h1>
-        <p>%Iterator.prototype%.flatMap is a built-in generator function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-        </emu-alg>
-        <p>The body of %Iterator.prototype%.flatMap is composed of the following steps:</p>
-        <emu-alg>
-          1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
-            1. IfAbruptCloseIterator(_mapped_, _iterated_).
-            1. Let _innerIterator_ be GetIterator(_mapped_, ~sync~).
-            1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
-            1. Let _innerAlive_ be *true*.
-            1. Repeat, while _innerAlive_ is *true*,
-              1. Let _innerNext_ be IteratorNext(_innerIterator_).
-              1. IfAbruptCloseIterator(_innerNext_, _iterated_).
-              1. Let _innerComplete_ be IteratorComplete(_innerNext_).
-              1. IfAbruptCloseIterator(_innerComplete_, _iterated_).
-              1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
-              1. Else,
-                1. Let _innerValue_ be IteratorValue(_innerNext_).
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Repeat,
+              1. Let _next_ be ? IteratorStep(_iterated_).
+              1. If _next_ is *false*, return *undefined*.
+              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _mapped_ be Call(_mapper_, *undefined*, &laquo; _value_ &raquo;).
+              1. IfAbruptCloseIterator(_mapped_, _iterated_).
+              1. Let _innerIterator_ be GetIterator(_mapped_, ~sync~).
+              1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
+              1. Let _innerAlive_ be *true*.
+              1. Repeat, while _innerAlive_ is *true*,
+                1. Let _innerNext_ be IteratorNext(_innerIterator_).
                 1. IfAbruptCloseIterator(_innerNext_, _iterated_).
-                1. Let _yielded_ be Yield(_innerValue_).
-                1. IfAbruptCloseIterator(_yielded_, _iterated_).
+                1. Let _innerComplete_ be IteratorComplete(_innerNext_).
+                1. IfAbruptCloseIterator(_innerComplete_, _iterated_).
+                1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
+                1. Else,
+                  1. Let _innerValue_ be IteratorValue(_innerNext_).
+                  1. IfAbruptCloseIterator(_innerNext_, _iterated_).
+                  1. Let _yielded_ be Yield(_innerValue_).
+                  1. IfAbruptCloseIterator(_yielded_, _iterated_).
+          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
