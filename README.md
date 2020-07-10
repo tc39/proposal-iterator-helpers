@@ -75,6 +75,7 @@ any form of iterator, different iterators have to be handled differently.
 - https://www.npmjs.com/package/itertools
 - https://www.npmjs.com/package/lodash
 - https://docs.python.org/3/library/itertools.html
+- https://github.com/more-itertools/more-itertools
 - https://docs.rs/itertools/
 - https://doc.rust-lang.org/std/iter/trait.Iterator.html
 - https://www.boost.org/doc/libs/1_66_0/libs/iterator/doc/index.html
