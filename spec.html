@@ -272,6 +272,51 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
+    <emu-clause id="sec-iterator-helper-objects">
+      <h1>Iterator Helper Objects</h1>
+      <p>An Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source iterator object via a built-in generator function. There is not a named constructor for Iterator Helper objects. Instead, Iterator Helper objects are created by calling certain methods of Iterator instance objects.</p>
+
+      <emu-clause id="sec-%iteratorhelperprototype%-object">
+        <h1>The %IteratorHelperPrototype% Object</h1>
+        <p>The <dfn>%IteratorHelperPrototype%</dfn> object:</p>
+        <ul>
+          <li>has properties that are inherited by all Iterator Helper Objects.</li>
+          <li>is an ordinary object.</li>
+          <li>has a [[Prototype]] internal slot whose value is %Iterator.prototype%.</li>
+          <li>has the following properties:</li>
+        </ul>
+
+        <emu-clause id="sec-%iteratorhelperprototype%.next">
+          <h1>%IteratorHelperPrototype%.next ( _value_ )</h1>
+          <emu-alg>
+            1. Return ? GeneratorResume(*this* value, _value_, ~Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%iteratorhelperprototype%.return">
+          <h1>%IteratorHelperPrototype%.return ( _value_ )</h1>
+          <emu-alg>
+            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: _value_, [[Target]]: ~empty~ }.
+            1. Return ? GeneratorResumeAbrupt(*this* value, _C_, ~Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%iteratorhelperprototype%.throw">
+          <h1>%IteratorHelperPrototype%.throw ( _exception_ )</h1>
+          <emu-alg>
+            1. Let _C_ be ThrowCompletion(_exception_).
+            1. Return ? GeneratorResumeAbrupt(*this* value, _C_, ~Iterator Helper~).
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-%iteratorhelperprototype%-@@tostringtag">
+          <h1>%IteratorHelperPrototype% [ @@toStringTag ]</h1>
+          <p>The initial value of the @@toStringTag property is the String value *"Iterator Helper"*.</p>
+          <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        </emu-clause>
+      </emu-clause>
+    </emu-clause>
+
     <emu-clause id="sec-%iteratorprototype%-object">
       <h1>The <dfn>%Iterator.prototype%</dfn> Object</h1>
 
