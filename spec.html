@@ -717,9 +717,6 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
-        </emu-alg>
-        <p>The body of %AsyncIterator.prototype%.flatMap is composed of the following steps:</p>
-        <emu-alg>
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
