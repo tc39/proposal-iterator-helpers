@@ -440,7 +440,7 @@ contributors: Gus Caplan
             1. Repeat, while _remaining_ &gt; 0,
               1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undeifned*.
+              1. If _next_ is *false*, return *undefined*.
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
@@ -661,7 +661,7 @@ contributors: Gus Caplan
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. If _remaining_ is 0, then
-                1. Return ? Await(? AsyncIteratorClose(_iterated_, NormalCompletion(*undefined*))).
+                1. Return ? AsyncIteratorClose(_iterated_, NormalCompletion(*undefined*)).
               1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
@@ -681,7 +681,7 @@ contributors: Gus Caplan
             1. Repeat, while _remaining_ &gt; 0,
               1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
-              1. If ? IteratorComplete(_next_) is *true*, return *undeifned*.
+              1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
@@ -701,7 +701,7 @@ contributors: Gus Caplan
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
-              1. If ? IteratorComplete(_next_ is *true*, return *undefined*).
+              1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
               1. Set _index_ to _index_ + 1.
