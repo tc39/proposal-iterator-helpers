@@ -103,64 +103,69 @@ contributors: Gus Caplan
   <emu-clause id="sec-iteration">
     <h1>Iteration</h1>
 
-    <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
-      <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
-      <p><dfn>IfAbruptCloseIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
-      <emu-alg>
-        1. IfAbruptCloseIterator(_value_, _iteratorRecord_).
-      </emu-alg>
-      <p>means the same thing as:</p>
-      <emu-alg>
-        1. If _value_ is an abrupt completion, then
-          1. Perform ? IteratorClose(_iteratorRecord_, _value_).
-          1. Return _value_.
-        1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
-      </emu-alg>
-    </emu-clause>
+    <emu-clause id="sec-iterator-abstract-operations">
+      <h1>Iterator Abstract Operations</h1>
 
-    <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
-      <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
-      <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
-      <emu-alg>
-        1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
-      </emu-alg>
-      <p>means the same thing as:</p>
-      <emu-alg>
-        1. If _value_ is an abrupt completion, then
-          1. Perform ? AsyncIteratorClose(_iteratorRecord_, _value_).
-          1. Return _value_.
-        1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-iterator-constructor">
-      <h1>The Iterator Constructor</h1>
-      <p>The <dfn>Iterator</dfn> constructor:</p>
-      <ul>
-        <li>is the initial value of the *Iterator* property of the global object.</li>
-        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
-      </ul>
-
-      <emu-clause id="sec-iterator">
-        <h1>Iterator ( )</h1>
-        <p>When the `Iterator` function is called, the following steps are taken:</p>
+      <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
+        <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
+        <p><dfn>IfAbruptCloseIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
         <emu-alg>
-          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
-          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%Iterator.prototype%"*).
+          1. IfAbruptCloseIterator(_value_, _iteratorRecord_).
+        </emu-alg>
+        <p>means the same thing as:</p>
+        <emu-alg>
+          1. If _value_ is an abrupt completion, then
+            1. Perform ? IteratorClose(_iteratorRecord_, _value_).
+            1. Return _value_.
+          1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-value-properties-of-the-iterator-constructor">
-        <h1>Value Properties of the Iterator Constructor</h1>
+      <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
+        <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
+        <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
+        <emu-alg>
+          1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
+        </emu-alg>
+        <p>means the same thing as:</p>
+        <emu-alg>
+          1. If _value_ is an abrupt completion, then
+            1. Perform ? AsyncIteratorClose(_iteratorRecord_, _value_).
+            1. Return _value_.
+          1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
+        </emu-alg>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-iterator-objects">
+      <h1>Iterator Objects</h1>
+
+      <emu-clause id="sec-iterator-constructor">
+        <h1>The Iterator Constructor</h1>
+        <p>The <dfn>Iterator</dfn> constructor:</p>
+        <ul>
+          <li>is the initial value of the *Iterator* property of the global object.</li>
+          <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+        </ul>
+
+        <emu-clause id="sec-iterator">
+          <h1>Iterator ( )</h1>
+          <p>When the `Iterator` function is called, the following steps are taken:</p>
+          <emu-alg>
+            1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+            1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%Iterator.prototype%"*).
+          </emu-alg>
+        </emu-clause>
+      </emu-clause>
+
+      <emu-clause id="sec-properties-of-the-iterator-constructor">
+        <h1>Properties of the Iterator Constructor</h1>
         <emu-clause id="sec-iterator.prototype">
           <h1>Iterator.prototype</h1>
           <p>The initial value of Iterator.prototype is %Iterator.prototype%.</p>
           <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
         </emu-clause>
-      </emu-clause>
 
-      <emu-clause id="sec-function-properties-of-the-iterator-constructor">
-        <h1>Function Properties of the Iterator Constructor</h1>
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
@@ -180,7 +185,7 @@ contributors: Gus Caplan
             <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
             <p>The <dfn>%WrapForValidIteratorPrototype%</dfn> object:</p>
             <ul>
-                <li>has a [[Prototype]] internal slot whose value is %Iterator.prototype%.</li>
+              <li>has a [[Prototype]] internal slot whose value is %Iterator.prototype%.</li>
             </ul>
 
             <emu-clause id="sec-wrapforvaliditeratorprototype.next">
@@ -221,34 +226,35 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-asynciterator-constructor">
-      <h1>The AsyncIterator Constructor</h1>
-      <p>The <dfn>AsyncIterator</dfn> constructor:</p>
-      <ul>
-        <li>is the initial value of the *AsyncIterator* property of the global object.</li>
-        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
-      </ul>
+    <emu-clause id="sec-asynciterator-objects">
+      <h1>AsyncIterator Objects</h1>
 
-      <emu-clause id="sec-asynciterator">
-        <h1>AsyncIterator ( )</h1>
-        <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
-        <emu-alg>
-          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
-          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncIterator.prototype%"*).
-        </emu-alg>
+      <emu-clause id="sec-asynciterator-constructor">
+        <h1>The AsyncIterator Constructor</h1>
+        <p>The <dfn>AsyncIterator</dfn> constructor:</p>
+        <ul>
+          <li>is the initial value of the *AsyncIterator* property of the global object.</li>
+          <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+        </ul>
+
+        <emu-clause id="sec-asynciterator">
+          <h1>AsyncIterator ( )</h1>
+          <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
+          <emu-alg>
+            1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+            1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncIterator.prototype%"*).
+          </emu-alg>
+        </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-value-properties-of-the-asynciterator-constructor">
-        <h1>Value Properties of the AsyncIterator Constructor</h1>
+      <emu-clause id="sec-properties-of-the-asynciterator-constructor">
+        <h1>Properties of the AsyncIterator Constructor</h1>
         <emu-clause id="sec-asynciterator.prototype">
           <h1>AsyncIterator.prototype</h1>
           <p>The initial value of AsyncIterator.prototype is %AsyncIterator.prototype%.</p>
           <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
         </emu-clause>
-      </emu-clause>
 
-      <emu-clause id="sec-function-properties-of-the-asynciterator-constructor">
-        <h1>Function Properties of the AsyncIterator Constructor</h1>
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
@@ -493,7 +499,7 @@ contributors: Gus Caplan
                 1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
                 1. Else,
                   1. Let _innerValue_ be IteratorValue(_innerNext_).
-                  1. IfAbruptCloseIterator(_innerNext_, _iterated_).
+                  1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                   1. Let _yielded_ be Yield(_innerValue_).
                   1. IfAbruptCloseIterator(_yielded_, _iterated_).
           1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
@@ -739,7 +745,7 @@ contributors: Gus Caplan
                 1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
                 1. Else,
                   1. Let _innerValue_ be IteratorValue(_innerNext_).
-                  1. IfAbruptCloseAsyncIterator(_innerNext_, _iterated_).
+                  1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
                   1. Let _yielded_ be Yield(_innerValue_).
                   1. IfAbruptCloseAsyncIterator(_yielded_, _iterated_).
           1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
