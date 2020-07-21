@@ -280,7 +280,7 @@ contributors: Gus Caplan
 
     <emu-clause id="sec-iterator-helper-objects">
       <h1>Iterator Helper Objects</h1>
-      <p>An Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source iterator object via a built-in generator function. There is not a named constructor for Iterator Helper objects. Instead, Iterator Helper objects are created by calling certain methods of Iterator instance objects.</p>
+      <p>An Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source iterator object. There is not a named constructor for Iterator Helper objects. Instead, Iterator Helper objects are created by calling certain methods of Iterator instance objects.</p>
 
       <emu-clause id="sec-%iteratorhelperprototype%-object">
         <h1>The %IteratorHelperPrototype% Object</h1>
@@ -325,7 +325,7 @@ contributors: Gus Caplan
 
     <emu-clause id="sec-async-iterator-helper-objects">
       <h1>Async Iterator Helper Objects</h1>
-      <p>An Async Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source async iterator object via a built-in async generator function. There is not a named constructor for Async Iterator Helper objects. Instead, Async Iterator Helper objects are created by calling certain methods of AsyncIterator instance objects.</p>
+      <p>An Async Iterator Helper object is an ordinary object that represents a lazy transformation of some specific source async iterator object. There is not a named constructor for Async Iterator Helper objects. Instead, Async Iterator Helper objects are created by calling certain methods of AsyncIterator instance objects.</p>
 
       <emu-clause id="sec-%asynciteratorhelperprototype%-object">
         <h1>The %AsyncIteratorHelperPrototype% Object</h1>
@@ -392,7 +392,7 @@ contributors: Gus Caplan
               1. IfAbruptCloseIterator(_iterated_, _mapped_).
               1. Set _lastValue_ to Yield(_mapped_).
               1. IfAbruptCloseIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -412,7 +412,7 @@ contributors: Gus Caplan
               1. If ! ToBoolean(_selected_) is *true*,
                 1. Set _lastValue_ to Yield(_value_).
                 1. IfAbruptCloseIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -432,7 +432,7 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
               1. IfAbruptCloseIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -453,7 +453,7 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
               1. IfAbruptCloseIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -472,7 +472,7 @@ contributors: Gus Caplan
               1. Set _index_ to _index_ + 1.
               1. Set _lastValue_ to Yield(_pair_).
               1. IfAbruptCloseIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -502,7 +502,7 @@ contributors: Gus Caplan
                   1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                   1. Let _yielded_ be Yield(_innerValue_).
                   1. IfAbruptCloseIterator(_yielded_, _iterated_).
-          1. Return ? CreateBuiltinGeneratorInstance(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return ? CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -631,7 +631,7 @@ contributors: Gus Caplan
               1. IfAbruptCloseAsyncIterator(_iterated_, _mapped_).
               1. Set _lastValue_ to Yield(_mapped_).
               1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -653,7 +653,7 @@ contributors: Gus Caplan
               1. If ! ToBoolean(_selected_) is *true*, then
                 1. Set _lastValue_ to Yield(_value_).
                 1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -673,7 +673,7 @@ contributors: Gus Caplan
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
               1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -694,7 +694,7 @@ contributors: Gus Caplan
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Set _lastValue_ to Yield(? IteratorValue(_next_)).
               1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -713,7 +713,7 @@ contributors: Gus Caplan
               1. Set _index_ to _index_ + 1.
               1. Set _lastValue_ to Yield(_pair_).
               1. IfAbruptCloseAsyncIterator(_iterated_, _lastValue_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -748,7 +748,7 @@ contributors: Gus Caplan
                   1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
                   1. Let _yielded_ be Yield(_innerValue_).
                   1. IfAbruptCloseAsyncIterator(_yielded_, _iterated_).
-          1. Return ? CreateBuiltinAsyncGeneratorInstance(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return ? CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
