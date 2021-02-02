@@ -63,6 +63,13 @@ class ObligatoryCryptocurrencyReference extends Component {
 }
 ```
 
+```js
+const responses = await AsyncIterator.from(urls).map(async (url) => {
+  const response = await fetch(url);
+  return await response.json();
+});
+```
+
 ### Why not use Array.from + Array.prototype methods?
 
 All of these methods (except for reduce and toArray) are **lazy**. They will
