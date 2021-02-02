@@ -66,7 +66,7 @@ class ObligatoryCryptocurrencyReference extends Component {
 ```js
 const responses = await AsyncIterator.from(urls).map(async (url) => {
   const response = await fetch(url);
-  return await response.json();
+  return response.json();
 });
 ```
 
