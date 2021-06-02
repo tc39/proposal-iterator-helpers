@@ -106,7 +106,7 @@ any form of iterator, different iterators have to be handled differently.
 | peekable                    | ☑    | ☐      | ☐             | ☐  |
 | position                    | ☑    | ☐      | ☐             | ☐  |
 | product                     | ☑    | ☑      | ☐             | ☐  |
-| reverse                     | ☑    | ☐      | ☐             | ☑  |
+| reverse                     | ☑    | ☑      | ☐             | ☑  |
 | scan                        | ☑    | ☐      | ☐             | ☐  |
 | skip                        | ☑    | ☐      | ☐             | ☑  |
 | skipWhile                   | ☑    | ☑      | ☐             | ☑  |
@@ -114,7 +114,7 @@ any form of iterator, different iterators have to be handled differently.
 | sum                         | ☑    | ☐      | ☑             | ☑  |
 | take                        | ☑    | ☐      | ☑             | ☑  |
 | takeWhile                   | ☑    | ☑      | ☐             | ☑  |
-| unzip                       | ☑    | ☐      | ☐             | ☐  |
+| unzip                       | ☑    | ☑      | ☑             | ☐  |
 | zip                         | ☑    | ☑      | ☑             | ☑  |
 | compress                    | ☐    | ☑      | ☑             | ☐  |
 | permutations                | ☐    | ☑      | ☑             | ☐  |
