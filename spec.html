@@ -171,35 +171,8 @@ contributors: Gus Caplan
   <emu-clause id="sec-iteration">
     <h1>Iteration</h1>
 
-    <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
-      <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
-      <p><dfn>IfAbruptCloseIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
-      <emu-alg>
-        1. IfAbruptCloseIterator(_value_, _iteratorRecord_).
-      </emu-alg>
-      <p>means the same thing as:</p>
-      <emu-alg>
-        1. If _value_ is an abrupt completion, then
-          1. Perform ? IteratorClose(_iteratorRecord_, _value_).
-          1. Return _value_.
-        1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
-      </emu-alg>
-    </emu-clause>
-
-    <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
-      <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
-      <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
-      <emu-alg>
-        1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
-      </emu-alg>
-      <p>means the same thing as:</p>
-      <emu-alg>
-        1. If _value_ is an abrupt completion, then
-          1. Perform ? AsyncIteratorClose(_iteratorRecord_, _value_).
-          1. Return _value_.
-        1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
-      </emu-alg>
-    </emu-clause>
+    <emu-clause id="sec-iterator-abstract-operations">
+      <h1>Iterator Abstract Operations</h1>
 
     <emu-clause id="sec-iterator-constructor">
       <h1>The Iterator Constructor</h1>
@@ -210,33 +183,58 @@ contributors: Gus Caplan
         <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
       </ul>
 
-      <emu-clause id="sec-iterator">
-        <h1>Iterator ( )</h1>
-        <p>When the `Iterator` function is called, the following steps are taken:</p>
+      <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
+        <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
+        <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
         <emu-alg>
-          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
-          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%Iterator.prototype%"*).
+          1. IfAbruptCloseAsyncIterator(_value_, _iteratorRecord_).
+        </emu-alg>
+        <p>means the same thing as:</p>
+        <emu-alg>
+          1. If _value_ is an abrupt completion, then
+            1. Perform ? AsyncIteratorClose(_iteratorRecord_, _value_).
+            1. Return _value_.
+          1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
         </emu-alg>
       </emu-clause>
+    </emu-clause>
 
-      <emu-clause id="sec-value-properties-of-the-iterator-constructor">
-        <h1>Value Properties of the Iterator Constructor</h1>
-        <emu-clause id="sec-iterator.prototype">
-          <h1>Iterator.prototype</h1>
-          <p>The initial value of Iterator.prototype is %Iterator.prototype%.</p>
-          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+    <emu-clause id="sec-iterator-objects">
+      <h1>Iterator Objects</h1>
+
+      <emu-clause id="sec-iterator-constructor">
+        <h1>The Iterator Constructor</h1>
+        <p>The <dfn>Iterator</dfn> constructor:</p>
+        <ul>
+          <li>is the initial value of the *Iterator* property of the global object.</li>
+          <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+        </ul>
+
+        <emu-clause id="sec-iterator">
+          <h1>Iterator ( )</h1>
+          <p>When the `Iterator` function is called, the following steps are taken:</p>
+          <emu-alg>
+            1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+            1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%Iterator.prototype%"*).
+          </emu-alg>
         </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-function-properties-of-the-iterator-constructor">
-        <h1>Function Properties of the Iterator Constructor</h1>
+      <emu-clause id="sec-properties-of-the-iterator-constructor">
+        <h1>Properties of the Iterator Constructor</h1>
+        <emu-clause id="sec-iterator.prototype">
+          <h1>Iterator.prototype</h1>
+          <p>The initial value of Iterator.prototype is %Iterator.prototype%.</p>
+          <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+        </emu-clause>
+
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
             1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
             1. If _usingIterator_ is not *undefined*,
               1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator.prototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
@@ -247,6 +245,10 @@ contributors: Gus Caplan
 
           <emu-clause id="sec-wrapforvaliditeratorprototype-object">
             <h1>The <dfn>%WrapForValidIteratorPrototype%</dfn> Object</h1>
+            <p>The <dfn>%WrapForValidIteratorPrototype%</dfn> object:</p>
+            <ul>
+              <li>has a [[Prototype]] internal slot whose value is %Iterator.prototype%.</li>
+            </ul>
 
             <emu-clause id="sec-wrapforvaliditeratorprototype.next">
               <h1>%WrapForValidIteratorPrototype%.next ( _value_ )</h1>
@@ -265,7 +267,8 @@ contributors: Gus Caplan
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. RequireInternalSlot(_O_, [[Iterated]]).
-                1. Return ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+                1. Let _result_ be ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+                1. Return CreateIterResultObject(_result_, true).
               </emu-alg>
             </emu-clause>
 
@@ -294,26 +297,27 @@ contributors: Gus Caplan
         <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
       </ul>
 
-      <emu-clause id="sec-asynciterator">
-        <h1>AsyncIterator ( )</h1>
-        <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
-        <emu-alg>
-          1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
-          1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncIterator.prototype%"*).
-        </emu-alg>
-      </emu-clause>
+    <emu-clause id="sec-asynciterator-objects">
+      <h1>AsyncIterator Objects</h1>
 
-      <emu-clause id="sec-value-properties-of-the-asynciterator-constructor">
-        <h1>Value Properties of the AsyncIterator Constructor</h1>
-        <emu-clause id="sec-asynciterator.prototype">
-          <h1>AsyncIterator.prototype</h1>
-          <p>The initial value of AsyncIterator.prototype is %AsyncIterator.prototype%.</p>
-          <p>This property has the attributes { [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <emu-clause id="sec-asynciterator">
+          <h1>AsyncIterator ( )</h1>
+          <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
+          <emu-alg>
+            1. If NewTarget is *undefined* or the active function object, throw a *TypeError* exception.
+            1. Return ? OrdinaryCreateFromConstructor(NewTarget, *"%AsyncIterator.prototype%"*).
+          </emu-alg>
         </emu-clause>
       </emu-clause>
 
-      <emu-clause id="sec-function-properties-of-the-asynciterator-constructor">
-        <h1>Function Properties of the AsyncIterator Constructor</h1>
+      <emu-clause id="sec-properties-of-the-asynciterator-constructor">
+        <h1>Properties of the AsyncIterator Constructor</h1>
+        <emu-clause id="sec-asynciterator.prototype">
+          <h1>AsyncIterator.prototype</h1>
+          <p>The initial value of AsyncIterator.prototype is %AsyncIterator.prototype%.</p>
+          <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+        </emu-clause>
+
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
@@ -423,7 +427,7 @@ contributors: Gus Caplan
           1. Repeat, while _remaining_ &gt; 0,
             1. Set _remaining_ to _remaining_ - 1.
             1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *undeifned*.
+            1. If _next_ is *false*, return *undefined*.
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
@@ -480,7 +484,7 @@ contributors: Gus Caplan
               1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
               1. Else,
                 1. Let _innerValue_ be IteratorValue(_innerNext_).
-                1. IfAbruptCloseIterator(_innerNext_, _iterated_).
+                1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                 1. Let _yielded_ be Yield(_innerValue_).
                 1. IfAbruptCloseIterator(_yielded_, _iterated_).
         </emu-alg>
@@ -545,7 +549,7 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
             1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. If ToBoolean(_result_) is *true*, return *true*.
+            1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(*true*)).
         </emu-alg>
       </emu-clause>
 
@@ -560,7 +564,7 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
             1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. If ToBoolean(_result_) is *false*, return *false*.
+            1. If ToBoolean(_result_) is *false*, return ? IteratorClose(_iterated_, NormalCompletion(*false*)).
         </emu-alg>
       </emu-clause>
 
@@ -575,7 +579,7 @@ contributors: Gus Caplan
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _result_ be Call(_fn_, *undefined*, &laquo; _value_ &raquo;).
             1. IfAbruptCloseIterator(_result_, _iterated_).
-            1. If ToBoolean(_result_) is *true*, return _value_.
+            1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(_value_)).
         </emu-alg>
       </emu-clause>
 
@@ -676,7 +680,7 @@ contributors: Gus Caplan
           1. Repeat, while _remaining_ &gt; 0,
             1. Set _remaining_ to _remaining_ - 1.
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
-            1. If ? IteratorComplete(_next_) is *true*, return *undeifned*.
+            1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
@@ -698,7 +702,7 @@ contributors: Gus Caplan
           1. Let _lastValue_ be *undefined*.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
-            1. If ? IteratorComplete(_next_ is *true*, return *undefined*).
+            1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
             1. Let _pair_ be ! CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
             1. Set _index_ to _index_ + 1.
@@ -737,7 +741,7 @@ contributors: Gus Caplan
               1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
               1. Else,
                 1. Let _innerValue_ be IteratorValue(_innerNext_).
-                1. IfAbruptCloseAsyncIterator(_innerNext_, _iterated_).
+                1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
                 1. Let _yielded_ be Yield(_innerValue_).
                 1. IfAbruptCloseAsyncIterator(_yielded_, _iterated_).
         </emu-alg>
@@ -811,7 +815,7 @@ contributors: Gus Caplan
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
-            1. If ToBoolean(_result_) is *true*, return *true*.
+            1. If ToBoolean(_result_) is *true*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(*true*)).
         </emu-alg>
       </emu-clause>
 
@@ -829,7 +833,7 @@ contributors: Gus Caplan
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
-            1. If ToBoolean(_result_) is *false*, return *false*.
+            1. If ToBoolean(_result_) is *false*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(*false*)).
         </emu-alg>
       </emu-clause>
 
@@ -847,7 +851,7 @@ contributors: Gus Caplan
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
             1. Set _result_ to Await(_result_).
             1. IfAbruptCloseAsyncIterator(_iterated_, _result_).
-            1. If ToBoolean(_result_) is *true*, return _value_.
+            1. If ToBoolean(_result_) is *true*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(_value_)).
         </emu-alg>
       </emu-clause>
 
@@ -855,6 +859,73 @@ contributors: Gus Caplan
         <h1>%AsyncIterator.prototype% [ @@toStringTag ]</h1>
         <p>The initial value of the @@toStringTag property is the String value "Async Iterator".</p>
         <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+      </emu-clause>
+    </emu-clause>
+
+    <emu-clause id="sec-%asyncfromsynciteratorprototype%-object">
+      <h1>The %AsyncFromSyncIteratorPrototype% Object</h1>
+
+      <emu-clause id="sec-%asyncfromsynciteratorprototype%.next">
+        <h1>%AsyncFromSyncIteratorPrototype%.next ( _value_ )</h1>
+        <emu-alg>
+          1. Let _O_ be the *this* value.
+          1. <del>Assert: Type(_O_) is Object and _O_ has a [[SyncIteratorRecord]] internal slot.</del>
+          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+          1. <ins>Let _check_ be RequireInternalSlot(_O_, [[SyncIteratorRecord]]).</ins>
+          1. <ins>IfAbruptRejectPromise(_check_, _promiseCapability_).</ins>
+          1. Let _syncIteratorRecord_ be _O_.[[SyncIteratorRecord]].
+          1. Let _result_ be IteratorNext(_syncIteratorRecord_, _value_).
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+          1. Return ! AsyncFromSyncIteratorContinuation(_result_, _promiseCapability_).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-%asyncfromsynciteratorprototype%.return">
+        <h1>%AsyncFromSyncIteratorPrototype%.return ( _value_ )</h1>
+
+        <emu-alg>
+          1. Let _O_ be the *this* value.
+          1. <del>Assert: Type(_O_) is Object and _O_ has a [[SyncIteratorRecord]] internal slot.</del>
+          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+          1. <ins>Let _check_ be RequireInternalSlot(_O_, [[SyncIteratorRecord]]).</ins>
+          1. <ins>IfAbruptRejectPromise(_check_, _promiseCapability_).</ins>
+          1. Let _return_ be GetMethod(_syncIterator_, *"return"*).
+          1. IfAbruptRejectPromise(_return_, _promiseCapability_).
+          1. If _return_ is *undefined*, then
+            1. Let _iterResult_ be ! CreateIterResultObject(_value_, *true*).
+            1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResult_ &raquo;).
+            1. Return _promiseCapability_.[[Promise]].
+          1. Let _result_ be Call(_return_, _syncIterator_, &laquo; _value_ &raquo;).
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+          1. If Type(_result_) is not Object, then
+            1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; a newly created *TypeError* object &raquo;).
+            1. Return _promiseCapability_.[[Promise]].
+          1. Return ! AsyncFromSyncIteratorContinuation(_result_, _promiseCapability_).
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-%asyncfromsynciteratorprototype%.throw">
+        <h1>%AsyncFromSyncIteratorPrototype%.throw ( _value_ )</h1>
+
+        <emu-alg>
+          1. Let _O_ be the *this* value.
+          1. <del>Assert: Type(_O_) is Object and _O_ has a [[SyncIteratorRecord]] internal slot.</del>
+          1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+          1. <ins>Let _check_ be RequireInternalSlot(_O_, [[SyncIteratorRecord]]).</ins>
+          1. <ins>IfAbruptRejectPromise(_check_, _promiseCapability_).</ins>
+          1. Let _syncIterator_ be _O_.[[SyncIteratorRecord]].[[Iterator]].
+          1. Let _throw_ be GetMethod(_syncIterator_, *"throw"*).
+          1. IfAbruptRejectPromise(_throw_, _promiseCapability_).
+          1. If _throw_ is *undefined*, then
+            1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _value_ &raquo;).
+            1. Return _promiseCapability_.[[Promise]].
+          1. Let _result_ be Call(_throw_, _syncIterator_, &laquo; _value_ &raquo;).
+          1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+          1. If Type(_result_) is not Object, then
+            1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; a newly created *TypeError* object &raquo;).
+            1. Return _promiseCapability_.[[Promise]].
+          1. Return ! AsyncFromSyncIteratorContinuation(_result_, _promiseCapability_).
+        </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
