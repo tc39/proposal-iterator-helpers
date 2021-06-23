@@ -4,6 +4,8 @@ node_js:
 branches:
   only:
     - master
+# See https://github.com/tc39/proposal-iterator-helpers/pull/124#issuecomment-771560244
+script: echo "npm test disabled"
 after_success:
   - $(npm bin)/set-up-ssh --key "${encrypted_7cd0ff475ed3_key}" --iv "${encrypted_7cd0ff475ed3_iv}" --path-encrypted-key .travis_github_deploy_key.enc
   - $(npm bin)/update-branch --commands 'npm run build' --commit-message "Update gh-pages @ ${TRAVIS_COMMIT}" --directory 'dist' --distribution-branch 'gh-pages' --source-branch 'master'

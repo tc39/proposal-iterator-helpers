@@ -63,6 +63,15 @@ class ObligatoryCryptocurrencyReference extends Component {
 }
 ```
 
+```js
+const responses = await AsyncIterator.from(urls)
+  .map(async (url) => {
+    const response = await fetch(url);
+    return response.json();
+  })
+  .toArray();
+```
+
 ### Why not use Array.from + Array.prototype methods?
 
 All of these methods (except for reduce and toArray) are **lazy**. They will
@@ -75,22 +84,24 @@ any form of iterator, different iterators have to be handled differently.
 - https://www.npmjs.com/package/itertools
 - https://www.npmjs.com/package/lodash
 - https://docs.python.org/3/library/itertools.html
+- https://github.com/more-itertools/more-itertools
 - https://docs.rs/itertools/
 - https://doc.rust-lang.org/std/iter/trait.Iterator.html
 - https://www.boost.org/doc/libs/1_66_0/libs/iterator/doc/index.html
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
 - https://github.com/ReactiveX/IxJS
+- https://www.npmjs.com/package/ballvalve
 
 | Method                      | Rust | Python | npm Itertools | C# |
 | --------------------------- | ---- | ------ | --------------| -- |
-| all                         | ☑    | ☐      | ☑             | ☑  |
-| any                         | ☑    | ☐      | ☑             | ☑  |
+| all                         | ☑    | ☑      | ☑             | ☑  |
+| any                         | ☑    | ☑      | ☑             | ☑  |
 | chain                       | ☑    | ☑      | ☑             | ☑  |
 | collect                     | ☑    | ☐      | ☐             | ☐  |
 | count                       | ☑    | ☑      | ☑             | ☑  |
 | cycle                       | ☑    | ☑      | ☑             | ☐  |
-| enumerate                   | ☑    | ☐      | ☑             | ☐  |
-| filter                      | ☑    | ☐      | ☑             | ☑  |
+| enumerate                   | ☑    | ☑      | ☑             | ☐  |
+| filter                      | ☑    | ☑      | ☑             | ☑  |
 | filterMap                   | ☑    | ☐      | ☐             | ☐  |
 | find                        | ☑    | ☐      | ☑             | ☑  |
 | findMap                     | ☑    | ☐      | ☐             | ☐  |
@@ -98,11 +109,11 @@ any form of iterator, different iterators have to be handled differently.
 | flatten                     | ☑    | ☐      | ☐             | ☐  |
 | forEach                     | ☑    | ☐      | ☐             | ☐  |
 | last                        | ☑    | ☐      | ☐             | ☑  |
-| map                         | ☑    | ☐      | ☑             | ☑  |
-| max                         | ☑    | ☐      | ☑             | ☑  |
-| min                         | ☑    | ☐      | ☑             | ☑  |
+| map                         | ☑    | ☑      | ☑             | ☑  |
+| max                         | ☑    | ☑      | ☑             | ☑  |
+| min                         | ☑    | ☑      | ☑             | ☑  |
 | nth                         | ☑    | ☐      | ☐             | ☑  |
-| partition                   | ☑    | ☑      | ☐             | ☑  |
+| partition                   | ☑    | ☐      | ☐             | ☑  |
 | peekable                    | ☑    | ☐      | ☐             | ☐  |
 | position                    | ☑    | ☐      | ☐             | ☐  |
 | product                     | ☑    | ☑      | ☐             | ☐  |
@@ -111,7 +122,7 @@ any form of iterator, different iterators have to be handled differently.
 | skip                        | ☑    | ☐      | ☐             | ☑  |
 | skipWhile                   | ☑    | ☑      | ☐             | ☑  |
 | stepBy                      | ☑    | ☐      | ☐             | ☐  |
-| sum                         | ☑    | ☐      | ☑             | ☑  |
+| sum                         | ☑    | ☑      | ☑             | ☑  |
 | take                        | ☑    | ☐      | ☑             | ☑  |
 | takeWhile                   | ☑    | ☑      | ☐             | ☑  |
 | unzip                       | ☑    | ☐      | ☐             | ☐  |
@@ -123,10 +134,10 @@ any form of iterator, different iterators have to be handled differently.
 | starmap                     | ☐    | ☑      | ☐             | ☐  |
 | tee                         | ☐    | ☑      | ☐             | ☐  |
 | compact                     | ☐    | ☐      | ☑             | ☐  |
-| contains                    | ☐    | ☐      | ☑             | ☑  |
+| contains                    | ☐    | ☑      | ☑             | ☑  |
 | range                       | ☑    | ☑      | ☑             | ☑  |
 | reduce                      | ☑    | ☑      | ☑             | ☑  |
-| sorted                      | ☐    | ☐      | ☑             | ☐  |
+| sorted                      | ☐    | ☑      | ☑             | ☐  |
 | unique                      | ☐    | ☐      | ☑             | ☑  |
 | average                     | ☐    | ☐      | ☐             | ☑  |
 | empty                       | ☑    | ☐      | ☐             | ☑  |
