@@ -63,6 +63,74 @@ contributors: Gus Caplan
   </ul>
 </div>
 
+<emu-clause id="sec-well-known-intrinsic-objects">
+  <h1>Well-Known Intrinsic Objects</h1>
+
+  <emu-table id="table-7" caption="Well-Known Intrinsic Objects">
+    <table>
+      <tr>
+        <th>
+          Intrinsic Name
+        </th>
+        <th>
+          Global Name
+        </th>
+        <th>
+          ECMAScript Language Association
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <ins>%AsyncIterator%</ins>
+        </td>
+        <td>
+          <ins>`AsyncIterator`</ins>
+        </td>
+        <td>
+          <ins>The `AsyncIterator` constructor (<emu-xref href="#sec-asynciterator-constructor"></emu-xref>)</ins>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          %AsyncIteratorPrototype%
+        </td>
+        <td>
+          <ins>`AsyncIterator.prototype`</ins>
+        </td>
+        <td>
+          An object that all standard built-in async iterator objects indirectly inherit from
+
+          <p><ins>The initial value of the *"prototype"* data property of %AsyncIterator%; i.e., %AsyncIterator.prototype%</ins></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <ins>%Iterator%</ins>
+        </td>
+        <td>
+          <ins>`Iterator`</ins>
+        </td>
+        <td>
+          <ins>The `Iterator` constructor (<emu-xref href="#sec-iterator-constructor"></emu-xref>)</ins>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          %IteratorPrototype%
+        </td>
+        <td>
+          <ins>`Iterator.prototype`</ins>
+        </td>
+        <td>
+          An object that all standard built-in iterator objects indirectly inherit from
+
+          <p><ins>The initial value of the *"prototype"* data property of %Iterator%; i.e., %Iterator.prototype%</ins></p>
+        </td>
+      </tr>
+    </table>
+  </emu-table>
+</emu-clause>
+
 <emu-clause id="sec-abstract-operations">
   <h1>Abstract Operations</h1>
 
@@ -106,20 +174,14 @@ contributors: Gus Caplan
     <emu-clause id="sec-iterator-abstract-operations">
       <h1>Iterator Abstract Operations</h1>
 
-      <emu-clause id="sec-ifabruptcloseiterator" aoid="IfAbruptCloseIterator">
-        <h1>IfAbruptCloseIterator ( _value_, _iteratorRecord_ )</h1>
-        <p><dfn>IfAbruptCloseIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
-        <emu-alg>
-          1. IfAbruptCloseIterator(_value_, _iteratorRecord_).
-        </emu-alg>
-        <p>means the same thing as:</p>
-        <emu-alg>
-          1. If _value_ is an abrupt completion, then
-            1. Perform ? IteratorClose(_iteratorRecord_, _value_).
-            1. Return _value_.
-          1. Else if _value_ is a Completion Record, set _value_ to _value_.[[Value]].
-        </emu-alg>
-      </emu-clause>
+    <emu-clause id="sec-iterator-constructor">
+      <h1>The Iterator Constructor</h1>
+      <p>The <dfn>Iterator</dfn> constructor:</p>
+      <ul>
+        <li>is the intrinsic object <dfn>%Iterator%</dfn>.</li>
+        <li>is the initial value of the *Iterator* property of the global object.</li>
+        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+      </ul>
 
       <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
         <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
@@ -226,16 +288,17 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
+    <emu-clause id="sec-asynciterator-constructor">
+      <h1>The AsyncIterator Constructor</h1>
+      <p>The <dfn>AsyncIterator</dfn> constructor:</p>
+      <ul>
+        <li>is the intrinsic object <dfn>%AsyncIterator%</dfn>.</li>
+        <li>is the initial value of the *AsyncIterator* property of the global object.</li>
+        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+      </ul>
+
     <emu-clause id="sec-asynciterator-objects">
       <h1>AsyncIterator Objects</h1>
-
-      <emu-clause id="sec-asynciterator-constructor">
-        <h1>The AsyncIterator Constructor</h1>
-        <p>The <dfn>AsyncIterator</dfn> constructor:</p>
-        <ul>
-          <li>is the initial value of the *AsyncIterator* property of the global object.</li>
-          <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
-        </ul>
 
         <emu-clause id="sec-asynciterator">
           <h1>AsyncIterator ( )</h1>
