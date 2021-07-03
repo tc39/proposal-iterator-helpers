@@ -174,15 +174,6 @@ contributors: Gus Caplan
     <emu-clause id="sec-iterator-abstract-operations">
       <h1>Iterator Abstract Operations</h1>
 
-    <emu-clause id="sec-iterator-constructor">
-      <h1>The Iterator Constructor</h1>
-      <p>The <dfn>Iterator</dfn> constructor:</p>
-      <ul>
-        <li>is the intrinsic object <dfn>%Iterator%</dfn>.</li>
-        <li>is the initial value of the *Iterator* property of the global object.</li>
-        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
-      </ul>
-
       <emu-clause id="sec-ifabruptcloseasynciterator" aoid="IfAbruptCloseAsyncIterator">
         <h1>IfAbruptCloseAsyncIterator ( _value_, _iteratorRecord_ )</h1>
         <p><dfn>IfAbruptCloseAsyncIterator</dfn> is a shorthand for a sequence of algorithm steps that use an Iterator Record. An algorithm step of the form:</p>
@@ -288,18 +279,17 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-asynciterator-constructor">
-      <h1>The AsyncIterator Constructor</h1>
-      <p>The <dfn>AsyncIterator</dfn> constructor:</p>
-      <ul>
-        <li>is the intrinsic object <dfn>%AsyncIterator%</dfn>.</li>
-        <li>is the initial value of the *AsyncIterator* property of the global object.</li>
-        <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
-      </ul>
-
     <emu-clause id="sec-asynciterator-objects">
       <h1>AsyncIterator Objects</h1>
 
+      <emu-clause id="sec-asynciterator-constructor">
+        <h1>The AsyncIterator Constructor</h1>
+        <p>The <dfn>AsyncIterator</dfn> constructor:</p>
+        <ul>
+          <li>is the intrinsic object <dfn>%AsyncIterator%</dfn>.</li>
+          <li>is the initial value of the *AsyncIterator* property of the global object.</li>
+          <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class defintion.</li>
+        </ul>
         <emu-clause id="sec-asynciterator">
           <h1>AsyncIterator ( )</h1>
           <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
