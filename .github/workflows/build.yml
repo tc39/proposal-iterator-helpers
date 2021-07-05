@@ -5,7 +5,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
@@ -14,6 +13,8 @@ jobs:
     - run: npm install
     - run: npm run build
     - name: commit changes
-      uses: elstudio/actions-js-build/commit@v3
+      uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
-        commitMessage: "fixup: [spec] `npm run build`"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist
