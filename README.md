@@ -11,15 +11,15 @@ This proposal is at Stage 2 of [The TC39 Process](https://tc39.es/process-docume
 
 ## Motivation
 
-Iterators are a useful way to represent large or possible infinite enumerable data sets. However,
+Iterators are a useful way to represent large or possibly infinite enumerable data sets. However,
 they lack helpers which make them as easy to use as Arrays and other finite data structures, which
 results in certain problems that could be better represented by iterators being expressed in Arrays,
 or using libraries to introduce the necessary helpers. Many [libraries and languages](#prior-art) already provide these interfaces.
 
 ## Proposal
 
-The proposal introduces a collection of new methods on the Iterator prototype, to allow general
-ussage and consumption of iterators. For specifics on the implemented methods, please refer to the
+The proposal introduces a collection of new methods on the Iterator and AsyncIterator prototypes, to allow general
+usage and consumption of iterators. For specifics on the implemented methods, please refer to the
 specification.
 
 See [DETAILS.md](./DETAILS.md) for details on semantics decisions.
@@ -135,7 +135,7 @@ result.next(); //  {value: 5, done: false};
 
 ### `.asIndexedPairs()`
 
-`.asInexedPairs` takes no arguments. It returns an iterator where each value is paired with its
+`.asIndexedPairs` takes no arguments. It returns an iterator where each value is paired with its
 index.
 
 Returns an iterator of pairs.
@@ -305,7 +305,7 @@ naturals().take(4).every(v => v >= 1); // true, acting on a new iterator
 
 Can be used without `take` on infinite iterators.
 
-Returns the found element.
+Returns the found element, or *undefined* if no element matches `fn`.
 
 ```JavaScript
 function* naturals() {
