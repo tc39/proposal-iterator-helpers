@@ -469,9 +469,10 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.take ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToInteger(_limit_).
-          1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+          1. Let _integerLimit_ be ? ToInteger(_limit_).
+          1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
+            1. Let _remaining_ be _integerLimit_.
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. If _remaining_ is 0, then
@@ -489,9 +490,10 @@ contributors: Gus Caplan
         <h1>%Iterator.prototype%.drop ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToInteger(_limit_).
-          1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+          1. Let _integerLimit_ be ? ToInteger(_limit_).
+          1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
+            1. Let _remaining_ be _integerLimit_.
             1. Repeat, while _remaining_ &gt; 0,
               1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? IteratorStep(_iterated_).
@@ -710,9 +712,10 @@ contributors: Gus Caplan
         <h1>%AsyncIterator.prototype%.take ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToInteger(_limit_).
-          1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+          1. Let _integerLimit_ be ? ToInteger(_limit_).
+          1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
+            1. Let _remaining_ be _integerLimit_.
             1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. If _remaining_ is 0, then
@@ -730,9 +733,10 @@ contributors: Gus Caplan
         <h1>%AsyncIterator.prototype%.drop ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _remaining_ be ? ToInteger(_limit_).
-          1. If _remaining_ &lt; 0, throw a *RangeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _remaining_ and performs the following steps when called:
+          1. Let _integerLimit_ be ? ToInteger(_limit_).
+          1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
+            1. Let _remaining_ be _integerLimit_.
             1. Repeat, while _remaining_ &gt; 0,
               1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
