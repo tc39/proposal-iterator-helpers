@@ -1,8 +1,10 @@
 # Iterator Helpers
+
 A proposal for several interfaces that will help with general usage and
 consumption of iterators in ECMAScript.
 
 ## Status
+
 Authors: Gus Caplan, Michael Ficcara, Adam Vandolder, Jason Orendorff
 
 Champions: Michael Ficcara, Yulia Startsev
@@ -166,8 +168,6 @@ const sunny = ["It's Sunny in", "", "California"].values();
 
 const result = sunny
   .flatMap(value => value.split(" ").values());
-result.next(); //  "it's";
-result.next(); //  "Sunny";
 result.next(); //  {value: "It's", done: false};
 result.next(); //  {value: "Sunny", done: false};
 result.next(); //  {value: "in", done: false};
