@@ -86,8 +86,7 @@ result.next(); //  {value: 4, done: false};
 
 ### `.take(limit)`
 
-`take` takes an integer as an argument. It takes a group of the specified size and returns an
-iterator with only those elements.
+`take` takes an integer as an argument. It returns an iterator that produces, at most, the given number of elements produced by the underlying iterator.
 
 Returns an iterator with items from the original iterator from 0 until the limit.
 
@@ -112,8 +111,7 @@ result.next(); //  {value: undefined, done: true};
 
 ### `.drop(limit)`
 
-`drop` takes an integer as an argument. It skips a set of value in the iterator determined by the
-`limit` argument.
+`drop` takes an integer as an argument. It skips the given number of elements produced by the underlying iterator before itself producing any remaining elements.
 
 Returns an iterator of items after the limit.
 
@@ -137,8 +135,7 @@ result.next(); //  {value: 5, done: false};
 
 ### `.asIndexedPairs()`
 
-`.asIndexedPairs` takes no arguments. It returns an iterator where each value is paired with its
-index.
+`.asIndexedPairs` takes no arguments. It returns an iterator where each value produced by the underlying iterator is paired with a counter, starting at 0 and increasing by 1 with every element produced.
 
 Returns an iterator of pairs.
 
@@ -156,8 +153,7 @@ result.next(); //  {value: [2, "c"], done: false};
 
 ### `.flatMap(mapperFn)`
 
-`.flatMap` takes a mapping function as an argument. It returns an iterator where each value, if it
-is an iterator, is flattened into a single iterator.
+`.flatMap` takes a mapping function as an argument. It returns an iterator that produces all elements of the iterators produced by applying the mapping function to the elements produced by the underlying iterator.
 
 Returns an iterator of flat values.
 
@@ -178,7 +174,7 @@ result.next(); //  {value: undefined, done: true};
 
 ### `.reduce(reducer [, initialValue ])`
 
-`reduce` takes a function and an optional initial value as an argument. It allows users to apply a funtion to every element returned from an iterator.
+`reduce` takes a function and an optional initial value as an argument. It allows users to apply a function to every element returned from an iterator, while keeping track of the most recent result of the reducer (the memo). For the first element, the given initial value is used as the memo.
 
 Returns a value (in the example, a number) of the type returned to the reducer function.
 
