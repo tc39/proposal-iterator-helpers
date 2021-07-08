@@ -5,9 +5,9 @@ consumption of iterators in ECMAScript.
 
 ## Status
 
-Authors: Gus Caplan, Michael Ficcara, Adam Vandolder, Jason Orendorff
+Authors: Gus Caplan, Michael Ficarra, Adam Vandolder, Jason Orendorff
 
-Champions: Michael Ficcara, Yulia Startsev
+Champions: Michael Ficarra, Yulia Startsev
 
 This proposal is at Stage 2 of [The TC39 Process](https://tc39.es/process-document/).
 
