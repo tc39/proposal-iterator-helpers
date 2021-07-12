@@ -243,8 +243,7 @@ console.log(log.join(", ")) // "1, 2, 3"
 
 ### `some(fn)`
 
-To check if any value in the iterator matches a paramter, `.some` can be used. It takes as an
-argument a function which returns true or false.
+To check if any value in the iterator matches a given predicate, `.some` can be used. It takes as an argument a function which returns true or false.
 
 
 Returns a boolean which is true if any element returned true when `fn` was called on it. The
@@ -352,7 +351,7 @@ class ObligatoryCryptocurrencyReference extends Component {
 
 #### Extending Iterator Prototype
 
-With this proposal, it will be easier to extend the IteatorPrototype for a custom class. See the
+With this proposal, it will be easier to extend the IteratorPrototype for a custom class. See the
 below example for the previous implementation compared to the new one.
 
 ```js
