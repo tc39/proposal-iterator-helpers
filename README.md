@@ -314,6 +314,27 @@ function* naturals() {
 naturals().find(v => v > 1); // 2
 ```
 
+### `.from(object)`
+
+`.from` takes an object as an argument. This method allows wrapping "iterator-like" objects with an
+iterator.
+
+Returns the object if it is already an iterator, returns a wrapping iterator if the passed object
+implements a callable @@iterator property.
+
+```JavaScript
+class Iter {
+  next() {
+    return { done: false, value: 1 };
+  }
+}
+
+const iter = new Iter();
+const wrapper = Iterator.from(iter);
+
+wrapper.next() // { value: 1, done: false }
+```
+
 ## More Example Usage
 
 ### Lazy Iteration over sets
