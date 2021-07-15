@@ -241,7 +241,7 @@ iter.forEach(fn);
 console.log(log.join(", ")) // "1, 2, 3"
 ```
 
-### `some(fn)`
+### `.some(fn)`
 
 To check if any value in the iterator matches a given predicate, `.some` can be used. It takes as an argument a function which returns true or false.
 
