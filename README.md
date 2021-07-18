@@ -34,7 +34,7 @@ For Iterators and AsyncIterators we add the following methods:
 
 ### `.map(mapperFn)`
 
-`map` takes a function as an argument. It allows users to apply a funtion to every element returned from an iterator.
+`map` takes a function as an argument. It allows users to apply a function to every element returned from an iterator.
 
 Returns an iterator of the values with the map function applied.
 
