@@ -191,7 +191,7 @@ function* naturals() {
 
 const result = naturals()
   .take(5)
-  .reduce((value, sum) => {
+  .reduce((sum, value) => {
     return sum + value;
   }, 3);
 
