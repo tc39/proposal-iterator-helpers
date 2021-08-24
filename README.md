@@ -399,6 +399,8 @@ Implementation tracking of Iterator Helpers
   * [] [SpiderMonkey](https://bugzilla.mozilla.org/show_bug.cgi?id=1568906) (feature-flagged on Nightly
       only)
   * [] JavaScriptCore
+- Polyfills:
+  * [x] [core-js](https://github.com/zloirock/core-js#iterator-helpers)
 
 ## Q & A
 
