@@ -399,8 +399,6 @@ Implementation tracking of Iterator Helpers
   * [] [SpiderMonkey](https://bugzilla.mozilla.org/show_bug.cgi?id=1568906) (feature-flagged on Nightly
       only)
   * [] JavaScriptCore
-- Polyfills:
-  * [x] [core-js](https://github.com/zloirock/core-js#iterator-helpers)
 
 ## Q & A
 
@@ -423,6 +421,7 @@ any form of iterator, different iterators have to be handled differently.
 - https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable
 - https://github.com/ReactiveX/IxJS
 - https://www.npmjs.com/package/ballvalve
+- https://github.com/zloirock/core-js#iterator-helpers
 
 | Method                      | Rust | Python | npm Itertools | C# |
 | --------------------------- | ---- | ------ | --------------| -- |
