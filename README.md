@@ -409,7 +409,7 @@ only consume the iterator when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
 
-## Prior Art
+## Prior Art & Userland implementations
 
 - https://www.npmjs.com/package/itertools
 - https://www.npmjs.com/package/lodash
