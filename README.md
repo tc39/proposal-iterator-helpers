@@ -422,6 +422,8 @@ any form of iterator, different iterators have to be handled differently.
 - https://github.com/ReactiveX/IxJS
 - https://www.npmjs.com/package/ballvalve
 - https://github.com/zloirock/core-js#iterator-helpers
+- Node.js [Readable](https://nodejs.org/api/stream.html#readable-streams) streams implement this proposal in its entirety.
+
 
 | Method                      | Rust | Python | npm Itertools | C# |
 | --------------------------- | ---- | ------ | --------------| -- |
