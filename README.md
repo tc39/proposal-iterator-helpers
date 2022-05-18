@@ -16,7 +16,7 @@ This proposal is at Stage 2 of [The TC39 Process](https://tc39.es/process-docume
 Iterators are a useful way to represent large or possibly infinite enumerable data sets. However,
 they lack helpers which make them as easy to use as Arrays and other finite data structures, which
 results in certain problems that could be better represented by iterators being expressed in Arrays,
-or using libraries to introduce the necessary helpers. Many [libraries and languages](#prior-art) already provide these interfaces.
+or using libraries to introduce the necessary helpers. Many [libraries and languages](#prior-art--userland-implementations) already provide these interfaces.
 
 ## Proposal
 
