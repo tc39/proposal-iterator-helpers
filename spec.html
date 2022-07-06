@@ -131,8 +131,14 @@ contributors: Gus Caplan
   <emu-clause id="sec-operations-on-iterator-objects">
     <h1>Operations on Iterator Objects</h1>
 
-    <emu-clause id="sec-getiteratordirect" aoid="GetIteratorDirect">
-      <h1>GetIteratorDirect ( _obj_ )</h1>
+    <emu-clause id="sec-getiteratordirect" type="abstract operation">
+      <h1>
+        GetIteratorDirect (
+          _obj_: an ECMAScript language value
+        ): either a normal completion containing an IteratorRecord or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
       <emu-alg>
         1. If Type(_obj_) is not Object, throw a *TypeError* exception.
         1. Let _nextMethod_ be ? GetV(_obj_, `"next"`).
@@ -142,9 +148,15 @@ contributors: Gus Caplan
       </emu-alg>
     </emu-clause>
 
-    <emu-clause id="sec-iteratorstep" aoid="IteratorStep">
-      <h1>IteratorStep ( _iteratorRecord_ <ins>[ , _value_ ]</ins> )</h1>
-
+    <emu-clause id="sec-iteratorstep" type="abstract operation">
+      <h1>
+        IteratorStep (
+          _iteratorRecord_: an Iterator Record,
+          <ins>optional value: an ECMAScript language value,</ins>
+        ): either a normal completion containing either an Object or *false*, or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
       <emu-alg>
         1. <del>Let _result_ be ? IteratorNext(_iteratorRecord_).</del>
         1. <ins>If _value_ is present, then</ins>
