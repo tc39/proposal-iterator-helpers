@@ -43,7 +43,7 @@ contributors: Gus Caplan
   }
 </style>
 
-<div id=metadata-block>
+<div id="metadata-block">
   <h1>Contributing to this Proposal</h1>
   <p>This proposal is developed on GitHub with the help of the ECMAScript community. There are a number of ways to contribute to the development of this specification:</p>
   <ul>
@@ -96,7 +96,8 @@ contributors: Gus Caplan
           <ins>`AsyncIterator.prototype`</ins>
         </td>
         <td>
-          An object that all standard built-in async iterator objects indirectly inherit from <p><ins>The initial value of the *"prototype"* data property of %AsyncIterator%; i.e., %AsyncIterator.prototype%</ins></p>
+          An object that all standard built-in async iterator objects indirectly inherit from
+          <p><ins>The initial value of the *"prototype"* data property of %AsyncIterator%; i.e., %AsyncIterator.prototype%</ins></p>
         </td>
       </tr>
       <tr>
@@ -118,7 +119,8 @@ contributors: Gus Caplan
           <ins>`Iterator.prototype`</ins>
         </td>
         <td>
-          An object that all standard built-in iterator objects indirectly inherit from <p><ins>The initial value of the *"prototype"* data property of %Iterator%; i.e., %Iterator.prototype%</ins></p>
+          An object that all standard built-in iterator objects indirectly inherit from
+          <p><ins>The initial value of the *"prototype"* data property of %Iterator%; i.e., %Iterator.prototype%</ins></p>
         </td>
       </tr>
     </table>
@@ -134,7 +136,7 @@ contributors: Gus Caplan
     <emu-clause id="sec-getiteratordirect" type="abstract operation">
       <h1>
         GetIteratorDirect (
-          _obj_: an ECMAScript language value
+          _obj_: an ECMAScript language value,
         ): either a normal completion containing an IteratorRecord or a throw completion
       </h1>
       <dl class="header">
@@ -152,7 +154,7 @@ contributors: Gus Caplan
       <h1>
         IteratorStep (
           _iteratorRecord_: an Iterator Record,
-          <ins>optional value: an ECMAScript language value,</ins>
+          <ins>optional _value_: an ECMAScript language value,</ins>
         ): either a normal completion containing either an Object or *false*, or a throw completion
       </h1>
       <dl class="header">
@@ -220,6 +222,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-properties-of-the-iterator-constructor">
         <h1>Properties of the Iterator Constructor</h1>
+
         <emu-clause id="sec-iterator.prototype">
           <h1>Iterator.prototype</h1>
           <p>The initial value of Iterator.prototype is %Iterator.prototype%.</p>
@@ -297,6 +300,7 @@ contributors: Gus Caplan
           <li>is the initial value of the *AsyncIterator* property of the global object.</li>
           <li>is designed to be subclassable. It may be used as the value of an *extends* clause of a class definition.</li>
         </ul>
+
         <emu-clause id="sec-asynciterator">
           <h1>AsyncIterator ( )</h1>
           <p>When the `AsyncIterator` function is called, the following steps are taken:</p>
@@ -309,6 +313,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-properties-of-the-asynciterator-constructor">
         <h1>Properties of the AsyncIterator Constructor</h1>
+
         <emu-clause id="sec-asynciterator.prototype">
           <h1>AsyncIterator.prototype</h1>
           <p>The initial value of AsyncIterator.prototype is %AsyncIterator.prototype%.</p>
