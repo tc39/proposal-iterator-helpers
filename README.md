@@ -255,7 +255,7 @@ iterator is consumed when some is called.
 const iter = [1, 2, 3].values();
 
 iter.some(v => v > 1); // true
-iter.some(v => v  == 1) // false, iterator is already consumed.
+iter.some(v => true); // false, iterator is already consumed.
 
 function* naturals() {
   let i = 0;
@@ -280,7 +280,7 @@ Returns a boolean.
 const iter = [1, 2, 3].values();
 
 iter.every(v => v >= 1); // true
-iter.every(v => v >= 1) // false, iterator is already consumed.
+iter.every(v => false); // true, iterator is already consumed.
 
 function* naturals() {
   let i = 0;
@@ -290,8 +290,8 @@ function* naturals() {
   }
 }
 
-naturals().take(4).every(v => v > 1); // false, first value is 1
-naturals().take(4).every(v => v >= 1); // true, acting on a new iterator
+naturals().take(4).every(v => v > 0); // false, first value is 0
+naturals().take(4).every(v => v >= 0); // true, acting on a new iterator
 ```
 
 ### `.find(fn)`
