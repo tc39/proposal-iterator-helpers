@@ -493,16 +493,22 @@ contributors: Gus Caplan
       </emu-clause>
     </emu-clause>
 
-    <emu-clause id="sec-%iteratorprototype%-object">
-      <h1>The <dfn>%Iterator.prototype%</dfn> Object</h1>
+    <emu-clause id="sec-iteratorprototype">
+      <h1>Iterator.prototype</h1>
+      <p>The <dfn>Iterator prototype object</dfn>:</p>
+      <ul>
+        <li>is <dfn>%Iterator.prototype%</dfn>.</li>
+        <li>has a [[Prototype]] internal slot whose value is %Object.prototype%.</li>
+        <li>is an ordinary object.</li>
+      </ul>
 
       <emu-clause id="sec-iteratorprototype.constructor">
-        <h1>%Iterator.prototype%.constructor</h1>
+        <h1>Iterator.prototype.constructor</h1>
         <p>The initial value of %Iterator.prototype%.constructor is %Iterator%.</p>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.map">
-        <h1>%Iterator.prototype%.map ( _mapper_ )</h1>
+        <h1>Iterator.prototype.map ( _mapper_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -521,7 +527,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.filter">
-        <h1>%Iterator.prototype%.filter ( _filterer_ )</h1>
+        <h1>Iterator.prototype.filter ( _filterer_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
@@ -541,7 +547,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.take">
-        <h1>%Iterator.prototype%.take ( _limit_ )</h1>
+        <h1>Iterator.prototype.take ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -565,7 +571,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.drop">
-        <h1>%Iterator.prototype%.drop ( _limit_ )</h1>
+        <h1>Iterator.prototype.drop ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -590,7 +596,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.indexed">
-        <h1>%Iterator.prototype%.indexed ( )</h1>
+        <h1>Iterator.prototype.indexed ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
@@ -609,7 +615,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.flatmap">
-        <h1>%Iterator.prototype%.flatMap ( _mapper_ )</h1>
+        <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -639,7 +645,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.reduce">
-        <h1>%Iterator.prototype%.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+        <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
@@ -660,7 +666,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.toarray">
-        <h1>%Iterator.prototype%.toArray ( )</h1>
+        <h1>Iterator.prototype.toArray ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -673,7 +679,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.foreach">
-        <h1>%Iterator.prototype%.forEach ( _fn_ )</h1>
+        <h1>Iterator.prototype.forEach ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -687,7 +693,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.some">
-        <h1>%Iterator.prototype%.some ( _fn_ )</h1>
+        <h1>Iterator.prototype.some ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -702,7 +708,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.every">
-        <h1>%Iterator.prototype%.every ( _fn_ )</h1>
+        <h1>Iterator.prototype.every ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -717,7 +723,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.find">
-        <h1>%Iterator.prototype%.find ( _fn_ )</h1>
+        <h1>Iterator.prototype.find ( _fn_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -732,22 +738,28 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype-@@tostringtag">
-        <h1>%Iterator.prototype% [ @@toStringTag ]</h1>
+        <h1>Iterator.prototype [ @@toStringTag ]</h1>
         <p>The initial value of the @@toStringTag property is the String value "Iterator".</p>
         <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
       </emu-clause>
     </emu-clause>
 
     <emu-clause id="sec-asynciteratorprototype">
-      <h1>The <dfn>%AsyncIterator.prototype%</dfn> Object</h1>
+      <h1>AsyncIterator.prototype</h1>
+      <p>The <dfn>AsyncIterator prototype object</dfn>:</p>
+      <ul>
+        <li>is <dfn>%AsyncIterator.prototype%</dfn>.</li>
+        <li>has a [[Prototype]] internal slot whose value is %Object.prototype%.</li>
+        <li>is an ordinary object.</li>
+      </ul>
 
       <emu-clause id="sec-asynciteratorprototype.constructor">
-        <h1>%AsyncIterator.prototype%.constructor</h1>
-        <p>The initial value of %AsyncIterator.prototype%.constructor is %AsyncIterator%.</p>
+        <h1>AsyncIterator.prototype.constructor</h1>
+        <p>The initial value of AsyncIterator.prototype.constructor is %AsyncIterator%.</p>
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.map">
-        <h1>%AsyncIterator.prototype%.map ( _mapper_ )</h1>
+        <h1>AsyncIterator.prototype.map ( _mapper_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -768,7 +780,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.filter">
-        <h1>%AsyncIterator.prototype%.filter ( _filterer_ )</h1>
+        <h1>AsyncIterator.prototype.filter ( _filterer_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
@@ -790,7 +802,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.take">
-        <h1>%AsyncIterator.prototype%.take ( _limit_ )</h1>
+        <h1>AsyncIterator.prototype.take ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -814,7 +826,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.drop">
-        <h1>%AsyncIterator.prototype%.drop ( _limit_ )</h1>
+        <h1>AsyncIterator.prototype.drop ( _limit_ )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -839,7 +851,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.indexed">
-        <h1>%AsyncIterator.prototype%.indexed ( )</h1>
+        <h1>AsyncIterator.prototype.indexed ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
@@ -858,8 +870,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.flatmap">
-        <h1>%AsyncIterator.prototype%.flatMap ( _mapper_ )</h1>
-        <p>%AsyncIterator.prototype%.flatMap is a built-in async generator function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.flatMap ( _mapper_ )</h1>
+        <p>AsyncIterator.prototype.flatMap is a built-in async generator function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -893,7 +905,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.reduce">
-        <h1>%AsyncIterator.prototype%.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+        <h1>AsyncIterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
@@ -916,8 +928,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.toarray">
-        <h1>%AsyncIterator.prototype%.toArray ( )</h1>
-        <p>%AsyncIterator.prototype%.toArray is a built-in async function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.toArray ( )</h1>
+        <p>AsyncIterator.prototype.toArray is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -930,8 +942,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.foreach">
-        <h1>%AsyncIterator.prototype%.forEach ( _fn_ )</h1>
-        <p>%AsyncIterator.prototype%.forEach is a built-in async function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.forEach ( _fn_ )</h1>
+        <p>AsyncIterator.prototype.forEach is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -947,8 +959,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.some">
-        <h1>%AsyncIterator.prototype%.some ( _fn_ )</h1>
-        <p>%AsyncIterator.prototype%.some is a built-in async function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.some ( _fn_ )</h1>
+        <p>AsyncIterator.prototype.some is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -965,8 +977,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.every">
-        <h1>%AsyncIterator.prototype%.every ( _fn_ )</h1>
-        <p>%AsyncIterator.prototype%.every is a built-in async function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.every ( _fn_ )</h1>
+        <p>AsyncIterator.prototype.every is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -983,8 +995,8 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.find">
-        <h1>%AsyncIterator.prototype%.find ( _fn_ )</h1>
-        <p>%AsyncIterator.prototype%.find is a built-in async function which, when called, performs the following steps:</p>
+        <h1>AsyncIterator.prototype.find ( _fn_ )</h1>
+        <p>AsyncIterator.prototype.find is a built-in async function which, when called, performs the following steps:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -1001,7 +1013,7 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype-@@tostringtag">
-        <h1>%AsyncIterator.prototype% [ @@toStringTag ]</h1>
+        <h1>AsyncIterator.prototype [ @@toStringTag ]</h1>
         <p>The initial value of the @@toStringTag property is the String value "Async Iterator".</p>
         <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
       </emu-clause>
