@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist; ecmarkup --strict --load-biblio @tc39/ecma262-biblio --verbose spec.html dist/index.html"
+    "build": "mkdir -p dist && ecmarkup --strict --load-biblio @tc39/ecma262-biblio --verbose --js-out dist/ecmarkup.js --css-out dist/ecmarkup.css spec.html dist/index.html"
   },
   "devDependencies": {
     "@tc39/ecma262-biblio": "2.0.2334",
