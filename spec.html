@@ -149,27 +149,6 @@ contributors: Gus Caplan
         1. Return _iteratorRecord_.
       </emu-alg>
     </emu-clause>
-
-    <emu-clause id="sec-iteratorstep" type="abstract operation">
-      <h1>
-        IteratorStep (
-          _iteratorRecord_: an Iterator Record,
-          <ins>optional _value_: an ECMAScript language value,</ins>
-        ): either a normal completion containing either an Object or *false*, or a throw completion
-      </h1>
-      <dl class="header">
-      </dl>
-      <emu-alg>
-        1. <del>Let _result_ be ? IteratorNext(_iteratorRecord_).</del>
-        1. <ins>If _value_ is present, then</ins>
-          1. <ins>Let _result_ be ? IteratorNext(_iteratorRecord_, _value_).</ins>
-        1. <ins>Else,</ins>
-          1. <ins>Let _result_ be ? IteratorNext(_iteratorRecord_).</ins>
-        1. Let _done_ be ? IteratorComplete(_result_).
-        1. If _done_ is *true*, return *false*.
-        1. Return _result_.
-      </emu-alg>
-    </emu-clause>
   </emu-clause>
 </emu-clause>
 
@@ -252,36 +231,21 @@ contributors: Gus Caplan
             </ul>
 
             <emu-clause id="sec-wrapforvaliditeratorprototype.next">
-              <h1>%WrapForValidIteratorPrototype%.next ( _value_ )</h1>
+              <h1>%WrapForValidIteratorPrototype%.next ( )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
-                1. If _value_ is not present, then
-                  1. Return ? IteratorNext(_O_.[[Iterated]]).
-                1. Else,
-                  1. Return ? IteratorNext(_O_.[[Iterated]], _value_).
+                1. Return ? IteratorNext(_O_.[[Iterated]]).
               </emu-alg>
             </emu-clause>
 
             <emu-clause id="sec-wrapforvaliditeratorprototype.return">
-              <h1>%WrapForValidIteratorPrototype%.return ( _v_ )</h1>
+              <h1>%WrapForValidIteratorPrototype%.return ( )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
-                1. Let _result_ be ? IteratorClose(_O_.[[Iterated]], NormalCompletion(_v_)).
+                1. Let _result_ be ? IteratorClose(_O_.[[Iterated]], NormalCompletion(*undefined*)).
                 1. Return CreateIterResultObject(_result_, true).
-              </emu-alg>
-            </emu-clause>
-
-            <emu-clause id="sec-wrapforvaliditeratorprototype.throw">
-              <h1>%WrapForValidIteratorPrototype%.throw ( _v_ )</h1>
-              <emu-alg>
-                1. Let _O_ be *this* value.
-                1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
-                1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
-                1. Let _throw_ be ? GetMethod(_iterator_, *"throw"*).
-                1. If _throw_ is *undefined*, return ThrowCompletion(_v_).
-                1. Otherwise, return ? Call(_throw_, _iterator_, &laquo; _v_ &raquo;).
               </emu-alg>
             </emu-clause>
           </emu-clause>
@@ -352,16 +316,13 @@ contributors: Gus Caplan
             </ul>
 
             <emu-clause id="sec-wrapforvalidasynciteratorprototype.next">
-              <h1>%WrapForValidAsyncIteratorPrototype%.next ( _value_ )</h1>
+              <h1>%WrapForValidAsyncIteratorPrototype%.next ( )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
                 1. Let _check_ be Completion(RequireInternalSlot(_O_, [[AsyncIterated]])).
                 1. IfAbruptRejectPromise(_check_, _promiseCapability_).
-                1. If _value_ is not present, then
-                  1. Let _result_ be Completion(IteratorNext(_O_.[[AsyncIterated]])).
-                1. Else,
-                  1. Let _result_ be Completion(IteratorNext(_O_.[[AsyncIterated]], _value_)).
+                1. Let _result_ be Completion(IteratorNext(_O_.[[AsyncIterated]])).
                 1. IfAbruptRejectPromise(_result_, _promiseCapability_).
                 1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _result_ &raquo;).
                 1. Return _promiseCapability_.[[Promise]].
@@ -369,36 +330,16 @@ contributors: Gus Caplan
             </emu-clause>
 
             <emu-clause id="sec-wrapforvalidasynciteratorprototype.return">
-              <h1>%WrapForValidAsyncIteratorPrototype%.return ( _v_ )</h1>
+              <h1>%WrapForValidAsyncIteratorPrototype%.return ( )</h1>
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
                 1. Let _check_ be Completion(RequireInternalSlot(_O_, [[AsyncIterated]])).
                 1. IfAbruptRejectPromise(_check_, _promiseCapability_).
-                1. Let _result_ be Completion(AsyncIteratorClose(_O_.[[AsyncIterated]], NormalCompletion(_v_))).
+                1. Let _result_ be Completion(AsyncIteratorClose(_O_.[[AsyncIterated]], NormalCompletion(*undefined*))).
                 1. IfAbruptRejectPromise(_result_, _promiseCapability_).
                 1. Let _iterResult_ be CreateIterResultObject(_result_, *true*).
                 1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResult_ &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
-              </emu-alg>
-            </emu-clause>
-
-            <emu-clause id="sec-wrapforvalidasynciteratorprototype.throw">
-              <h1>%WrapForValidAsyncIteratorPrototype%.throw ( _v_ )</h1>
-              <emu-alg>
-                1. Let _O_ be *this* value.
-                1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
-                1. Let _check_ be Completion(RequireInternalSlot(_O_, [[AsyncIterated]])).
-                1. IfAbruptRejectPromise(_check_, _promiseCapability_).
-                1. Let _iterator_ be _O_.[[AsyncIterated]].[[Iterator]].
-                1. Let _throw_ be Completion(GetMethod(_iterator_, *"throw"*)).
-                1. IfAbruptRejectPromise(_throw_, _promiseCapability_).
-                1. If _throw_ is *undefined*, then
-                  1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, &laquo; _v_ &raquo;).
-                  1. Return _promiseCapability_.[[Promise]].
-                1. Let _result_ be Completion(Call(_throw_, _iterator_, &laquo; _v_ &raquo;)).
-                1. IfAbruptRejectPromise(_result_, _promiseCapability_).
-                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _result_ &raquo;).
                 1. Return _promiseCapability_.[[Promise]].
               </emu-alg>
             </emu-clause>
@@ -422,24 +363,16 @@ contributors: Gus Caplan
         </ul>
 
         <emu-clause id="sec-%iteratorhelperprototype%.next">
-          <h1>%IteratorHelperPrototype%.next ( _value_ )</h1>
+          <h1>%IteratorHelperPrototype%.next ( )</h1>
           <emu-alg>
-            1. Return ? GeneratorResume(*this* value, _value_, ~Iterator Helper~).
+            1. Return ? GeneratorResume(*this* value, *undefined*, ~Iterator Helper~).
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-%iteratorhelperprototype%.return">
-          <h1>%IteratorHelperPrototype%.return ( _value_ )</h1>
+          <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: _value_, [[Target]]: ~empty~ }.
-            1. Return ? GeneratorResumeAbrupt(*this* value, _C_, ~Iterator Helper~).
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-%iteratorhelperprototype%.throw">
-          <h1>%IteratorHelperPrototype%.throw ( _exception_ )</h1>
-          <emu-alg>
-            1. Let _C_ be ThrowCompletion(_exception_).
+            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: *undefined*, [[Target]]: ~empty~ }.
             1. Return ? GeneratorResumeAbrupt(*this* value, _C_, ~Iterator Helper~).
           </emu-alg>
         </emu-clause>
@@ -467,25 +400,17 @@ contributors: Gus Caplan
         </ul>
 
         <emu-clause id="sec-%asynciteratorhelperprototype%.next">
-          <h1>%AsyncIteratorHelperPrototype%.next ( _value_ )</h1>
+          <h1>%AsyncIteratorHelperPrototype%.next ( )</h1>
           <emu-alg>
-            1. Let _C_ be NormalCompletion(_value_).
+            1. Let _C_ be NormalCompletion(*undefined*).
             1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-%asynciteratorhelperprototype%.return">
-          <h1>%AsyncIteratorHelperPrototype%.return ( _value_ )</h1>
+          <h1>%AsyncIteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: _value_, [[Target]]: ~empty~ }.
-            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
-          </emu-alg>
-        </emu-clause>
-
-        <emu-clause id="sec-%asynciteratorhelperprototype%.throw">
-          <h1>%AsyncIteratorHelperPrototype%.throw ( _exception_ )</h1>
-          <emu-alg>
-            1. Let _C_ be ThrowCompletion(_exception_).
+            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: *undefined*, [[Target]]: ~empty~ }.
             1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
           </emu-alg>
         </emu-clause>
