@@ -133,9 +133,9 @@ result.next(); //  {value: 4, done: false};
 result.next(); //  {value: 5, done: false};
 ```
 
-### `.asIndexedPairs()`
+### `.indexed()`
 
-`.asIndexedPairs` takes no arguments. It returns an iterator where each value produced by the underlying iterator is paired with a counter, starting at 0 and increasing by 1 with every element produced.
+`.indexed` takes no arguments. It returns an iterator where each value produced by the underlying iterator is paired with a counter, starting at 0 and increasing by 1 with every element produced.
 
 Returns an iterator of pairs.
 
@@ -145,7 +145,7 @@ Returns an iterator of pairs.
 const abc = ["a", "b", "c"].values();
 
 const result = abc
-  .asIndexedPairs();
+  .indexed();
 result.next(); //  {value: [0, "a"], done: false};
 result.next(); //  {value: [1, "b"], done: false};
 result.next(); //  {value: [2, "c"], done: false};
