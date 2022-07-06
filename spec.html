@@ -578,8 +578,8 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype.asindexedpairs">
-        <h1>%Iterator.prototype%.asIndexedPairs ( )</h1>
+      <emu-clause id="sec-iteratorprototype.indexed">
+        <h1>%Iterator.prototype%.indexed ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
@@ -823,8 +823,8 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype.asindexedpairs">
-        <h1>%AsyncIterator.prototype%.asIndexedPairs ( )</h1>
+      <emu-clause id="sec-asynciteratorprototype.indexed">
+        <h1>%AsyncIterator.prototype%.indexed ( )</h1>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
