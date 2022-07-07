@@ -443,15 +443,14 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
-              1. Set _lastValue_ to Completion(Yield(_mapped_)).
-              1. IfAbruptCloseIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(_mapped_)).
+              1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -462,16 +461,15 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _selected_ be Completion(Call(_filterer_, *undefined*, &laquo; _value_ &raquo;)).
               1. IfAbruptCloseIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
-                1. Set _lastValue_ to Completion(Yield(_value_)).
-                1. IfAbruptCloseIterator(_lastValue_, _iterated_).
+                1. Let _completion_ be Completion(Yield(_value_)).
+                1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -486,16 +484,15 @@ contributors: Gus Caplan
           1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
             1. Let _remaining_ be _integerLimit_.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. If _remaining_ is 0, then
                 1. Return ? IteratorClose(_iterated_, NormalCompletion(*undefined*)).
               1. If _remaining_ is not +∞, then
                 1. Set _remaining_ to _remaining_ - 1.
-              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
-              1. Set _lastValue_ to Completion(Yield(? IteratorValue(_next_))).
-              1. IfAbruptCloseIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
+              1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -515,12 +512,11 @@ contributors: Gus Caplan
                 1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
-              1. Set _lastValue_ to Completion(Yield(? IteratorValue(_next_))).
-              1. IfAbruptCloseIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
+              1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -531,15 +527,14 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
             1. Let _index_ be 0.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_, _lastValue_).
+              1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _pair_ be CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
               1. Set _index_ to _index_ + 1.
-              1. Set _lastValue_ to Completion(Yield(_pair_)).
-              1. IfAbruptCloseIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(_pair_)).
+              1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -560,11 +555,10 @@ contributors: Gus Caplan
               1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
-                1. Let _innerNext_ be Completion(IteratorNext(_innerIterator_)).
+                1. Let _innerNext_ be Completion(IteratorStep(_innerIterator_)).
                 1. IfAbruptCloseIterator(_innerNext_, _iterated_).
-                1. Let _innerComplete_ be Completion(IteratorComplete(_innerNext_)).
-                1. IfAbruptCloseIterator(_innerComplete_, _iterated_).
-                1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
+                1. If _innerNext_ is *false*, then
+                  1. Set _innerAlive_ to *false*.
                 1. Else,
                   1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
                   1. IfAbruptCloseIterator(_innerValue_, _iterated_).
@@ -694,17 +688,16 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_value_, _lastValue_)).
+              1. Let _next_ be ? Await(? IteratorNext(_value_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
-              1. Set _mapped_ to Await(_mapped_).
+              1. Set _mapped_ to Completion(Await(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
-              1. Set _lastValue_ to Completion(Yield(_mapped_)).
-              1. IfAbruptCloseAsyncIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(_mapped_)).
+              1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -715,18 +708,17 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_value_, _lastValue_)).
+              1. Let _next_ be ? Await(? IteratorNext(_value_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _selected_ be Completion(Call(_filterer_, *undefined*, &laquo; _value_ &raquo;)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
-              1. Set _selected_ to Await(_selected_).
+              1. Set _selected_ to Completion(Await(_selected_)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
-                1. Set _lastValue_ to Completion(Yield(_value_)).
-                1. IfAbruptCloseAsyncIterator(_lastValue_, _iterated_).
+                1. Let _completion_ be Completion(Yield(_value_)).
+                1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -741,16 +733,15 @@ contributors: Gus Caplan
           1. If _integerLimit_ &lt; 0, throw a *RangeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _integerLimit_ and performs the following steps when called:
             1. Let _remaining_ be _integerLimit_.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
               1. If _remaining_ is 0, then
                 1. Return ? AsyncIteratorClose(_iterated_, NormalCompletion(*undefined*)).
               1. If _remaining_ is not +∞, then
                 1. Set _remaining_ to _remaining_ - 1.
-              1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
+              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
-              1. Set _lastValue_ to Completion(Yield(? IteratorValue(_next_))).
-              1. IfAbruptCloseAsyncIterator(_lastValue_, _iterated_).
+              1. Set _completion_ to Completion(Yield(? IteratorValue(_next_))).
+              1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -770,12 +761,11 @@ contributors: Gus Caplan
                 1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
+              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
-              1. Set _lastValue_ to Completion(Yield(? IteratorValue(_next_))).
-              1. IfAbruptCloseAsyncIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
+              1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -786,15 +776,14 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
             1. Let _index_ be 0.
-            1. Let _lastValue_ be *undefined*.
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_iterated_, _lastValue_)).
+              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _pair_ be CreateArrayFromList(&laquo; _index_, _value_ &raquo;).
               1. Set _index_ to _index_ + 1.
-              1. Set _lastValue_ to Completion(Yield(_pair_)).
-              1. IfAbruptCloseAsyncIterator(_lastValue_, _iterated_).
+              1. Let _completion_ be Completion(Yield(_pair_)).
+              1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -812,7 +801,7 @@ contributors: Gus Caplan
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
-              1. Set _mapped_ to Await(_mapped_).
+              1. Set _mapped_ to Completion(Await(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
               1. Let _innerIterator_ be Completion(GetIterator(_mapped_, ~async~)).
               1. IfAbruptCloseAsyncIterator(_innerIterator_, _iterated_).
@@ -820,11 +809,12 @@ contributors: Gus Caplan
               1. Repeat, while _innerAlive_ is *true*,
                 1. Let _innerNextPromise_ be Completion(IteratorNext(_innerIterator_)).
                 1. IfAbruptCloseAsyncIterator(_innerNextPromise_, _iterated_).
-                1. Let _innerNext_ be Await(_innerNextPromise_).
+                1. Let _innerNext_ be Completion(Await(_innerNextPromise_)).
                 1. IfAbruptCloseAsyncIterator(_innerNext_, _iterated_).
                 1. Let _innerComplete_ be Completion(IteratorComplete(_innerNext_)).
                 1. IfAbruptCloseAsyncIterator(_innerComplete_, _iterated_).
-                1. If _innerComplete_ is *true*, set _innerAlive_ to *false*.
+                1. If _innerComplete_ is *true*, then
+                  1. Set _innerAlive_ to *false*.
                 1. Else,
                   1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
                   1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
