@@ -401,16 +401,14 @@ contributors: Gus Caplan
         <emu-clause id="sec-%asynciteratorhelperprototype%.next">
           <h1>%AsyncIteratorHelperPrototype%.next ( )</h1>
           <emu-alg>
-            1. Let _C_ be NormalCompletion(*undefined*).
-            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
+            1. Return AsyncGeneratorNext(*this* value, ~Async Iterator Helper~, *undefined*).
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-%asynciteratorhelperprototype%.return">
           <h1>%AsyncIteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: *undefined*, [[Target]]: ~empty~ }.
-            1. Return ! AsyncGeneratorEnqueue(*this* value, _C_, ~Async Iterator Helper~).
+            1. Return AsyncGeneratorReturn(*this* value, ~Async Iterator Helper~, *undefined*).
           </emu-alg>
         </emu-clause>
 
@@ -946,5 +944,67 @@ contributors: Gus Caplan
         <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
       </emu-clause>
     </emu-clause>
+  </emu-clause>
+</emu-clause>
+
+<emu-clause id="sec-new-asyncgenerator-aos">
+  <h1>New AsyncGenerator AOs</h1>
+  <p>These factor out functionality from AsyncGenerator.prototype.next and AsyncGenerator.prototype.return and should be used in those methods when this proposal lands in the main specification.</p>
+
+  <emu-clause id="sec-asyncgenerator-next" type="abstract operation">
+    <h1>
+      AsyncGeneratorNext (
+        _generator_: unknown,
+        _brand_: unknown,
+        _value_: an ECMAScript language value,
+      ): an ECMAScript language value
+    </h1>
+    <dl class="header">
+    </dl>
+    <emu-alg>
+      1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+      1. Let _result_ be Completion(AsyncGeneratorValidate(_generator_, _brand_)).
+      1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+      1. Let _state_ be _generator_.[[AsyncGeneratorState]].
+      1. If _state_ is ~completed~, then
+        1. Let _iteratorResult_ be CreateIterResultObject(*undefined*, *true*).
+        1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iteratorResult_ &raquo;).
+        1. Return _promiseCapability_.[[Promise]].
+      1. Let _completion_ be NormalCompletion(_value_).
+      1. Perform AsyncGeneratorEnqueue(_generator_, _completion_, _promiseCapability_).
+      1. If _state_ is either ~suspendedStart~ or ~suspendedYield~, then
+        1. Perform AsyncGeneratorResume(_generator_, _completion_).
+      1. Else,
+        1. Assert: _state_ is either ~executing~ or ~awaiting-return~.
+      1. Return _promiseCapability_.[[Promise]].
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-asyncgenerator-return" type="abstract operation">
+    <h1>
+      AsyncGeneratorReturn (
+        _generator_: unknown,
+        _brand_: unknown,
+        _value_: an ECMAScript language value,
+      ): an ECMAScript language value
+    </h1>
+    <dl class="header">
+    </dl>
+    <emu-alg>
+      1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+      1. Let _result_ be Completion(AsyncGeneratorValidate(_generator_, _brand_)).
+      1. IfAbruptRejectPromise(_result_, _promiseCapability_).
+      1. Let _completion_ be Completion Record { [[Type]]: ~return~, [[Value]]: _value_, [[Target]]: ~empty~ }.
+      1. Perform AsyncGeneratorEnqueue(_generator_, _completion_, _promiseCapability_).
+      1. Let _state_ be _generator_.[[AsyncGeneratorState]].
+      1. If _state_ is either ~suspendedStart~ or ~completed~, then
+        1. Set _generator_.[[AsyncGeneratorState]] to ~awaiting-return~.
+        1. Perform ! AsyncGeneratorAwaitReturn(_generator_).
+      1. Else if _state_ is ~suspendedYield~, then
+        1. Perform AsyncGeneratorResume(_generator_, _completion_).
+      1. Else,
+        1. Assert: _state_ is either ~executing~ or ~awaiting-return~.
+      1. Return _promiseCapability_.[[Promise]].
+    </emu-alg>
   </emu-clause>
 </emu-clause>
