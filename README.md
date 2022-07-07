@@ -404,7 +404,7 @@ Implementation tracking of Iterator Helpers
 
 ### Why not use Array.from + Array.prototype methods?
 
-All of these methods (except for reduce and toArray) are **lazy**. They will
+All of the iterator-producing methods in this proposal are **lazy**. They will
 only consume the iterator when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
