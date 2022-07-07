@@ -643,8 +643,11 @@ contributors: Gus Caplan
                 1. Else,
                   1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
                   1. IfAbruptCloseIterator(_innerValue_, _iterated_).
-                  1. Let _yielded_ be Completion(Yield(_innerValue_)).
-                  1. IfAbruptCloseIterator(_yielded_, _iterated_).
+                  1. Let _completion_ be Completion(Yield(_innerValue_)).
+                  1. If _completion_ is an abrupt completion, then
+                    1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
+                    1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
+                    1. Return ? IteratorClose(_completion_, _iterated_).
           1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -903,8 +906,14 @@ contributors: Gus Caplan
                 1. Else,
                   1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
                   1. IfAbruptCloseAsyncIterator(_innerValue_, _iterated_).
-                  1. Let _yielded_ be Completion(Yield(_innerValue_)).
-                  1. IfAbruptCloseAsyncIterator(_yielded_, _iterated_).
+                  1. [id="step-async-iterator-flatmap-yield"] Let _completion_ be Completion(Yield(_innerValue_)).
+                  1. If _completion_ is a return completion, then
+                    1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
+                    1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
+                    1. Return ? IteratorClose(_completion_, _iterated_).
+                  1. Else if _completion_ is a throw completion, then
+                    1. Assert: Awaiting _innerValue_ during the Yield on step <emu-xref href="#step-async-iterator-flatmap-yield"></emu-xref> threw.
+                    1. Return ? IteratorClose(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
