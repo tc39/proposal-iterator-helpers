@@ -335,6 +335,17 @@ const wrapper = Iterator.from(iter);
 wrapper.next() // { value: 1, done: false }
 ```
 
+## Iterator helpers and the generator protocol
+
+The generator protocol facilitates coordination between a producer and a
+consumer, which is necessarily broken by iteration-based transforms. There is
+no way to properly preserve or re-establish this coordination. We've taken the
+philosophy that any iterators produced by the helpers this proposal adds only
+implement the iterator protocol and make no attempt to support generators which
+use the remainder of the generator protocol. Specifically, such iterators do
+not implement `.throw` and do not forward the parameter of `.next` or `.return`
+to an underlying or "source" iterator.
+
 ## More Example Usage
 
 ### Lazy Iteration over sets
