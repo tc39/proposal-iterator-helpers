@@ -450,7 +450,7 @@ any form of iterator, different iterators have to be handled differently.
 | find                        | ☑    | ☐      | ☑             | ☑  |
 | findMap                     | ☑    | ☐      | ☐             | ☐  |
 | flatMap                     | ☑    | ☐      | ☑             | ☑  |
-| flatten                     | ☑    | ☐      | ☐             | ☐  |
+| flat                        | ☑    | ☐      | ☐             | ☐  |
 | forEach                     | ☑    | ☐      | ☐             | ☐  |
 | last                        | ☑    | ☐      | ☐             | ☑  |
 | map                         | ☑    | ☑      | ☑             | ☑  |
