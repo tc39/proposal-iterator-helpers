@@ -603,6 +603,17 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
+      <emu-clause id="sec-iteratorprototype.toasync">
+        <h1>Iterator.prototype.toAsync ( )</h1>
+        <emu-alg>
+          1. Let _syncIteratorRecord_ be ? GetIteratorDirect(*this* value).
+          1. Let _asyncIteratorRecord_ to CreateAsyncFromSyncIterator(_syncIteratorRecord_).
+          1. Let _wrapper_ be ! ObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
+          1. Set _wrapper_.[[AsyncIterated]] to _asyncIteratorRecord_.
+          1. Return _wrapper_.
+        </emu-alg>
+      </emu-clause>
+
       <emu-clause id="sec-iteratorprototype.foreach">
         <h1>Iterator.prototype.forEach ( _fn_ )</h1>
         <emu-alg>
