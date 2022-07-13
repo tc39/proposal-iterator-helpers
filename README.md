@@ -5,7 +5,7 @@ consumption of iterators in ECMAScript.
 
 ## Status
 
-Authors: Gus Caplan, Michael Ficarra, Adam Vandolder, Jason Orendorff
+Authors: Gus Caplan, Michael Ficarra, Adam Vandolder, Jason Orendorff, Kevin Gibbons
 
 Champions: Michael Ficarra, Yulia Startsev
 
