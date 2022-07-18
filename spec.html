@@ -235,7 +235,8 @@ contributors: Gus Caplan
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
-                1. Return ? IteratorNext(_O_.[[Iterated]]).
+                1. Let _iteratorRecord_ be _O_.[[Iterated]].
+                1. Return ? Call(_iteratorRecord_.[[NextMethod]], _iteratorRecord_.[[Iterator]]).
               </emu-alg>
             </emu-clause>
 
