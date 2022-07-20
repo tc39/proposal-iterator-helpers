@@ -690,7 +690,7 @@ contributors: Gus Caplan
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_value_)).
+              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, &laquo; _value_ &raquo;)).
@@ -710,7 +710,7 @@ contributors: Gus Caplan
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
             1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_value_)).
+              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _selected_ be Completion(Call(_filterer_, *undefined*, &laquo; _value_ &raquo;)).
