@@ -675,8 +675,31 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype-@@tostringtag">
         <h1>Iterator.prototype [ @@toStringTag ]</h1>
-        <p>The initial value of the @@toStringTag property is the String value "Iterator".</p>
-        <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <p>`Iterator.prototype[@@toStringTag]` is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-clause id="sec-get-iteratorprototype-@@tostringtag">
+          <h1>get Iterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return *"Iterator"*.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-set-iteratorprototype-@@tostringtag">
+          <h1>set Iterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Let _O_ be ? RequireObjectCoercible(*this* value).
+            1. If _O_ is %Iterator.prototype%, then
+              1. Return *undefined*.
+            1. Let _desc_ be ? _O_.[[GetOwnProperty]](@@toStringTag).
+            1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
+              1. Return *undefined*.
+            1. Let _newDesc_ be the PropertyDescriptor { [[Value]]: _v_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.
+            1. Perform ? _O_.[[DefineOwnProperty]](@@toStringTag, _newDesc_).
+            1. Return *undefined*.
+          </emu-alg>
+        </emu-clause>
       </emu-clause>
     </emu-clause>
 
@@ -952,8 +975,31 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype-@@tostringtag">
         <h1>AsyncIterator.prototype [ @@toStringTag ]</h1>
-        <p>The initial value of the @@toStringTag property is the String value "Async Iterator".</p>
-        <p>This property has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.</p>
+        <p>`AsyncIterator.prototype[@@toStringTag]` is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-clause id="sec-get-asynciteratorprototype-@@tostringtag">
+          <h1>get AsyncIterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return *"AsyncIterator"*.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-set-asynciteratorprototype-@@tostringtag">
+          <h1>set AsyncIterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Let _O_ be ? RequireObjectCoercible(*this* value).
+            1. If _O_ is %AsyncIterator.prototype%, then
+              1. Return *undefined*.
+            1. Let _desc_ be ? _O_.[[GetOwnProperty]](@@toStringTag).
+            1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
+              1. Return *undefined*.
+            1. Let _newDesc_ be the PropertyDescriptor { [[Value]]: _v_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.
+            1. Perform ? _O_.[[DefineOwnProperty]](@@toStringTag, _newDesc_).
+            1. Return *undefined*.
+          </emu-alg>
+        </emu-clause>
       </emu-clause>
     </emu-clause>
   </emu-clause>
