@@ -245,8 +245,12 @@ contributors: Gus Caplan
               <emu-alg>
                 1. Let _O_ be *this* value.
                 1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
-                1. Let _result_ be ? IteratorClose(_O_.[[Iterated]], NormalCompletion(*undefined*)).
-                1. Return CreateIterResultObject(_result_, true).
+                1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
+                1. Assert: Type(_iterator_) is Object.
+                1. Let _returnMethod_ be ? GetMethod(_iterator_, *"return"*).
+                1. If _returnMethod_ is *undefined*, then
+                  1. Return CreateIterResultObject(*undefined*, *true*).
+                1. Return ? Call(_returnMethod_, _iterator_).
               </emu-alg>
             </emu-clause>
           </emu-clause>
@@ -336,11 +340,15 @@ contributors: Gus Caplan
                 1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
                 1. Let _check_ be Completion(RequireInternalSlot(_O_, [[AsyncIterated]])).
                 1. IfAbruptRejectPromise(_check_, _promiseCapability_).
-                1. Let _result_ be Completion(AsyncIteratorClose(_O_.[[AsyncIterated]], NormalCompletion(*undefined*))).
+                1. Let _iterator_ be _O_.[[AsyncIterated]].[[Iterator]].
+                1. Assert: Type(_iterator_) is Object.
+                1. Let _returnMethod_ be Completion(GetMethod(_iterator_, *"return"*)).
+                1. IfAbruptRejectPromise(_returnMethod_, _promiseCapability_).
+                1. If _returnMethod_ is *undefined*, then
+                  1. Return ? PromiseResolve(%Promise%, CreateIterResultObject(*undefined*, *true*)).
+                1. Let _result_ be Completion(Call(_returnMethod_, _iterator_)).
                 1. IfAbruptRejectPromise(_result_, _promiseCapability_).
-                1. Let _iterResult_ be CreateIterResultObject(_result_, *true*).
-                1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, &laquo; _iterResult_ &raquo;).
-                1. Return _promiseCapability_.[[Promise]].
+                1. Return ? PromiseResolve(%Promise%, _result_).
               </emu-alg>
             </emu-clause>
           </emu-clause>
