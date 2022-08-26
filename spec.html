@@ -345,7 +345,7 @@ contributors: Gus Caplan
                 1. Let _returnMethod_ be Completion(GetMethod(_iterator_, *"return"*)).
                 1. IfAbruptRejectPromise(_returnMethod_, _promiseCapability_).
                 1. If _returnMethod_ is *undefined*, then
-                  1. Return ? PromiseResolve(%Promise%, CreateIterResultObject(*undefined*, *true*)).
+                  1. Return ! PromiseResolve(%Promise%, CreateIterResultObject(*undefined*, *true*)).
                 1. Let _result_ be Completion(Call(_returnMethod_, _iterator_)).
                 1. IfAbruptRejectPromise(_result_, _promiseCapability_).
                 1. Return ? PromiseResolve(%Promise%, _result_).
