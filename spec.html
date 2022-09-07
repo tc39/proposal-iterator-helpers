@@ -373,7 +373,7 @@ contributors: Gus Caplan
         <emu-clause id="sec-%iteratorhelperprototype%.next">
           <h1>%IteratorHelperPrototype%.next ( )</h1>
           <emu-alg>
-            1. Return ? GeneratorResume(*this* value, *undefined*, ~Iterator Helper~).
+            1. Return ? GeneratorResume(*this* value, *undefined*, *"Iterator Helper"*).
           </emu-alg>
         </emu-clause>
 
@@ -381,7 +381,7 @@ contributors: Gus Caplan
           <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
             1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: *undefined*, [[Target]]: ~empty~ }.
-            1. Return ? GeneratorResumeAbrupt(*this* value, _C_, ~Iterator Helper~).
+            1. Return ? GeneratorResumeAbrupt(*this* value, _C_, *"Iterator Helper"*).
           </emu-alg>
         </emu-clause>
 
@@ -410,14 +410,14 @@ contributors: Gus Caplan
         <emu-clause id="sec-%asynciteratorhelperprototype%.next">
           <h1>%AsyncIteratorHelperPrototype%.next ( )</h1>
           <emu-alg>
-            1. Return AsyncGeneratorNext(*this* value, ~Async Iterator Helper~, *undefined*).
+            1. Return AsyncGeneratorNext(*this* value, *"Async Iterator Helper"*, *undefined*).
           </emu-alg>
         </emu-clause>
 
         <emu-clause id="sec-%asynciteratorhelperprototype%.return">
           <h1>%AsyncIteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
-            1. Return AsyncGeneratorReturn(*this* value, ~Async Iterator Helper~, *undefined*).
+            1. Return AsyncGeneratorReturn(*this* value, *"Async Iterator Helper"*, *undefined*).
           </emu-alg>
         </emu-clause>
 
@@ -457,7 +457,7 @@ contributors: Gus Caplan
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
               1. Let _completion_ be Completion(Yield(_mapped_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -476,7 +476,7 @@ contributors: Gus Caplan
               1. If ToBoolean(_selected_) is *true*, then
                 1. Let _completion_ be Completion(Yield(_value_)).
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -499,7 +499,7 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -523,7 +523,7 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -541,7 +541,7 @@ contributors: Gus Caplan
               1. Set _index_ to _index_ + 1.
               1. Let _completion_ be Completion(Yield(_pair_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -573,7 +573,7 @@ contributors: Gus Caplan
                     1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
                     1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                     1. Return ? IteratorClose(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, ~Iterator Helper~, %IteratorHelperPrototype%).
+          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -718,7 +718,7 @@ contributors: Gus Caplan
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
               1. Let _completion_ be Completion(Yield(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -739,7 +739,7 @@ contributors: Gus Caplan
               1. If ToBoolean(_selected_) is *true*, then
                 1. Let _completion_ be Completion(Yield(_value_)).
                 1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -762,7 +762,7 @@ contributors: Gus Caplan
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Set _completion_ to Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -786,7 +786,7 @@ contributors: Gus Caplan
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -804,7 +804,7 @@ contributors: Gus Caplan
               1. Set _index_ to _index_ + 1.
               1. Let _completion_ be Completion(Yield(_pair_)).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
@@ -846,7 +846,7 @@ contributors: Gus Caplan
                   1. Else if _completion_ is a throw completion, then
                     1. Assert: Awaiting _innerValue_ during the Yield on step <emu-xref href="#step-async-iterator-flatmap-yield"></emu-xref> threw.
                     1. Return ? IteratorClose(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, ~Async Iterator Helper~, %AsyncIteratorHelperPrototype%).
+          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
 
