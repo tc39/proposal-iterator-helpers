@@ -142,7 +142,7 @@ contributors: Gus Caplan
       <dl class="header">
       </dl>
       <emu-alg>
-        1. If Type(_obj_) is not Object, throw a *TypeError* exception.
+        1. If _obj_ is not an Object, throw a *TypeError* exception.
         1. Let _nextMethod_ be ? GetV(_obj_, `"next"`).
         1. If IsCallable(_nextMethod_) is *false*, throw a *TypeError* exception.
         1. Let _iteratorRecord_ be Record { [[Iterator]]: _obj_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
@@ -246,7 +246,7 @@ contributors: Gus Caplan
                 1. Let _O_ be *this* value.
                 1. Perform ? RequireInternalSlot(_O_, [[Iterated]]).
                 1. Let _iterator_ be _O_.[[Iterated]].[[Iterator]].
-                1. Assert: Type(_iterator_) is Object.
+                1. Assert: _iterator_ is an Object.
                 1. Let _returnMethod_ be ? GetMethod(_iterator_, *"return"*).
                 1. If _returnMethod_ is *undefined*, then
                   1. Return CreateIterResultObject(*undefined*, *true*).
@@ -341,7 +341,7 @@ contributors: Gus Caplan
                 1. Let _check_ be Completion(RequireInternalSlot(_O_, [[AsyncIterated]])).
                 1. IfAbruptRejectPromise(_check_, _promiseCapability_).
                 1. Let _iterator_ be _O_.[[AsyncIterated]].[[Iterator]].
-                1. Assert: Type(_iterator_) is Object.
+                1. Assert: _iterator_ is an Object.
                 1. Let _returnMethod_ be Completion(GetMethod(_iterator_, *"return"*)).
                 1. IfAbruptRejectPromise(_returnMethod_, _promiseCapability_).
                 1. If _returnMethod_ is *undefined*, then
