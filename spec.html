@@ -296,7 +296,7 @@ contributors: Gus Caplan
             1. Let _iteratorRecord_ be *undefined*.
             1. If _usingIterator_ is not *undefined*, then
               1. Set _iteratorRecord_ to ? GetIterator(_O_, ~async~, _usingIterator_).
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator.prototype%, _iteratorRecord_.[[Iterator]]).
+              1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator%, _iteratorRecord_.[[Iterator]]).
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. If _iteratorRecord_ is *undefined*, then
