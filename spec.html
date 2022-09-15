@@ -687,6 +687,9 @@ contributors: Gus Caplan
       <emu-clause id="sec-iteratorprototype-@@tostringtag">
         <h1>Iterator.prototype [ @@toStringTag ]</h1>
         <p>The initial value of the @@toStringTag property is the String value "Iterator".</p>
+        <emu-note>
+          <p>Unlike the @@toStringTag on most built-in classes, for web-compatibility reasons this property must be writable.</p>
+        </emu-note>
       </emu-clause>
     </emu-clause>
 
@@ -963,6 +966,9 @@ contributors: Gus Caplan
       <emu-clause id="sec-asynciteratorprototype-@@tostringtag">
         <h1>AsyncIterator.prototype [ @@toStringTag ]</h1>
         <p>The initial value of the @@toStringTag property is the String value "Async Iterator".</p>
+        <emu-note>
+          <p>Unlike the @@toStringTag on most built-in classes, for web-compatibility reasons this property must be writable.</p>
+        </emu-note>
       </emu-clause>
     </emu-clause>
   </emu-clause>
