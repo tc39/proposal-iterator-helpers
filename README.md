@@ -420,6 +420,15 @@ only consume the iterator when they need the next item from it. Especially
 for iterators that never end, this is key. Without generic support for
 any form of iterator, different iterators have to be handled differently.
 
+### How can I access the new intrinsics?
+
+```js
+const IteratorHelperPrototype = Object.getPrototypeOf(Iterator.from([]).take(0));
+const AsyncIteratorHelperPrototype = Object.getPrototypeOf(AsyncIterator.from([]).take(0));
+const WrapForValidIteratorPrototype = Object.getPrototypeOf(Iterator.from({ next(){} }));
+const WrapForValidAsyncIteratorPrototype = Object.getPrototypeOf(AsyncIterator.from({ async next(){} }));
+```
+
 ## Prior Art & Userland implementations
 
 - https://www.npmjs.com/package/itertools
