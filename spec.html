@@ -219,7 +219,7 @@ contributors: Gus Caplan
               1. If _hasInstance_ is *true*, then
                 1. Return _iteratorRecord_.[[Iterator]].
             1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
+            1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidIteratorPrototype%, &laquo; [[Iterated]] &raquo;).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
           </emu-alg>
@@ -308,7 +308,7 @@ contributors: Gus Caplan
                 1. If IsCallable(_syncIteratorRecord_.[[NextMethod]]) is *false*, throw a *TypeError* exception.
                 1. Set _iteratorRecord_ to CreateAsyncFromSyncIterator(_syncIteratorRecord_).
             1. If _iteratorRecord_ is *undefined*, set _iteratorRecord_ to ? GetIteratorDirect(_O_).
-            1. Let _wrapper_ be ! ObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
+            1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
             1. Set _wrapper_.[[AsyncIterated]] to _iteratorRecord_.
             1. Return _wrapper_.
           </emu-alg>
@@ -619,7 +619,7 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _syncIteratorRecord_ be ? GetIteratorDirect(*this* value).
           1. Let _asyncIteratorRecord_ be CreateAsyncFromSyncIterator(_syncIteratorRecord_).
-          1. Let _wrapper_ be ! ObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
+          1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidAsyncIteratorPrototype%, &laquo; [[AsyncIterated]] &raquo;).
           1. Set _wrapper_.[[AsyncIterated]] to _asyncIteratorRecord_.
           1. Return _wrapper_.
         </emu-alg>
@@ -765,7 +765,7 @@ contributors: Gus Caplan
                 1. Set _remaining_ to _remaining_ - 1.
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
-              1. Set _completion_ to Completion(Yield(? IteratorValue(_next_))).
+              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
           1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
