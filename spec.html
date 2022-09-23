@@ -244,7 +244,7 @@ contributors: Gus Caplan
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _iteratorRecord_ be GetIteratorFlattenable(_mapped_, ~sync~).
+            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_, ~sync~).
             1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
             1. If _hasInstance_ is *true*, then
               1. Return _iteratorRecord_.[[Iterator]].
@@ -322,7 +322,7 @@ contributors: Gus Caplan
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _iteratorRecord_ be GetIteratorFlattenable(_mapped_, ~sync~).
+            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_, ~sync~).
             1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator%, _iteratorRecord_.[[Iterator]]).
             1. If _hasInstance_ is *true*, then
               1. Return _iteratorRecord_.[[Iterator]].
