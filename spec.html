@@ -323,6 +323,9 @@ contributors: Gus Caplan
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
             1. Let _iteratorRecord_ be GetIteratorFlattenable(_mapped_, ~sync~).
+            1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator%, _iteratorRecord_.[[Iterator]]).
+            1. If _hasInstance_ is *true*, then
+              1. Return _iteratorRecord_.[[Iterator]].
             1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidAsyncIteratorPrototype%, « [[AsyncIterated]] »).
             1. Set _wrapper_.[[AsyncIterated]] to _iteratorRecord_.
             1. Return _wrapper_.
