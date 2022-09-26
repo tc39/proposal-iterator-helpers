@@ -127,6 +127,105 @@ contributors: Gus Caplan
   </emu-table>
 </emu-clause>
 
+<emu-clause id="sec-built-in-function-objects">
+  <h1>Built-in Function Objects</h1>
+
+  <p>
+    <del>If a built-in function object is not implemented as an ECMAScript function it must provide [[Call]] and [[Construct]] internal methods that conform to the following definitions:</del>
+    <ins>Unless otherwise specified, a built-in function object must provide [[Call]] and [[Construct]] internal methods that conform to the following definitions:</ins>
+  </p>
+
+  <emu-clause id="sec-createbuiltinfunction" type="abstract operation">
+    <h1>
+      CreateBuiltinFunction (
+        _behaviour_: an Abstract Closure, a set of algorithm steps, or some other definition of a function's behaviour provided in this specification,
+        _length_: a non-negative integer or +&infin;,
+        _name_: a property key or a Private Name,
+        _additionalInternalSlotsList_: a List of names of internal slots,
+        optional _realm_: a Realm Record,
+        optional _prototype_: an Object or *null*,
+        optional _prefix_: a String,
+      ): a function object
+    </h1>
+    <dl class="header">
+      <dt>description</dt>
+      <dd>_additionalInternalSlotsList_ contains the names of additional internal slots that must be defined as part of the object. This operation creates a built-in function object.</dd>
+    </dl>
+    <emu-alg>
+      1. If _realm_ is not present, set _realm_ to the current Realm Record.
+      1. If _prototype_ is not present, set _prototype_ to _realm_.[[Intrinsics]].[[%Function.prototype%]].
+      1. Let _internalSlotsList_ be a List containing the names of all the internal slots that <emu-xref href="#sec-built-in-function-objects"></emu-xref> requires for the built-in function object that is about to be created.
+      1. Append to _internalSlotsList_ the elements of _additionalInternalSlotsList_.
+      1. <ins>If _behaviour_ is described as async, then</ins>
+        1. <ins>Let _func_ be a new built-in async function object that, when called, performs the action described by _behaviour_ using the provided arguments as the values of the corresponding parameters specified by _behaviour_. The new function object has internal slots whose names are the elements of _internalSlotsList_, and an [[InitialName]] internal slot.</ins>
+      1. <ins>Else,</ins>
+        1. Let _func_ be a new built-in function object that, when called, performs the action described by _behaviour_ using the provided arguments as the values of the corresponding parameters specified by _behaviour_. The new function object has internal slots whose names are the elements of _internalSlotsList_, and an [[InitialName]] internal slot.
+      1. Set _func_.[[Prototype]] to _prototype_.
+      1. Set _func_.[[Extensible]] to *true*.
+      1. Set _func_.[[Realm]] to _realm_.
+      1. Set _func_.[[InitialName]] to *null*.
+      1. Perform SetFunctionLength(_func_, _length_).
+      1. If _prefix_ is not present, then
+        1. Perform SetFunctionName(_func_, _name_).
+      1. Else,
+        1. Perform SetFunctionName(_func_, _name_, _prefix_).
+      1. Return _func_.
+    </emu-alg>
+    <p>Each built-in function defined in this specification is created by calling the CreateBuiltinFunction abstract operation.</p>
+  </emu-clause>
+</emu-clause>
+
+<emu-clause id="sec-built-in-async-function-objects">
+  <h1>Built-in Async Function Objects</h1>
+  <p><dfn variants="built-in async function object,built-in async function objects">Built-in async function objects</dfn> are built-in function objects that provide alternative [[Call]] and [[Construct]] internal methods that conform to the following definitions:</p>
+
+  <emu-clause id="sec-built-in-function-objects-call-thisargument-argumentslist" type="internal method">
+    <h1>
+      [[Call]] (
+        _thisArgument_: an ECMAScript language value,
+        _argumentsList_: a List of ECMAScript language values,
+      ): a normal completion containing an ECMAScript language value
+    </h1>
+    <dl class="header">
+      <dt>for</dt>
+      <dd>a built-in async function object _F_</dd>
+    </dl>
+    <emu-alg>
+      1. Let _callerContext_ be the running execution context.
+      1. If _callerContext_ is not already suspended, suspend _callerContext_.
+      1. Let _calleeContext_ be a new execution context.
+      1. Set the Function of _calleeContext_ to _F_.
+      1. Let _calleeRealm_ be _F_.[[Realm]].
+      1. Set the Realm of _calleeContext_ to _calleeRealm_.
+      1. Set the ScriptOrModule of _calleeContext_ to *null*.
+      1. Perform any necessary implementation-defined initialization of _calleeContext_.
+      1. Push _calleeContext_ onto the execution context stack; _calleeContext_ is now the running execution context.
+      1. Let _promiseCapability_ be ! NewPromiseCapability(%Promise%).
+      1. Let _resultsClosure_ be a new Abstract Closure that captures _F_, _thisArgument_, and _argumentsList_ and performs the following steps when called:
+        1. Return the result of evaluating _F_ in a manner that conforms to the specification of _F_. _thisArgument_ is the *this* value, _argumentsList_ provides the named parameters, and the NewTarget value is *undefined*.
+      1. Perform AsyncFunctionStart(_promiseCapability_, _resultsClosure_).
+      1. Remove _calleeContext_ from the execution context stack and restore _callerContext_ as the running execution context.
+      1. Return _promiseCapability_.
+    </emu-alg>
+  </emu-clause>
+
+  <emu-clause id="sec-built-in-function-objects-construct-argumentslist-newtarget" type="internal method">
+    <h1>
+      [[Construct]] (
+        _argumentsList_: a List of ECMAScript language values,
+        _newTarget_: a constructor,
+      ): either a normal completion containing an Object or a throw completion
+    </h1>
+    <dl class="header">
+      <dt>for</dt>
+      <dd>a built-in async function object _F_</dd>
+    </dl>
+    <emu-alg>
+      1. Throw a *TypeError* exception.
+    </emu-alg>
+  </emu-clause>
+</emu-clause>
+
 <emu-clause id="sec-abstract-operations">
   <h1>Abstract Operations</h1>
 
@@ -448,6 +547,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.map">
         <h1>Iterator.prototype.map ( _mapper_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -466,6 +566,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.filter">
         <h1>Iterator.prototype.filter ( _filterer_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
@@ -485,6 +586,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.take">
         <h1>Iterator.prototype.take ( _limit_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -508,6 +610,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.drop">
         <h1>Iterator.prototype.drop ( _limit_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -532,6 +635,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.indexed">
         <h1>Iterator.prototype.indexed ( )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
@@ -550,6 +654,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.flatmap">
         <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -582,6 +687,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.reduce">
         <h1>Iterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
@@ -603,6 +709,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.toarray">
         <h1>Iterator.prototype.toArray ( )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -616,6 +723,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.toasync">
         <h1>Iterator.prototype.toAsync ( )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _syncIteratorRecord_ be ? GetIteratorDirect(*this* value).
           1. Let _asyncIteratorRecord_ be CreateAsyncFromSyncIterator(_syncIteratorRecord_).
@@ -627,6 +735,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.foreach">
         <h1>Iterator.prototype.forEach ( _fn_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -641,6 +750,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.some">
         <h1>Iterator.prototype.some ( _fn_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -656,6 +766,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.every">
         <h1>Iterator.prototype.every ( _fn_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -671,6 +782,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.find">
         <h1>Iterator.prototype.find ( _fn_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -709,6 +821,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.map">
         <h1>AsyncIterator.prototype.map ( _mapper_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -729,6 +842,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.filter">
         <h1>AsyncIterator.prototype.filter ( _filterer_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
@@ -750,6 +864,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.take">
         <h1>AsyncIterator.prototype.take ( _limit_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -773,6 +888,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.drop">
         <h1>AsyncIterator.prototype.drop ( _limit_ )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _numLimit_ be ? ToNumber(_limit_).
@@ -797,6 +913,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.indexed">
         <h1>AsyncIterator.prototype.indexed ( )</h1>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
@@ -815,7 +932,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.flatmap">
         <h1>AsyncIterator.prototype.flatMap ( _mapper_ )</h1>
-        <p>AsyncIterator.prototype.flatMap is a built-in async generator function which, when called, performs the following steps:</p>
+        <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
@@ -857,6 +974,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.reduce">
         <h1>AsyncIterator.prototype.reduce ( _reducer_ [ , _initialValue_ ] )</h1>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
@@ -880,7 +998,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.toarray">
         <h1>AsyncIterator.prototype.toArray ( )</h1>
-        <p>AsyncIterator.prototype.toArray is a built-in async function which, when called, performs the following steps:</p>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. Let _items_ be a new empty List.
@@ -894,7 +1012,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.foreach">
         <h1>AsyncIterator.prototype.forEach ( _fn_ )</h1>
-        <p>AsyncIterator.prototype.forEach is a built-in async function which, when called, performs the following steps:</p>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -911,7 +1029,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.some">
         <h1>AsyncIterator.prototype.some ( _fn_ )</h1>
-        <p>AsyncIterator.prototype.some is a built-in async function which, when called, performs the following steps:</p>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -929,7 +1047,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.every">
         <h1>AsyncIterator.prototype.every ( _fn_ )</h1>
-        <p>AsyncIterator.prototype.every is a built-in async function which, when called, performs the following steps:</p>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -947,7 +1065,7 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-asynciteratorprototype.find">
         <h1>AsyncIterator.prototype.find ( _fn_ )</h1>
-        <p>AsyncIterator.prototype.find is a built-in async function which, when called, performs the following steps:</p>
+        <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
@@ -969,6 +1087,70 @@ contributors: Gus Caplan
         <emu-note>
           <p>Unlike the @@toStringTag on most built-in classes, for web-compatibility reasons this property must be writable.</p>
         </emu-note>
+      </emu-clause>
+    </emu-clause>
+  </emu-clause>
+
+  <emu-clause id="sec-async-function-objects">
+    <h1>AsyncFunction Objects</h1>
+
+    <emu-clause id="sec-async-functions-abstract-operations">
+      <h1>Async Functions Abstract Operations</h1>
+
+      <emu-clause id="sec-async-functions-abstract-operations-async-function-start" type="abstract operation">
+        <h1>
+          AsyncFunctionStart (
+            _promiseCapability_: a PromiseCapability Record,
+            _asyncFunctionBody_: a |FunctionBody| Parse Node or an |ExpressionBody| Parse Node <ins>or an Abstract Closure with no parameters</ins>,
+          ): ~unused~
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. Let _runningContext_ be the running execution context.
+          1. Let _asyncContext_ be a copy of _runningContext_.
+          1. NOTE: Copying the execution state is required for AsyncBlockStart to resume its execution. It is ill-defined to resume a currently executing context.
+          1. Perform AsyncBlockStart(_promiseCapability_, _asyncFunctionBody_, _asyncContext_).
+          1. Return ~unused~.
+        </emu-alg>
+      </emu-clause>
+
+      <emu-clause id="sec-asyncblockstart" type="abstract operation">
+        <h1>
+          AsyncBlockStart (
+            _promiseCapability_: a PromiseCapability Record,
+            _asyncBody_: a Parse Node <ins>or an Abstract Closure with no parameters</ins>,
+            _asyncContext_: an execution context,
+          )
+        </h1>
+        <dl class="header">
+        </dl>
+        <emu-alg>
+          1. Assert: _promiseCapability_ is a PromiseCapability Record.
+          1. Let _runningContext_ be the running execution context.
+          1. [fence-effects="user-code"] Set the code evaluation state of _asyncContext_ such that when evaluation is resumed for that execution context the following steps will be performed:
+            1. <ins>If _asyncBody_ is a Parse Node, then</ins>
+              1. <ins>Let _result_ be the result of evaluating _asyncBody_.</ins>
+            1. <ins>Else,</ins>
+              1. <ins>Assert: _asyncBody_ is an Abstract Closure with no parameters.</ins>
+              1. <ins>Let _result_ be _asyncBody_().</ins>
+            1. <del>Let _result_ be the result of evaluating _asyncBody_.</del>
+            1. Assert: If we return here, the async function either threw an exception or performed an implicit or explicit return; all awaiting is done.
+            1. Remove _asyncContext_ from the execution context stack and restore the execution context that is at the top of the execution context stack as the running execution context.
+            1. If _result_.[[Type]] is ~normal~, then
+              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, « *undefined* »).
+            1. Else if _result_.[[Type]] is ~return~, then
+              1. Perform ! Call(_promiseCapability_.[[Resolve]], *undefined*, « _result_.[[Value]] »).
+            1. Else,
+              1. Assert: _result_.[[Type]] is ~throw~.
+              1. Perform ! Call(_promiseCapability_.[[Reject]], *undefined*, « _result_.[[Value]] »).
+            1. [id="step-asyncblockstart-return-undefined"] Return.
+          1. Push _asyncContext_ onto the execution context stack; _asyncContext_ is now the running execution context.
+          1. <emu-meta effects="user-code">Resume the suspended evaluation of _asyncContext_</emu-meta>. Let _result_ be the value returned by the resumed computation.
+          1. Assert: When we return here, _asyncContext_ has already been removed from the execution context stack and _runningContext_ is the currently running execution context.
+          1. Assert: _result_ is a normal completion with a value of *undefined*. The possible sources of completion values are Await or, if the async function doesn't await anything, step <emu-xref href="#step-asyncblockstart-return-undefined"></emu-xref> above.
+          1. Return.
+        </emu-alg>
       </emu-clause>
     </emu-clause>
   </emu-clause>
