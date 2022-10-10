@@ -1134,6 +1134,8 @@ contributors: Gus Caplan
             1. <ins>Else,</ins>
               1. <ins>Assert: _asyncBody_ is an Abstract Closure with no parameters.</ins>
               1. <ins>Let _result_ be _asyncBody_().</ins>
+              1. <ins>If _result_ is a normal completion, then</ins>
+                1. <ins>Set _result_ to Completion Record { [[Type]]: ~return~, [[Value]]: _result_.[[Value]], [[Target]]: ~empty~ }.</ins>
             1. <del>Let _result_ be the result of evaluating _asyncBody_.</del>
             1. Assert: If we return here, the async function either threw an exception or performed an implicit or explicit return; all awaiting is done.
             1. Remove _asyncContext_ from the execution context stack and restore the execution context that is at the top of the execution context stack as the running execution context.
