@@ -248,6 +248,39 @@ contributors: Gus Caplan
         1. Return _iteratorRecord_.
       </emu-alg>
     </emu-clause>
+
+    <emu-clause id="sec-getiteratorflattenable" type="abstract operation">
+      <h1>
+        GetIteratorFlattenable (
+          _obj_: an ECMAScript language value,
+          _hint_: ~sync~ or ~async~,
+        ): either a normal completion containing an Iterator Record or a throw completion
+      </h1>
+      <dl class="header">
+      </dl>
+      <emu-alg>
+        1. If _obj_ is not an Object, throw a *TypeError* exception.
+        1. Let _alreadyAsync_ be *false*.
+        1. Let _method_ be *undefined*.
+        1. If _hint_ is ~async~, then
+          1. Set _method_ to ? Get(_obj_, @@asyncIterator).
+          1. Set _alreadyAsync_ to *true*.
+        1. If IsCallable(_method_) is *false*, then
+          1. Set _method_ to ? Get(_obj_, @@iterator).
+          1. Set _alreadyAsync_ to *false*.
+        1. If IsCallable(_method_) is *false*, then
+          1. Let _iterator_ be _obj_.
+          1. Set _alreadyAsync_ to *true*.
+        1. Else,
+          1. Let _iterator_ be ? Call(_method_, _obj_).
+        1. Let _nextMethod_ be ? GetV(_iterator_, *"next"*).
+        1. If IsCallable(_nextMethod_) is *false*, throw a *TypeError* exception.
+        1. Let _iteratorRecord_ be the Iterator Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
+        1. If _hint_ is ~async~ and _alreadyAsync_ is *false*, then
+          1. Return CreateAsyncFromSyncIterator(_iteratorRecord_).
+        1. Return _iteratorRecord_.
+      </emu-alg>
+    </emu-clause>
   </emu-clause>
 </emu-clause>
 
@@ -324,14 +357,10 @@ contributors: Gus Caplan
         <emu-clause id="sec-iterator.from">
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _usingIterator_ be ? GetMethod(_O_, @@iterator).
-            1. If _usingIterator_ is not *undefined*, then
-              1. Let _iteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-              1. If IsCallable(_iteratorRecord_.[[NextMethod]]) is *false*, throw a *TypeError* exception.
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
-              1. If _hasInstance_ is *true*, then
-                1. Return _iteratorRecord_.[[Iterator]].
-            1. Else, Let _iteratorRecord_ be ? GetIteratorDirect(_O_).
+            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_, ~sync~).
+            1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
+            1. If _hasInstance_ is *true*, then
+              1. Return _iteratorRecord_.[[Iterator]].
             1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidIteratorPrototype%, « [[Iterated]] »).
             1. Set _wrapper_.[[Iterated]] to _iteratorRecord_.
             1. Return _wrapper_.
@@ -406,21 +435,10 @@ contributors: Gus Caplan
         <emu-clause id="sec-asynciterator.from">
           <h1>AsyncIterator.from ( _O_ )</h1>
           <emu-alg>
-            1. Let _usingIterator_ be ? GetMethod(_O_, @@asyncIterator).
-            1. Let _iteratorRecord_ be *undefined*.
-            1. If _usingIterator_ is not *undefined*, then
-              1. Set _iteratorRecord_ to ? GetIterator(_O_, ~async~, _usingIterator_).
-              1. If IsCallable(_iteratorRecord_.[[NextMethod]]) is *false*, throw a *TypeError* exception.
-              1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator%, _iteratorRecord_.[[Iterator]]).
-              1. If _hasInstance_ is *true*, then
-                1. Return _iteratorRecord_.[[Iterator]].
-            1. If _iteratorRecord_ is *undefined*, then
-              1. Set _usingIterator_ to ? GetMethod(_O_, @@iterator).
-              1. If _usingIterator_ is not *undefined*, then
-                1. Let _syncIteratorRecord_ be ? GetIterator(_O_, ~sync~, _usingIterator_).
-                1. If IsCallable(_syncIteratorRecord_.[[NextMethod]]) is *false*, throw a *TypeError* exception.
-                1. Set _iteratorRecord_ to CreateAsyncFromSyncIterator(_syncIteratorRecord_).
-            1. If _iteratorRecord_ is *undefined*, set _iteratorRecord_ to ? GetIteratorDirect(_O_).
+            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_, ~async~).
+            1. Let _hasInstance_ be ? OrdinaryHasInstance(%AsyncIterator%, _iteratorRecord_.[[Iterator]]).
+            1. If _hasInstance_ is *true*, then
+              1. Return _iteratorRecord_.[[Iterator]].
             1. Let _wrapper_ be OrdinaryObjectCreate(%WrapForValidAsyncIteratorPrototype%, « [[AsyncIterated]] »).
             1. Set _wrapper_.[[AsyncIterated]] to _iteratorRecord_.
             1. Return _wrapper_.
@@ -566,14 +584,16 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_ »)).
+              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
               1. Let _completion_ be Completion(Yield(_mapped_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -585,15 +605,17 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_ »)).
+              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
                 1. Let _completion_ be Completion(Yield(_value_)).
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -647,25 +669,6 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-iteratorprototype.indexed">
-        <h1>Iterator.prototype.indexed ( )</h1>
-        <p>This method performs the following steps when called:</p>
-        <emu-alg>
-          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
-            1. Let _index_ be 0.
-            1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _pair_ be CreateArrayFromList(« 𝔽(_index_), _value_ »).
-              1. Set _index_ to _index_ + 1.
-              1. Let _completion_ be Completion(Yield(_pair_)).
-              1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
-        </emu-alg>
-      </emu-clause>
-
       <emu-clause id="sec-iteratorprototype.flatmap">
         <h1>Iterator.prototype.flatMap ( _mapper_ )</h1>
         <p>This method performs the following steps when called:</p>
@@ -673,13 +676,14 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_ »)).
+              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
-              1. Let _innerIterator_ be Completion(GetIterator(_mapped_, ~sync~)).
+              1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_, ~sync~)).
               1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
@@ -695,6 +699,7 @@ contributors: Gus Caplan
                     1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
                     1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                     1. Return ? IteratorClose(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -711,13 +716,15 @@ contributors: Gus Caplan
             1. Let _accumulator_ be ? IteratorValue(_next_).
           1. Else,
             1. Let _accumulator_ be _initialValue_.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return _accumulator_.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_ »)).
+            1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. Set _accumulator_ to _result_.[[Value]].
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -753,12 +760,14 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -768,13 +777,15 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *false*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(*true*)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -784,13 +795,15 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *true*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *false*, return ? IteratorClose(_iterated_, NormalCompletion(*false*)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -800,13 +813,15 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(_value_)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -840,16 +855,18 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_ »)).
+              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
               1. Set _mapped_ to Completion(AwaitNonPrimitive(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
               1. Let _completion_ be Completion(Yield(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -861,17 +878,19 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_ »)).
+              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
               1. Set _selected_ to Completion(AwaitNonPrimitive(_selected_)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
                 1. Let _completion_ be Completion(Yield(_value_)).
                 1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -925,25 +944,6 @@ contributors: Gus Caplan
         </emu-alg>
       </emu-clause>
 
-      <emu-clause id="sec-asynciteratorprototype.indexed">
-        <h1>AsyncIterator.prototype.indexed ( )</h1>
-        <p>This method performs the following steps when called:</p>
-        <emu-alg>
-          1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and performs the following steps when called:
-            1. Let _index_ be 0.
-            1. Repeat,
-              1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
-              1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
-              1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _pair_ be CreateArrayFromList(« _index_, _value_ »).
-              1. Set _index_ to _index_ + 1.
-              1. Let _completion_ be Completion(Yield(_pair_)).
-              1. IfAbruptCloseAsyncIterator(_completion_, _iterated_).
-          1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
-        </emu-alg>
-      </emu-clause>
-
       <emu-clause id="sec-asynciteratorprototype.flatmap">
         <h1>AsyncIterator.prototype.flatMap ( _mapper_ )</h1>
         <p>This method performs the following steps when called:</p>
@@ -951,15 +951,16 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_mapper_) is *false*, throw a *TypeError* exception.
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
+            1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_ »)).
+              1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
               1. Set _mapped_ to Completion(AwaitNonPrimitive(_mapped_)).
               1. IfAbruptCloseAsyncIterator(_mapped_, _iterated_).
-              1. Let _innerIterator_ be Completion(GetIterator(_mapped_, ~async~)).
+              1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_, ~async~)).
               1. IfAbruptCloseAsyncIterator(_innerIterator_, _iterated_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
@@ -982,6 +983,7 @@ contributors: Gus Caplan
                   1. Else if _completion_ is a throw completion, then
                     1. Assert: Awaiting _innerValue_ during the Yield on step <emu-xref href="#step-async-iterator-flatmap-yield"></emu-xref> threw.
                     1. Return ? IteratorClose(_completion_, _iterated_).
+              1. Set _counter_ to _counter_ + 1.
           1. Return CreateAsyncIteratorFromClosure(_closure_, *"Async Iterator Helper"*, %AsyncIteratorHelperPrototype%).
         </emu-alg>
       </emu-clause>
@@ -998,15 +1000,17 @@ contributors: Gus Caplan
             1. Let _accumulator_ be ? IteratorValue(_next_).
           1. Else,
             1. Let _accumulator_ be _initialValue_.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return _accumulator_.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_ »)).
+            1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _accumulator_ to _result_.
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -1030,14 +1034,16 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _r_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _r_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_r_, _iterated_).
             1. Set _r_ to Completion(AwaitNonPrimitive(r)).
             1. IfAbruptCloseAsyncIterator(_r_, _iterated_).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -1047,15 +1053,17 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *false*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(*true*)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -1065,15 +1073,17 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *true*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *false*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(*false*)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -1083,15 +1093,17 @@ contributors: Gus Caplan
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
           1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_ »)).
+            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? AsyncIteratorClose(_iterated_, NormalCompletion(_value_)).
+            1. Set _counter_ to _counter_ + 1.
         </emu-alg>
       </emu-clause>
 
@@ -1148,6 +1160,8 @@ contributors: Gus Caplan
             1. <ins>Else,</ins>
               1. <ins>Assert: _asyncBody_ is an Abstract Closure with no parameters.</ins>
               1. <ins>Let _result_ be _asyncBody_().</ins>
+              1. <ins>If _result_ is a normal completion, then</ins>
+                1. <ins>Set _result_ to Completion Record { [[Type]]: ~return~, [[Value]]: _result_.[[Value]], [[Target]]: ~empty~ }.</ins>
             1. <del>Let _result_ be the result of evaluating _asyncBody_.</del>
             1. Assert: If we return here, the async function either threw an exception or performed an implicit or explicit return; all awaiting is done.
             1. Remove _asyncContext_ from the execution context stack and restore the execution context that is at the top of the execution context stack as the running execution context.
