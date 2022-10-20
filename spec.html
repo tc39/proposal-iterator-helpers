@@ -714,9 +714,10 @@ contributors: Gus Caplan
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, throw a *TypeError* exception.
             1. Let _accumulator_ be ? IteratorValue(_next_).
+            1. Let _counter_ be 1.
           1. Else,
             1. Let _accumulator_ be _initialValue_.
-          1. Let _counter_ be 0.
+            1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return _accumulator_.
@@ -998,9 +999,10 @@ contributors: Gus Caplan
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, throw a *TypeError* exception.
             1. Let _accumulator_ be ? IteratorValue(_next_).
+            1. Let _counter_ be 1.
           1. Else,
             1. Let _accumulator_ be _initialValue_.
-          1. Let _counter_ be 0.
+            1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return _accumulator_.
