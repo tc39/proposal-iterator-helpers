@@ -133,24 +133,6 @@ result.next(); //  {value: 4, done: false};
 result.next(); //  {value: 5, done: false};
 ```
 
-### `.indexed()`
-
-`.indexed` takes no arguments. It returns an iterator where each value produced by the underlying iterator is paired with a counter, starting at 0 and increasing by 1 with every element produced.
-
-Returns an iterator of pairs.
-
-#### Example
-
-```JavaScript
-const abc = ["a", "b", "c"].values();
-
-const result = abc
-  .indexed();
-result.next(); //  {value: [0, "a"], done: false};
-result.next(); //  {value: [1, "b"], done: false};
-result.next(); //  {value: [2, "c"], done: false};
-```
-
 ### `.flatMap(mapperFn)`
 
 `.flatMap` takes a mapping function as an argument. It returns an iterator that produces all elements of the iterators produced by applying the mapping function to the elements produced by the underlying iterator.
