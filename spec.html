@@ -503,18 +503,18 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.filter">
-        <h1>Iterator.prototype.filter ( _filterer_ )</h1>
+        <h1>Iterator.prototype.filter ( _predicate_ )</h1>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _predicate_ and performs the following steps when called:
             1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _selected_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
                 1. Let _completion_ be Completion(Yield(_value_)).
@@ -677,17 +677,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.some">
-        <h1>Iterator.prototype.some ( _fn_ )</h1>
+        <h1>Iterator.prototype.some ( _predicate_ )</h1>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *false*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(*true*)).
             1. Set _counter_ to _counter_ + 1.
@@ -695,17 +695,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.every">
-        <h1>Iterator.prototype.every ( _fn_ )</h1>
+        <h1>Iterator.prototype.every ( _predicate_ )</h1>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *true*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *false*, return ? IteratorClose(_iterated_, NormalCompletion(*false*)).
             1. Set _counter_ to _counter_ + 1.
@@ -713,17 +713,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.find">
-        <h1>Iterator.prototype.find ( _fn_ )</h1>
+        <h1>Iterator.prototype.find ( _predicate_ )</h1>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? IteratorStep(_iterated_).
             1. If _next_ is *false*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(_value_)).
             1. Set _counter_ to _counter_ + 1.
@@ -777,18 +777,18 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.filter">
-        <h1>AsyncIterator.prototype.filter ( _filterer_ )</h1>
+        <h1>AsyncIterator.prototype.filter ( _predicate_ )</h1>
         <p>This method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_filterer_) is *false*, throw a *TypeError* exception.
-          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _filterer_ and performs the following steps when called:
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
+          1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _predicate_ and performs the following steps when called:
             1. Let _counter_ be 0.
             1. Repeat,
               1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
               1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
               1. Let _value_ be ? IteratorValue(_next_).
-              1. Let _selected_ be Completion(Call(_filterer_, *undefined*, « _value_, 𝔽(_counter_) »)).
+              1. Let _selected_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
               1. Set _selected_ to Completion(AwaitNonPrimitive(_selected_)).
               1. IfAbruptCloseAsyncIterator(_selected_, _iterated_).
@@ -954,17 +954,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.some">
-        <h1>AsyncIterator.prototype.some ( _fn_ )</h1>
+        <h1>AsyncIterator.prototype.some ( _predicate_ )</h1>
         <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *false*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
@@ -974,17 +974,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.every">
-        <h1>AsyncIterator.prototype.every ( _fn_ )</h1>
+        <h1>AsyncIterator.prototype.every ( _predicate_ )</h1>
         <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *true*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
@@ -994,17 +994,17 @@ contributors: Gus Caplan
       </emu-clause>
 
       <emu-clause id="sec-asynciteratorprototype.find">
-        <h1>AsyncIterator.prototype.find ( _fn_ )</h1>
+        <h1>AsyncIterator.prototype.find ( _predicate_ )</h1>
         <p>This async method performs the following steps when called:</p>
         <emu-alg>
           1. Let _iterated_ be ? GetIteratorDirect(*this* value).
-          1. If IsCallable(_fn_) is *false*, throw a *TypeError* exception.
+          1. If IsCallable(_predicate_) is *false*, throw a *TypeError* exception.
           1. Let _counter_ be 0.
           1. Repeat,
             1. Let _next_ be ? Await(? IteratorNext(_iterated_)).
             1. If ? IteratorComplete(_next_) is *true*, return *undefined*.
             1. Let _value_ be ? IteratorValue(_next_).
-            1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
+            1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
             1. Set _result_ to Completion(AwaitNonPrimitive(_result_)).
             1. IfAbruptCloseAsyncIterator(_result_, _iterated_).
