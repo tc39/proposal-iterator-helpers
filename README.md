@@ -413,6 +413,7 @@ const WrapForValidAsyncIteratorPrototype = Object.getPrototypeOf(AsyncIterator.f
 
 ## Prior Art & Userland implementations
 
+- https://github.com/vitaly-t/iter-ops
 - https://www.npmjs.com/package/itertools
 - https://www.npmjs.com/package/lodash
 - https://docs.python.org/3/library/itertools.html
