@@ -11,6 +11,8 @@ Champions: Michael Ficarra, Yulia Startsev
 
 This proposal is at Stage 3 of [The TC39 Process](https://tc39.es/process-document/).
 
+This proposal formerly contained async as well as sync helpers. The async helpers have been split out to [a seperate proposal](https://github.com/tc39/proposal-async-iterator-helpers).
+
 ## Motivation
 
 Iterators are a useful way to represent large or possibly infinite enumerable data sets. However,
@@ -20,9 +22,7 @@ or using libraries to introduce the necessary helpers. Many [libraries and langu
 
 ## Proposal
 
-The proposal introduces a collection of new methods on the Iterator and AsyncIterator prototypes, to allow general
-usage and consumption of iterators. For specifics on the implemented methods, please refer to the
-specification.
+The proposal introduces a collection of new methods on the Iterator prototype, to allow general usage and consumption of iterators. For specifics on the implemented methods, please refer to the specification.
 
 See [DETAILS.md](./DETAILS.md) for details on semantics decisions.
 
@@ -30,7 +30,7 @@ See this proposal rendered [here](https://tc39.es/proposal-iterator-helpers)
 
 ## Added Methods
 
-For Iterators and AsyncIterators we add the following methods:
+For Iterators we add the following methods:
 
 ### `.map(mapperFn)`
 
@@ -328,40 +328,6 @@ use the remainder of the generator protocol. Specifically, such iterators do
 not implement `.throw` and do not forward the parameter of `.next` or `.return`
 to an underlying or "source" iterator.
 
-## More Example Usage
-
-### Lazy Iteration over sets
-
-Iterating over a set of URLs, asynchronously fetching each, and returning an array of their
-JSON Output.
-
-```js
-const responses = await AsyncIterator.from(urls)
-  .map(async (url) => {
-    const response = await fetch(url);
-    return response.json();
-  })
-  .toArray();
-```
-
-Example of iterating over a potentially infinite iterator and transforming it to an array in groups
-of 5.
-
-```js
-class ObligatoryCryptocurrencyReference extends Component {
-  componentWillMount() {
-    const items = ticker() // returns async iterator
-      .map((c) => createElement('h2', null, `${c.name}: ${c.price}`))
-      .take(5) // only consume 5 items of a potentially infinite iterator
-      .toArray() // greedily transform async iterator into array
-      .then((data) => this.setState({ data }));
-  }
-
-  render() {
-    return createElement('div', null, this.state.data);
-  }
-}
-```
 
 #### Extending Iterator Prototype
 
@@ -406,9 +372,7 @@ any form of iterator, different iterators have to be handled differently.
 
 ```js
 const IteratorHelperPrototype = Object.getPrototypeOf(Iterator.from([]).take(0));
-const AsyncIteratorHelperPrototype = Object.getPrototypeOf(AsyncIterator.from([]).take(0));
 const WrapForValidIteratorPrototype = Object.getPrototypeOf(Iterator.from({ next(){} }));
-const WrapForValidAsyncIteratorPrototype = Object.getPrototypeOf(AsyncIterator.from({ async next(){} }));
 ```
 
 ## Prior Art & Userland implementations
