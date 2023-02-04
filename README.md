@@ -11,7 +11,7 @@ Champions: Michael Ficarra, Yulia Startsev
 
 This proposal is at Stage 3 of [The TC39 Process](https://tc39.es/process-document/).
 
-This proposal formerly contained async as well as sync helpers. The async helpers have been split out to [a seperate proposal](https://github.com/tc39/proposal-async-iterator-helpers).
+This proposal formerly contained async as well as sync helpers. The async helpers have been split out to [a separate proposal](https://github.com/tc39/proposal-async-iterator-helpers).
 
 ## Motivation
 
