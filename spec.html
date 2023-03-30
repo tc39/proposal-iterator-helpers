@@ -129,33 +129,22 @@ contributors: Gus Caplan
     <emu-clause id="sec-getiteratorflattenable" type="abstract operation">
       <h1>
         GetIteratorFlattenable (
-          _obj_: an ECMAScript language value,
-          _hint_: ~sync~ or ~async~,
+          _obj_: an ECMAScript language value
         ): either a normal completion containing an Iterator Record or a throw completion
       </h1>
       <dl class="header">
       </dl>
       <emu-alg>
         1. If _obj_ is not an Object, throw a *TypeError* exception.
-        1. Let _alreadyAsync_ be *false*.
-        1. Let _method_ be *undefined*.
-        1. If _hint_ is ~async~, then
-          1. Set _method_ to ? Get(_obj_, @@asyncIterator).
-          1. Set _alreadyAsync_ to *true*.
-        1. If IsCallable(_method_) is *false*, then
-          1. Set _method_ to ? Get(_obj_, @@iterator).
-          1. Set _alreadyAsync_ to *false*.
-        1. If IsCallable(_method_) is *false*, then
+        1. Let _method_ be ? GetMethod(_obj_, @@iterator).
+        1. If _method_ is *undefined*, then
           1. Let _iterator_ be _obj_.
-          1. Set _alreadyAsync_ to *true*.
         1. Else,
           1. Let _iterator_ be ? Call(_method_, _obj_).
         1. If _iterator_ is not an Object, throw a *TypeError* exception.
         1. Let _nextMethod_ be ? Get(_iterator_, *"next"*).
         1. If IsCallable(_nextMethod_) is *false*, throw a *TypeError* exception.
         1. Let _iteratorRecord_ be the Iterator Record { [[Iterator]]: _iterator_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
-        1. If _hint_ is ~async~ and _alreadyAsync_ is *false*, then
-          1. Return CreateAsyncFromSyncIterator(_iteratorRecord_).
         1. Return _iteratorRecord_.
       </emu-alg>
     </emu-clause>
@@ -203,7 +192,7 @@ contributors: Gus Caplan
           <h1>Iterator.from ( _O_ )</h1>
           <emu-alg>
             1. If _O_ is a String, set _O_ to ! ToObject(_O_).
-            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_, ~sync~).
+            1. Let _iteratorRecord_ be ? GetIteratorFlattenable(_O_).
             1. Let _hasInstance_ be ? OrdinaryHasInstance(%Iterator%, _iteratorRecord_.[[Iterator]]).
             1. If _hasInstance_ is *true*, then
               1. Return _iteratorRecord_.[[Iterator]].
@@ -414,7 +403,7 @@ contributors: Gus Caplan
               1. Let _value_ be ? IteratorValue(_next_).
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
-              1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_, ~sync~)).
+              1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_)).
               1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
