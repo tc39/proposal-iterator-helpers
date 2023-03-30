@@ -136,8 +136,8 @@ contributors: Gus Caplan
       </dl>
       <emu-alg>
         1. If _obj_ is not an Object, throw a *TypeError* exception.
-        1. Let _method_ be ? GetMethod(_obj_, @@iterator).
-        1. If _method_ is *undefined*, then
+        1. Let _method_ be ? Get(_obj_, @@iterator).
+        1. If IsCallable(_method_) is *false*, then
           1. Let _iterator_ be _obj_.
         1. Else,
           1. Let _iterator_ be ? Call(_method_, _obj_).
