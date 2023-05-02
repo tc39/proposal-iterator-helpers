@@ -258,11 +258,16 @@ contributors: Gus Caplan
           <h1>%IteratorHelperPrototype%.return ( )</h1>
           <emu-alg>
             1. Let _O_ be *this* value.
-            1. Perform ? RequireInternalSlot(_O_, [[UnderlyingIterator]]).
+            1. Perform ? RequireInternalSlot(_O_, [[SourceIterators]]).
             1. Assert: _O_ has a [[GeneratorState]] slot.
             1. If _O_.[[GeneratorState]] is ~suspendedStart~, then
               1. Set _O_.[[GeneratorState]] to ~completed~.
               1. NOTE: Once a generator enters the completed state it never leaves it and its associated execution context is never resumed. Any execution state associated with _O_ can be discarded at this point.
+              1. Let _firstAbrupt_ be ~empty~.
+              1. For each element _iterator_ of _O_.[[SourceIterators]], do
+                1. Let _result_ be Completion(IteratorClose(_iterator_, NormalCompletion(~unused~))).
+                1. If _result_ is an abrupt completion and _firstAbrupt_ is ~empty~, set _firstAbrupt_ to _result_.
+              1. If _firstAbrupt_ is not ~empty~, return _firstAbrupt_.
               1. Perform ? IteratorClose(_O_.[[UnderlyingIterator]], NormalCompletion(~unused~)).
               1. Return CreateIterResultObject(*undefined*, *true*).
             1. Let _C_ be Completion { [[Type]]: ~return~, [[Value]]: *undefined*, [[Target]]: ~empty~ }.
@@ -311,8 +316,8 @@ contributors: Gus Caplan
               1. Let _completion_ be Completion(Yield(_mapped_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
               1. Set _counter_ to _counter_ + 1.
-          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
-          1. Set _result_.[[UnderlyingIterator]] to _iterated_.
+          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[SourceIterators]] »).
+          1. Set _result_.[[SourceIterators]] to « _iterated_ ».
           1. Return _result_.
         </emu-alg>
       </emu-clause>
@@ -337,8 +342,8 @@ contributors: Gus Caplan
                 1. Let _completion_ be Completion(Yield(_value_)).
                 1. IfAbruptCloseIterator(_completion_, _iterated_).
               1. Set _counter_ to _counter_ + 1.
-          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
-          1. Set _result_.[[UnderlyingIterator]] to _iterated_.
+          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[SourceIterators]] »).
+          1. Set _result_.[[SourceIterators]] to « _iterated_ ».
           1. Return _result_.
         </emu-alg>
       </emu-clause>
@@ -365,8 +370,8 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
-          1. Set _result_.[[UnderlyingIterator]] to _iterated_.
+          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[SourceIterators]] »).
+          1. Set _result_.[[SourceIterators]] to « _iterated_ ».
           1. Return _result_.
         </emu-alg>
       </emu-clause>
@@ -394,8 +399,8 @@ contributors: Gus Caplan
               1. If _next_ is *false*, return *undefined*.
               1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
-          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
-          1. Set _result_.[[UnderlyingIterator]] to _iterated_.
+          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[SourceIterators]] »).
+          1. Set _result_.[[SourceIterators]] to « _iterated_ ».
           1. Return _result_.
         </emu-alg>
       </emu-clause>
@@ -425,6 +430,7 @@ contributors: Gus Caplan
                 1. If _innerNext_ is *false*, then
                   1. Set _innerAlive_ to *false*.
                 1. Else,
+                  1. Set _result_.[[SourceIterators]] to « _innerIterator, _iterated_ ».
                   1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
                   1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                   1. Let _completion_ be Completion(Yield(_innerValue_)).
@@ -433,8 +439,8 @@ contributors: Gus Caplan
                     1. IfAbruptCloseIterator(_backupCompletion_, _iterated_).
                     1. Return ? IteratorClose(_completion_, _iterated_).
               1. Set _counter_ to _counter_ + 1.
-          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
-          1. Set _result_.[[UnderlyingIterator]] to _iterated_.
+          1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[SourceIterators]] »).
+          1. Set _result_.[[SourceIterators]] to « _iterated_ ».
           1. Return _result_.
         </emu-alg>
       </emu-clause>
