@@ -120,7 +120,6 @@ contributors: Gus Caplan
       </dl>
       <emu-alg>
         1. Let _nextMethod_ be ? Get(_obj_, `"next"`).
-        1. If IsCallable(_nextMethod_) is *false*, throw a *TypeError* exception.
         1. Let _iteratorRecord_ be Record { [[Iterator]]: _obj_, [[NextMethod]]: _nextMethod_, [[Done]]: *false* }.
         1. Return _iteratorRecord_.
       </emu-alg>
