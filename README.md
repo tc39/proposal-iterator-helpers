@@ -296,10 +296,9 @@ function* naturals() {
 naturals().find(v => v > 1); // 2
 ```
 
-### `.from(object)`
+### `Iterator.from(object)`
 
-`.from` takes an object as an argument. This method allows wrapping "iterator-like" objects with an
-iterator.
+`.from` is a _static_ method (unlike the others listed above) which takes an object as an argument. This method allows wrapping "iterator-like" objects with an iterator.
 
 Returns the object if it is already an iterator, returns a wrapping iterator if the passed object
 implements a callable @@iterator property.
