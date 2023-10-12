@@ -305,7 +305,7 @@ contributors: Gus Caplan
           <emu-alg>
             1. Let _O_ be ? RequireObjectCoercible(*this* value).
             1. If _O_ is %Iterator.prototype%, then
-              1. Return *undefined*.
+              1. Throw a *TypeError* exception.
             1. Let _desc_ be ? _O_.[[GetOwnProperty]](*"constructor"*).
             1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
               1. Throw a *TypeError* exception.
@@ -607,7 +607,7 @@ contributors: Gus Caplan
           <emu-alg>
             1. Let _O_ be ? RequireObjectCoercible(*this* value).
             1. If _O_ is %Iterator.prototype%, then
-              1. Return *undefined*.
+              1. Throw a *TypeError* exception.
             1. Let _desc_ be ? _O_.[[GetOwnProperty]](@@toStringTag).
             1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
               1. Throw a *TypeError* exception.
