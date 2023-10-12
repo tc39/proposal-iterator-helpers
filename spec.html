@@ -308,7 +308,7 @@ contributors: Gus Caplan
               1. Return *undefined*.
             1. Let _desc_ be ? _O_.[[GetOwnProperty]](*"constructor"*).
             1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
-              1. Return *undefined*.
+              1. Throw a *TypeError* exception.
             1. Let _newDesc_ be the PropertyDescriptor { [[Value]]: _v_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.
             1. Perform ? _O_.[[DefineOwnProperty]](*"constructor"*, _newDesc_).
             1. Return *undefined*.
@@ -610,7 +610,7 @@ contributors: Gus Caplan
               1. Return *undefined*.
             1. Let _desc_ be ? _O_.[[GetOwnProperty]](@@toStringTag).
             1. If IsDataDescriptor(_desc_) is *true* and _desc_.[[Writable]] is *false*, then
-              1. Return *undefined*.
+              1. Throw a *TypeError* exception.
             1. Let _newDesc_ be the PropertyDescriptor { [[Value]]: _v_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *true* }.
             1. Perform ? _O_.[[DefineOwnProperty]](@@toStringTag, _newDesc_).
             1. Return *undefined*.
