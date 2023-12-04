@@ -107,6 +107,30 @@ contributors: Gus Caplan
 <emu-clause id="sec-abstract-operations">
   <h1>Abstract Operations</h1>
 
+  <emu-clause id="sec-SetterThatIgnoresPrototypeProperties" type="abstract operation">
+    <h1>
+      SetterThatIgnoresPrototypeProperties (
+        _home_: an Object,
+        _p_: a property key,
+        _v_: an ECMAScript language value,
+      ): either a normal completion containing ~unused~ or a throw completion
+    </h1>
+    <dl class="header">
+    </dl>
+    <emu-alg>
+      1. Let _O_ be ? RequireObjectCoercible(*this* value).
+      1. If _O_ is _home_, then
+        1. NOTE: Throwing here emulates assignment to a non-writable data property on the _home_ object in strict mode code.
+        1. Throw a *TypeError* exception.
+      1. Let _desc_ be ? _O_.[[GetOwnProperty]](_p_).
+      1. If _desc_ is *undefined*, then
+        1. Perform ? CreateDataPropertyOrThrow(_O_, _p_, _v_).
+      1. Else,
+        1. Perform ? Set(_O_, _p_, _v_, *true*).
+      1. Return ~unused~.
+    </emu-alg>
+  </emu-clause>
+
   <emu-clause id="sec-operations-on-iterator-objects">
     <h1>Operations on Iterator Objects</h1>
 
@@ -289,7 +313,28 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype.constructor">
         <h1>Iterator.prototype.constructor</h1>
-        <p>The initial value of %Iterator.prototype%.constructor is %Iterator%.</p>
+        <p>`Iterator.prototype.constructor` is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-clause id="sec-get-iteratorprototype-constructor">
+          <h1>get Iterator.prototype.constructor</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return %Iterator%.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-set-iteratorprototype-constructor">
+          <h1>set Iterator.prototype.constructor</h1>
+          <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Perform ? SetterThatIgnoresPrototypeProperties(%Iterator.prototype%, *"constructor"*, _v_).
+            1. Return *undefined*.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-note>
+          <p>Unlike the *"constructor"* property on most built-in prototypes, for web-compatibility reasons this property must be an accessor.</p>
+        </emu-note>
       </emu-clause>
 
       <emu-clause id="sec-iteratorprototype.map">
@@ -563,9 +608,27 @@ contributors: Gus Caplan
 
       <emu-clause id="sec-iteratorprototype-@@tostringtag">
         <h1>Iterator.prototype [ @@toStringTag ]</h1>
-        <p>The initial value of the @@toStringTag property is the String value "Iterator".</p>
+        <p>`Iterator.prototype[@@toStringTag]` is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-clause id="sec-get-iteratorprototype-@@tostringtag">
+          <h1>get Iterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return *"Iterator"*.
+          </emu-alg>
+        </emu-clause>
+
+        <emu-clause id="sec-set-iteratorprototype-@@tostringtag">
+          <h1>set Iterator.prototype [ @@toStringTag ]</h1>
+          <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Perform ? SetterThatIgnoresPrototypeProperties(%Iterator.prototype%, %Symbol.toStringTag%, _v_).
+            1. Return *undefined*.
+          </emu-alg>
+        </emu-clause>
+
         <emu-note>
-          <p>Unlike the @@toStringTag on most built-in classes, for web-compatibility reasons this property must be writable.</p>
+          <p>Unlike the @@toStringTag property on most built-in prototypes, for web-compatibility reasons this property must be an accessor.</p>
         </emu-note>
       </emu-clause>
     </emu-clause>
