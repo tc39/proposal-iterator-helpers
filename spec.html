@@ -118,7 +118,7 @@ contributors: Gus Caplan
     <dl class="header">
     </dl>
     <emu-alg>
-      1. Let _O_ be ? RequireObjectCoercible(*this* value).
+      1. Let _O_ be ? ToObject(*this* value).
       1. If _O_ is _home_, then
         1. NOTE: Throwing here emulates assignment to a non-writable data property on the _home_ object in strict mode code.
         1. Throw a *TypeError* exception.
