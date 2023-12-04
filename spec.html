@@ -110,6 +110,7 @@ contributors: Gus Caplan
   <emu-clause id="sec-SetterThatIgnoresPrototypeProperties" type="abstract operation">
     <h1>
       SetterThatIgnoresPrototypeProperties (
+        _this_: an ECMAScript language value,
         _home_: an Object,
         _p_: a property key,
         _v_: an ECMAScript language value,
@@ -118,7 +119,7 @@ contributors: Gus Caplan
     <dl class="header">
     </dl>
     <emu-alg>
-      1. Let _O_ be ? ToObject(*this* value).
+      1. Let _O_ be ? ToObject(_this_).
       1. If _O_ is _home_, then
         1. NOTE: Throwing here emulates assignment to a non-writable data property on the _home_ object in strict mode code.
         1. Throw a *TypeError* exception.
@@ -327,7 +328,7 @@ contributors: Gus Caplan
           <h1>set Iterator.prototype.constructor</h1>
           <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
           <emu-alg>
-            1. Perform ? SetterThatIgnoresPrototypeProperties(%Iterator.prototype%, *"constructor"*, _v_).
+            1. Perform ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, *"constructor"*, _v_).
             1. Return *undefined*.
           </emu-alg>
         </emu-clause>
@@ -622,7 +623,7 @@ contributors: Gus Caplan
           <h1>set Iterator.prototype [ @@toStringTag ]</h1>
           <p>The value of the [[Set]] attribute is a built-in function that takes an argument _v_. It performs the following steps when called:</p>
           <emu-alg>
-            1. Perform ? SetterThatIgnoresPrototypeProperties(%Iterator.prototype%, %Symbol.toStringTag%, _v_).
+            1. Perform ? SetterThatIgnoresPrototypeProperties(*this* value, %Iterator.prototype%, %Symbol.toStringTag%, _v_).
             1. Return *undefined*.
           </emu-alg>
         </emu-clause>
