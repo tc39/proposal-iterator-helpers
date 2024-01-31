@@ -7,7 +7,7 @@
     "check-format": "emu-format --check spec.html"
   },
   "devDependencies": {
-    "@tc39/ecma262-biblio": "2.1.2407",
+    "@tc39/ecma262-biblio": "2.1.2678",
     "ecmarkup": "^15.0.0"
   }
 }

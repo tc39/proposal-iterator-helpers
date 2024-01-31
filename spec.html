@@ -350,9 +350,8 @@ contributors: Gus Caplan
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
             1. Let _counter_ be 0.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _value_ be ? IteratorStepValue(_iterated_).
+              1. If _value_ is ~done~, return *undefined*.
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
               1. Let _completion_ be Completion(Yield(_mapped_)).
@@ -375,9 +374,8 @@ contributors: Gus Caplan
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _predicate_ and performs the following steps when called:
             1. Let _counter_ be 0.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _value_ be ? IteratorStepValue(_iterated_).
+              1. If _value_ is ~done~, return *undefined*.
               1. Let _selected_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_selected_, _iterated_).
               1. If ToBoolean(_selected_) is *true*, then
@@ -408,9 +406,9 @@ contributors: Gus Caplan
                 1. Return ? IteratorClose(_iterated_, NormalCompletion(*undefined*)).
               1. If _remaining_ is not +∞, then
                 1. Set _remaining_ to _remaining_ - 1.
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
+              1. Let _value_ be ? IteratorStepValue(_iterated_).
+              1. If _value_ is ~done~, return *undefined*.
+              1. Let _completion_ be Completion(Yield(_value_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
           1. Set _result_.[[UnderlyingIterator]] to _iterated_.
@@ -437,9 +435,9 @@ contributors: Gus Caplan
               1. Let _next_ be ? IteratorStep(_iterated_).
               1. If _next_ is *false*, return *undefined*.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _completion_ be Completion(Yield(? IteratorValue(_next_))).
+              1. Let _value_ be ? IteratorStepValue(_iterated_).
+              1. If _value_ is ~done~, return *undefined*.
+              1. Let _completion_ be Completion(Yield(_value_)).
               1. IfAbruptCloseIterator(_completion_, _iterated_).
           1. Let _result_ be CreateIteratorFromClosure(_closure_, *"Iterator Helper"*, %IteratorHelperPrototype%, « [[UnderlyingIterator]] »).
           1. Set _result_.[[UnderlyingIterator]] to _iterated_.
@@ -458,22 +456,19 @@ contributors: Gus Caplan
           1. Let _closure_ be a new Abstract Closure with no parameters that captures _iterated_ and _mapper_ and performs the following steps when called:
             1. Let _counter_ be 0.
             1. Repeat,
-              1. Let _next_ be ? IteratorStep(_iterated_).
-              1. If _next_ is *false*, return *undefined*.
-              1. Let _value_ be ? IteratorValue(_next_).
+              1. Let _value_ be ? IteratorStepValue(_iterated_).
+              1. If _value_ is ~done~, return *undefined*.
               1. Let _mapped_ be Completion(Call(_mapper_, *undefined*, « _value_, 𝔽(_counter_) »)).
               1. IfAbruptCloseIterator(_mapped_, _iterated_).
               1. Let _innerIterator_ be Completion(GetIteratorFlattenable(_mapped_, ~reject-strings~)).
               1. IfAbruptCloseIterator(_innerIterator_, _iterated_).
               1. Let _innerAlive_ be *true*.
               1. Repeat, while _innerAlive_ is *true*,
-                1. Let _innerNext_ be Completion(IteratorStep(_innerIterator_)).
-                1. IfAbruptCloseIterator(_innerNext_, _iterated_).
-                1. If _innerNext_ is *false*, then
+                1. Let _innerValue_ be Completion(IteratorStepValue(_innerIterator_)).
+                1. IfAbruptCloseIterator(_innerValue_, _iterated_).
+                1. If _innerValue_ is ~done~, then
                   1. Set _innerAlive_ to *false*.
                 1. Else,
-                  1. Let _innerValue_ be Completion(IteratorValue(_innerNext_)).
-                  1. IfAbruptCloseIterator(_innerValue_, _iterated_).
                   1. Let _completion_ be Completion(Yield(_innerValue_)).
                   1. If _completion_ is an abrupt completion, then
                     1. Let _backupCompletion_ be Completion(IteratorClose(_innerIterator_, _completion_)).
@@ -495,17 +490,15 @@ contributors: Gus Caplan
           1. If IsCallable(_reducer_) is *false*, throw a *TypeError* exception.
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. If _initialValue_ is not present, then
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, throw a *TypeError* exception.
-            1. Let _accumulator_ be ? IteratorValue(_next_).
+            1. Let _accumulator_ be ? IteratorStepValue(_iterated_).
+            1. If _accumulator_ is ~done~, throw a *TypeError* exception.
             1. Let _counter_ be 1.
           1. Else,
             1. Let _accumulator_ be _initialValue_.
             1. Let _counter_ be 0.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return _accumulator_.
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return _accumulator_.
             1. Let _result_ be Completion(Call(_reducer_, *undefined*, « _accumulator_, _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. Set _accumulator_ to _result_.[[Value]].
@@ -522,9 +515,8 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. Let _items_ be a new empty List.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return CreateArrayFromList(_items_).
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return CreateArrayFromList(_items_).
             1. Append _value_ to _items_.
         </emu-alg>
       </emu-clause>
@@ -539,9 +531,8 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. Let _counter_ be 0.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return *undefined*.
             1. Let _result_ be Completion(Call(_fn_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. Set _counter_ to _counter_ + 1.
@@ -558,9 +549,8 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. Let _counter_ be 0.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *false*.
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return *false*.
             1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(*true*)).
@@ -578,9 +568,8 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. Let _counter_ be 0.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *true*.
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return *true*.
             1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *false*, return ? IteratorClose(_iterated_, NormalCompletion(*false*)).
@@ -598,9 +587,8 @@ contributors: Gus Caplan
           1. Let _iterated_ be ? GetIteratorDirect(_O_).
           1. Let _counter_ be 0.
           1. Repeat,
-            1. Let _next_ be ? IteratorStep(_iterated_).
-            1. If _next_ is *false*, return *undefined*.
-            1. Let _value_ be ? IteratorValue(_next_).
+            1. Let _value_ be ? IteratorStepValue(_iterated_).
+            1. If _value_ is ~done~, return *undefined*.
             1. Let _result_ be Completion(Call(_predicate_, *undefined*, « _value_, 𝔽(_counter_) »)).
             1. IfAbruptCloseIterator(_result_, _iterated_).
             1. If ToBoolean(_result_) is *true*, return ? IteratorClose(_iterated_, NormalCompletion(_value_)).
