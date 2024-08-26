@@ -353,10 +353,10 @@ Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
 Implementation tracking of Iterator Helpers
 
 - Browsers:
-  * [ ] V8
+  * [x] V8  (114 dev trial, 117 stable, unshipped, reshipped in 122): https://chromestatus.com/feature/5102502917177344
   * [ ] [SpiderMonkey](https://bugzilla.mozilla.org/show_bug.cgi?id=1568906) (feature-flagged on Nightly
       only)
-  * [ ] JavaScriptCore
+  * [ ] JavaScriptCore: https://bugs.webkit.org/show_bug.cgi?id=248650
 
 ## Q & A
 
