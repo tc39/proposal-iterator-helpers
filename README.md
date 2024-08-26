@@ -348,15 +348,6 @@ const MyIteratorPrototype = {
 
 Object.setPrototypeOf(MyIteratorPrototype, Iterator.prototype);
 ```
-## Implementations
-
-Implementation tracking of Iterator Helpers
-
-- Browsers:
-  * [x] V8  (114 dev trial, 117 stable, unshipped, reshipped in 122): https://chromestatus.com/feature/5102502917177344
-  * [ ] [SpiderMonkey](https://bugzilla.mozilla.org/show_bug.cgi?id=1568906) (feature-flagged on Nightly
-      only)
-  * [ ] JavaScriptCore: https://bugs.webkit.org/show_bug.cgi?id=248650
 
 ## Q & A
 
