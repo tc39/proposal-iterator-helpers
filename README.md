@@ -1,5 +1,8 @@
 # Iterator Helpers
 
+> [!IMPORTANT]  
+> This proposal is now a Stage 4 and will be merged into ECMA-262 as part of https://github.com/tc39/ecma262/pull/3395. This repo is no longer active.
+
 A proposal for several interfaces that will help with general usage and
 consumption of iterators in ECMAScript.
 
@@ -9,7 +12,7 @@ Authors: Gus Caplan, Michael Ficarra, Adam Vandolder, Jason Orendorff, Kevin Gib
 
 Champions: Michael Ficarra, Yulia Startsev
 
-This proposal is at Stage 3 of [The TC39 Process](https://tc39.es/process-document/).
+This proposal is at Stage 4 of [The TC39 Process](https://tc39.es/process-document/).
 
 This proposal formerly contained async as well as sync helpers. The async helpers have been split out to [a separate proposal](https://github.com/tc39/proposal-async-iterator-helpers).
 
